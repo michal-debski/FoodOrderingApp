@@ -1,0 +1,38 @@
+eureka:
+  instance:
+    hostname: localhost
+
+spring:
+  cloud:
+    netflix:
+      eureka:
+        instance:
+          hostname: localhost
+        client:
+          serviceUrl:
+            defaultZone: http://localhost:8761/eureka/
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/food-ordering
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+      ddl-auto: update
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  flyway:
+    default-schema: auth_service
+    schemas: auth_service
+    baseline-on-migrate: true
+    enabled: true
+    baseline-description: "init"
+    baseline-version: 1
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+  security:
+    jwt:
+      secret: 4f8yFZxA3rQeU6J0LGz+6IxE9V8YlT7sqH1KC+WyTpM=
+server:
+  port: 8220

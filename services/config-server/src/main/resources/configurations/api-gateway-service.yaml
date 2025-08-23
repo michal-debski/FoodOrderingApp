@@ -1,0 +1,47 @@
+server:
+  port: 8222
+auth:
+  service:
+    url: lb://AUTH-SERVICE
+spring:
+  cloud:
+    netflix:
+      eureka:
+        client:
+          serviceUrl:
+            defaultZone: http://localhost:8761/eureka/
+    gateway:
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: true
+          routes:
+            - id: auth-service
+              uri: lb://AUTH-SERVICE
+              predicates:
+                - Path=/api/v1/auth/**
+              filters:
+                - RewritePath=/api/v1/auth/(?<segment>.*), /auth/${segment}
+            - id: meal-service
+              uri: lb://MEAL-SERVICE
+              predicates:
+                - Path=/api/v1/meals/**
+              filters:
+                - RewritePath=/api/v1/meals/(?<segment>.*), /meals/${segment}
+                - JwtValidation
+            - id: order-service
+              uri: lb://ORDER-SERVICE
+              predicates:
+                - Path=/api/v1/orders/**
+              filters:
+                - RewritePath=/api/v1/orders/(?<segment>.*), /orders/${segment}
+                - JwtValidation
+            - id: restaurant-service
+              uri: lb://RESTAURANT-SERVICE
+              predicates:
+                - Path=/api/v1/restaurants/**
+              filters:
+                - RewritePath=/api/v1/restaurants/(?<segment>.*), /restaurants/${segment}
+                - JwtValidation
+

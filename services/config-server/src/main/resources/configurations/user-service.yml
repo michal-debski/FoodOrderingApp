@@ -1,0 +1,10 @@
+spring:
+  datasource:
+      username: postgres
+      password: postgres
+      host: localhost
+      port: 5432
+      database: new_user
+      authentication-database: admin
+server:
+  port: 8090
