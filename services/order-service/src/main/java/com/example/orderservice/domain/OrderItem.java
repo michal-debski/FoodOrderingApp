@@ -11,13 +11,11 @@ public class OrderItem {
     Integer quantity;
     String mealId;
     BigDecimal unitPrice;
-    String orderNumber;
 
-    public OrderItem(Integer quantity, String mealId, BigDecimal unitPrice, String orderNumber) {
+    public OrderItem(Integer quantity, String mealId, BigDecimal unitPrice) {
         this.quantity = quantity;
         this.mealId = mealId;
         this.unitPrice = unitPrice;
-        this.orderNumber = orderNumber;
     }
 
     public OrderItem() {

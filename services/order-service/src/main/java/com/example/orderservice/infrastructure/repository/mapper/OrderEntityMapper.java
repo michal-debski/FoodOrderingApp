@@ -55,7 +55,6 @@ public class OrderEntityMapper {
                                         .quantity(orderItemEntity.getQuantity())
                                         .mealId(orderItemEntity.getMealId())
                                         .unitPrice(orderItemEntity.getUnitPrice())
-                                        .orderNumber(orderItemEntity.getOrder().getOrderNumber())
                                         .build()
                                 )
                                 .collect(Collectors.toList())

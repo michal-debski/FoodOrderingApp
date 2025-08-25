@@ -10,7 +10,6 @@ public class OrderItemMapper {
         return OrderItem.builder()
                 .quantity(orderItemDTO.quantity())
                 .mealId(orderItemDTO.mealId())
-                .orderNumber(orderItemDTO.orderNumber())
                 .unitPrice(orderItemDTO.unitPrice())
                 .build();
     }

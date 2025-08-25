@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.5.3'
 	id 'io.spring.dependency-management' version '1.1.7'
+	id 'com.google.protobuf' version '0.9.5'
 }
 
 group = 'com.example'
@@ -36,6 +37,18 @@ dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-config'
 	implementation 'org.springframework.kafka:spring-kafka'
 	implementation 'org.postgresql:postgresql'
+
+//	grpc
+	implementation 'net.devh:grpc-server-spring-boot-starter:3.1.0.RELEASE'
+	implementation 'io.grpc:grpc-core:1.75.0'
+	implementation 'io.grpc:grpc-stub:1.75.0'
+	implementation 'io.grpc:grpc-protobuf:1.75.0'
+	implementation 'io.grpc:grpc-netty-shaded:1.75.0'
+	implementation 'com.google.protobuf:protobuf-java:4.32.0'
+	implementation 'jakarta.annotation:jakarta.annotation-api:2.1.1'
+
+
+//	jwt
 	implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
@@ -58,4 +71,22 @@ dependencyManagement {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+protobuf {
+	protoc {
+		artifact = 'com.google.protobuf:protoc:4.32.0'
+	}
+	plugins {
+		grpc {
+			artifact = 'io.grpc:protoc-gen-grpc-java:1.75.0'
+		}
+	}
+	generateProtoTasks {
+		all().each { task ->
+			task.plugins {
+				grpc {}
+			}
+		}
+	}
 }

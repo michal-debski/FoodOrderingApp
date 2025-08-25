@@ -2,7 +2,7 @@ package com.example.orderservice.api.dto.mapper;
 
 import com.example.orderservice.api.dto.OrderDTO;
 import com.example.orderservice.api.dto.OrderItemDTO;
-import com.example.orderservice.api.dto.MealCheckMessage;
+import com.example.orderservice.api.dto.IngredientRemovalFromStorageMessage;
 import com.example.orderservice.domain.Order;
 import com.example.orderservice.domain.OrderItem;
 import org.springframework.stereotype.Component;
@@ -25,7 +25,6 @@ public class OrderMapper extends OffsetDateTimeMapper {
                                 .quantity(orderItem.getQuantity())
                                 .unitPrice(orderItem.getUnitPrice())
                                 .mealId(orderItem.getMealId())
-                                .orderNumber(orderItem.getOrderNumber())
                                 .build())
                         .collect(Collectors.toList()))
                 .isCancellable(order.isCancellable())
@@ -46,23 +45,21 @@ public class OrderMapper extends OffsetDateTimeMapper {
                                 .quantity(orderItem.quantity())
                                 .unitPrice(orderItem.unitPrice())
                                 .mealId(orderItem.mealId())
-                                .orderNumber(orderItem.orderNumber())
                                 .build())
                         .collect(Collectors.toList()))
                 .build();
     }
 
 
-    public MealCheckMessage mapToMealCheckMessage(OrderDTO order) {
-        return MealCheckMessage.builder()
-                .orderNumber(order.orderNumber())
-                .orderItems(order.orderItems()
+    public IngredientRemovalFromStorageMessage mapToIngredientRemovalFromStorageMessage(Order order) {
+        return IngredientRemovalFromStorageMessage.builder()
+                .orderNumber(order.getOrderNumber())
+                .orderItems(order.getOrderItems()
                         .stream()
                         .map(orderItem -> OrderItem.builder()
-                                .quantity(orderItem.quantity())
-                                .unitPrice(orderItem.unitPrice())
-                                .mealId(orderItem.mealId())
-                                .orderNumber(orderItem.orderNumber())
+                                .quantity(orderItem.getQuantity())
+                                .unitPrice(orderItem.getUnitPrice())
+                                .mealId(orderItem.getMealId())
                                 .build())
                         .toList()
                 )

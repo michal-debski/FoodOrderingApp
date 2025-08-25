@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 @Setter
@@ -14,7 +15,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "meal")
+@Table(name = "meal", schema = "meal_service")
 public class MealEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -36,4 +37,6 @@ public class MealEntity {
     @Column(name = "restaurantId")
     private String restaurantId;
 
+    @OneToMany(mappedBy = "meal", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<MealIngredientEntity> ingredients;
 }

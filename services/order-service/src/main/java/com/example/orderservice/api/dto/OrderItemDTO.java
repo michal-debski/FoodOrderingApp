@@ -10,8 +10,7 @@ import java.math.BigDecimal;
 public record OrderItemDTO(
         Integer quantity,
         String mealId,
-        BigDecimal unitPrice,
-        String orderNumber
+        BigDecimal unitPrice
 ) {
 
 

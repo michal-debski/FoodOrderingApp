@@ -2,6 +2,8 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.5.3'
     id 'io.spring.dependency-management' version '1.1.7'
+    id 'com.google.protobuf' version '0.9.5'
+
 }
 
 group = 'com.example'
@@ -36,6 +38,16 @@ dependencies {
     implementation 'org.flywaydb:flyway-database-postgresql'
     implementation 'org.springframework.kafka:spring-kafka'
 
+
+    //grpc
+    implementation 'net.devh:grpc-server-spring-boot-starter:3.1.0.RELEASE'
+    implementation 'io.grpc:grpc-core:1.75.0'
+    implementation 'io.grpc:grpc-stub:1.75.0'
+    implementation 'io.grpc:grpc-protobuf:1.75.0'
+    implementation 'io.grpc:grpc-netty-shaded:1.75.0'
+    implementation 'com.google.protobuf:protobuf-java:4.32.0'
+    implementation 'jakarta.annotation:jakarta.annotation-api:2.1.1'
+
     runtimeOnly 'org.postgresql:postgresql'
 
     compileOnly 'org.projectlombok:lombok'
@@ -53,4 +65,22 @@ dependencyManagement {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+protobuf {
+    protoc {
+        artifact = 'com.google.protobuf:protoc:4.32.0'
+    }
+    plugins {
+        grpc {
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.75.0'
+        }
+    }
+    generateProtoTasks {
+        all().each { task ->
+            task.plugins {
+                grpc {}
+            }
+        }
+    }
 }

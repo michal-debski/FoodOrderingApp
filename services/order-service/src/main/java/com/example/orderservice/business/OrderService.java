@@ -1,9 +1,13 @@
 package com.example.orderservice.business;
 
+import com.example.mealservice.grpc.MealCheckRequest;
+import com.example.mealservice.grpc.MealCheckResponse;
+import com.example.mealservice.grpc.MealServiceGrpc;
 import com.example.orderservice.business.dao.OrderDAO;
 import com.example.orderservice.domain.Order;
 import com.example.orderservice.domain.OrderItem;
 import com.example.orderservice.exception.NotFoundException;
+import com.example.orderservice.exception.UnavailableMealsException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,6 +28,10 @@ public class OrderService {
     private final OrderDAO orderDAO;
 
     private final OrderItemService orderItemService;
+
+    private final MealServiceGrpcClient mealServiceGrpcClient;
+
+    private final KafkaMessageProducerService kafkaMessageProducerService;
 
     public void deleteOrder(String orderNumber) {
         orderDAO.findOrderByOrderNumber(orderNumber).ifPresent(order -> {
@@ -46,6 +54,7 @@ public class OrderService {
         return orderDAO.findOrderByClientEmail(email);
     }
 
+    @Transactional
     public Order buildOrder(List<OrderItem> orderItems, String restaurantId, String email) {
         OffsetDateTime dateOfOrder = OffsetDateTime.now();
         System.out.println(orderItems);
@@ -56,10 +65,18 @@ public class OrderService {
                 .customerEmail(email)
                 .restaurantId(restaurantId)
                 .build();
+        MealCheckResponse mealCheckResponse = mealServiceGrpcClient.checkMealAvailability(orderPlaced.getOrderNumber(), orderItems);
+        int unavailableMealsCount = mealCheckResponse.getUnavailableMealsCount();
+
+        if (unavailableMealsCount > 0 || !mealCheckResponse.getCanPrepare()) {
+            throw new UnavailableMealsException("One or more meals cannot be prepared.");
+        }
+
         orderPlaced.setOrderItems(orderItems);
         System.out.println(orderPlaced.getOrderItems());
         log.info("Creating order before saving order: {}", orderPlaced);
         BigDecimal totalPrice = BigDecimal.valueOf(0);
+
         if (!orderItems.isEmpty()) {
             for (OrderItem orderItem : orderItems) {
                 BigDecimal multiply = orderItem.getUnitPrice().multiply(BigDecimal.valueOf(orderItem.getQuantity()));
@@ -72,9 +89,11 @@ public class OrderService {
         orderPlaced.setTotalPrice(totalPrice.setScale(2, RoundingMode.HALF_EVEN));
         System.out.println(orderPlaced.getOrderItems());
         System.out.println("Order Placed: " + orderPlaced + " !");
-        return orderDAO.saveOrder(orderPlaced);
+        Order savedOrder = orderDAO.saveOrder(orderPlaced);
+        kafkaMessageProducerService.sendMessage(savedOrder);
+        return savedOrder;
 
-    }
+}
 
     public List<Order> findAllOrders() {
         return orderDAO.findAll();
