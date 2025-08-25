@@ -3,7 +3,6 @@ package com.example.mealservice.business;
 import com.example.mealservice.domain.Meal;
 import com.example.mealservice.grpc.MealCheckResponse;
 import com.example.mealservice.grpc.MealServiceGrpc;
-import com.example.mealservice.grpc.OrderItem;
 import com.example.mealservice.grpc.UnavailableMeal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +36,6 @@ public class MealGrpcService extends MealServiceGrpc.MealServiceImplBase {
             if (meals.isEmpty()){
                 MealCheckResponse mealCheckResponse = MealCheckResponse.newBuilder()
                         .setCanPrepare(true)
-                        //TODO CO Z UNAVAILABLE MEALS JEŚLI NIE MA ŻADNEGO.
                         .build();
                 responseObserver.onNext(mealCheckResponse);
                 responseObserver.onCompleted();
