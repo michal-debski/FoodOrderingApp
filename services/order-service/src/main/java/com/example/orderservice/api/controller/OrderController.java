@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 public class OrderController {
 
     private final OrderService orderService;
-    private final KafkaMessageProducerService kafkaMessageProducerService;
     private final OrderMapper orderMapper;
     private final OrderItemMapper orderItemMapper;
     private final OrderItemService orderItemService;
@@ -47,8 +46,6 @@ public class OrderController {
         OrderDTO orderDTOToShow = orderMapper
                 .mapToDTO(order);
 
-        kafkaMessageProducerService.sendMessage(orderDTOToShow);
-
         return ResponseEntity.ok(orderDTOToShow);
     }
 
@@ -67,7 +64,6 @@ public class OrderController {
     @GetMapping("/all")
     public ResponseEntity<?> showOrdersForCustomerEmail(
             @RequestHeader("X-User-Email") String email
-
     ) {
         log.info("email: " + email);
         List<Order> listOfOrders = orderService.findAllOrders();

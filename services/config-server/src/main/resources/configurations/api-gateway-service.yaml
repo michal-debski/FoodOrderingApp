@@ -10,12 +10,15 @@ spring:
         client:
           serviceUrl:
             defaultZone: http://localhost:8761/eureka/
+            register-with-eureka: true
+            fetch-registry: true
     gateway:
       server:
         webflux:
           discovery:
             locator:
               enabled: true
+              lower-case-service-id: true
           routes:
             - id: auth-service
               uri: lb://AUTH-SERVICE

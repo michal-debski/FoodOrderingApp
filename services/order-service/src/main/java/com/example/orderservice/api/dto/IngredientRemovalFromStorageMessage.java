@@ -6,7 +6,9 @@ import lombok.Builder;
 import java.util.List;
 
 @Builder
-public record MealCheckMessage (String orderNumber, List<OrderItem> orderItems){
-
+public record IngredientRemovalFromStorageMessage(
+        String orderNumber,
+        List<OrderItem> orderItems
+){
 
 }

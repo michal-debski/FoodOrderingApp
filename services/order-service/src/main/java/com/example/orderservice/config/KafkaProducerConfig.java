@@ -1,6 +1,6 @@
 package com.example.orderservice.config;
 
-import com.example.orderservice.api.dto.MealCheckMessage;
+import com.example.orderservice.api.dto.IngredientRemovalFromStorageMessage;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +21,7 @@ public class KafkaProducerConfig {
     private String bootstrapServers;
 
     @Bean
-    public ProducerFactory<String, MealCheckMessage> objectProducerFactory() {
+    public ProducerFactory<String, IngredientRemovalFromStorageMessage> objectProducerFactory() {
         Map<String, Object> config = new HashMap<>();
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -30,7 +30,7 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, MealCheckMessage> kafkaTemplate() {
+    public KafkaTemplate<String, IngredientRemovalFromStorageMessage> kafkaTemplate() {
         return new KafkaTemplate<>(objectProducerFactory());
     }
 

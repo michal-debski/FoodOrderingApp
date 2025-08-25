@@ -3,7 +3,9 @@ package com.example.mealservice.infrastructure.respository;
 import com.example.mealservice.business.MealDAO;
 import com.example.mealservice.domain.Meal;
 import com.example.mealservice.infrastructure.entity.MealEntity;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 
@@ -12,25 +14,26 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Repository
 @AllArgsConstructor
 public class MealRepository implements MealDAO {
 
 
-    private final MealMongoRepository mealMongoRepository;
+    private final MealJpaRepository mealJpaRepository;
     private final MealEntityMapper mealEntityMapper;
 
 
     @Override
     public Set<Meal> findAllMealsByCategory(String category) {
-        return mealMongoRepository.findByCategory(category).stream()
+        return mealJpaRepository.findByCategory(category).stream()
                 .map(mealEntityMapper::mapFromEntity).collect(Collectors.toSet());
     }
 
 
     @Override
     public List<Meal> findAllMeals() {
-        return mealMongoRepository.findAll().stream()
+        return mealJpaRepository.findAll().stream()
                 .map(mealEntityMapper::mapFromEntity)
                 .toList();
     }
@@ -38,33 +41,32 @@ public class MealRepository implements MealDAO {
     @Override
     public Meal saveMeal(Meal meal) {
         MealEntity mealEntity = mealEntityMapper.mapToEntity(meal);
-        MealEntity entitySaved = mealMongoRepository.save(mealEntity);
+        MealEntity entitySaved = mealJpaRepository.save(mealEntity);
+        log.info("###Saved!!!  + "  + entitySaved);
         return mealEntityMapper.mapFromEntity(entitySaved);
     }
 
-
     @Override
     public void deleteById(String id) {
-        mealMongoRepository.delete(mealMongoRepository.findById(id).get());
+        mealJpaRepository.delete(mealJpaRepository.findById(id).get());
     }
 
     @Override
     public List<Meal> findAllMealsBySelectedRestaurant(String id) {
-        return mealMongoRepository.findAllByRestaurantId(id)
+        return mealJpaRepository.findAllByRestaurantId(id)
                 .stream().map(mealEntityMapper::mapFromEntity).toList();
     }
 
     @Override
     public Optional<Meal> findMealById(String mealId) {
-        return mealMongoRepository.findById(mealId)
+        return mealJpaRepository.findById(mealId)
                 .map(mealEntityMapper::mapFromEntity);
     }
 
     @Override
     public Meal updateMeal(Meal meal) {
-
         return mealEntityMapper.mapFromEntity(
-                mealMongoRepository.save(
+                mealJpaRepository.save(
                         mealEntityMapper.mapToEntity(meal)
                 )
         );

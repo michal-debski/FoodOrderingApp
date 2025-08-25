@@ -30,7 +30,6 @@ public class RestaurantStreetService {
 
     @Transactional
     public void saveRestaurantStreets(Restaurant restaurant, List<String> streets) {
-
         List<Integer> streetsId = streets.stream()
                 .map(Integer::valueOf)
                 .toList();

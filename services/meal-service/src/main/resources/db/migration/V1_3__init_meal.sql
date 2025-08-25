@@ -2,11 +2,11 @@ CREATE SCHEMA IF NOT EXISTS meal_service;
 
 CREATE TABLE IF NOT EXISTS MEAL
 (
-    MEAL_ID             SERIAL       NOT NULL,
+    MEAL_ID             VARCHAR(255) NOT NULL,
     NAME                VARCHAR(255) NOT NULL,
     CATEGORY            VARCHAR(64)  NOT NULL,
     DESCRIPTION         TEXT         NOT NULL,
     PRICE               NUMERIC(4,2) NOT NULL,
     RESTAURANT_ID       SERIAL       NOT NULL,
     PRIMARY KEY (MEAL_ID)
-);
+    );

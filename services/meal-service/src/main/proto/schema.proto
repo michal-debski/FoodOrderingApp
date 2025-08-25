@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.example.mealservice.grpc";
+
+message OrderItem {
+  string mealId = 1;
+  int32 quantity = 2;
+}
+
+// Request z order-service do meal-service
+message MealCheckRequest {
+  string orderNumber = 1;
+  repeated OrderItem orderItems = 2;
+}
+
+// Informacja o pojedynczym niedostępnym posiłku
+message UnavailableMeal {
+  string mealId = 1;
+  string reason = 2; // np. "Out of ingredients"
+}
+
+// Response z meal-service
+message MealCheckResponse {
+  bool canPrepare = 1; // true jeśli wszystkie dostępne
+  repeated UnavailableMeal unavailableMeals = 2; // lista niedostępnych
+}
+
+service MealService {
+  rpc CheckMealAvailability(MealCheckRequest) returns (MealCheckResponse);
+}

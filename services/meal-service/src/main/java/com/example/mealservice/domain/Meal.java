@@ -1,8 +1,9 @@
 package com.example.mealservice.domain;
 
-import lombok.*;
+import lombok.Builder;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Builder
 public record Meal(
@@ -11,6 +12,7 @@ public record Meal(
         Category category,
         String description,
         BigDecimal price,
+        List<MealIngredient> ingredients,
         String restaurantId
 ) {
 
