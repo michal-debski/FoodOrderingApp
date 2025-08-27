@@ -8,9 +8,7 @@ import lombok.With;
 @Value
 @Builder
 public class RestaurantStreet {
-
-    Integer id;
+    String id;
     Street street;
-    Restaurant restaurant;
-
+    String restaurantId;
 }

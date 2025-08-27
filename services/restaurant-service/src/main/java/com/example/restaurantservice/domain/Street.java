@@ -10,8 +10,5 @@ import lombok.With;
 public class Street {
 
     Integer streetId;
-
     String name;
-
-
 }

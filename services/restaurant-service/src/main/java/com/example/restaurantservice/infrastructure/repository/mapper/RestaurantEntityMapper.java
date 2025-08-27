@@ -7,6 +7,7 @@ import com.example.restaurantservice.domain.Street;
 import com.example.restaurantservice.infrastructure.RestaurantEntity;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -15,11 +16,11 @@ public class RestaurantEntityMapper {
 
     public Restaurant mapFromEntity(RestaurantEntity entity){
         return Restaurant.builder()
-                .restaurantId(entity.getRestaurantId())
                 .restaurantName(entity.getRestaurantName())
                 .email(entity.getEmail())
                 .address(entity.getAddress())
                 .phone(entity.getPhone())
+                .ownerEmail(entity.getOwnerEmail())
                 .restaurantStreets(entity.getRestaurantStreets() == null ? null : entity.getRestaurantStreets().stream().map(
                         restaurantStreetEntity ->
                                 RestaurantStreet.builder()
@@ -36,11 +37,12 @@ public class RestaurantEntityMapper {
 
     public RestaurantEntity mapToEntity(Restaurant restaurant){
         return RestaurantEntity.builder()
-                .restaurantId(restaurant.getRestaurantId())
+                .restaurantId(UUID.randomUUID().toString())
                 .restaurantName(restaurant.getRestaurantName())
                 .email(restaurant.getEmail())
                 .address(restaurant.getAddress())
                 .phone(restaurant.getPhone())
+                .ownerEmail(restaurant.getOwnerEmail())
                 .restaurantStreets(null)
                 .build();
     }

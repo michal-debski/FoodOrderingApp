@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RequiredArgsConstructor
 @RestController
@@ -21,9 +23,10 @@ public class RestaurantController {
 
     @PostMapping("/addRestaurant")
     public ResponseEntity<?> makeRestaurant(
-            @RequestBody RestaurantRequest request
+            @RequestBody RestaurantRequest request,
+            @RequestHeader("X-User-Email") String ownerEmail
     ) {
-        Restaurant restaurant = restaurantMapper.mapFromDto(request);
+        Restaurant restaurant = restaurantMapper.mapFromDto(request, ownerEmail);
         Restaurant savedRestaurant = restaurantService.saveRestaurant(restaurant);
         RestaurantDTO savedRestaurantInDTO = restaurantMapper.map(savedRestaurant);
         return new ResponseEntity<>(savedRestaurantInDTO, HttpStatus.CREATED);
@@ -33,8 +36,19 @@ public class RestaurantController {
     public ResponseEntity<RestaurantDTO> deleteRestaurant(
             @PathVariable String restaurantId
     ) {
-        restaurantService.deleteRestaurant(Integer.valueOf(restaurantId));
+        restaurantService.deleteRestaurant(restaurantId);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<RestaurantDTO>> getAllRestaurantsByOwnerEmail(
+            @RequestHeader("X-User-Email") String ownerEmail
+    ) {
+        List<Restaurant> allRestaurantsByOwnerEmail = restaurantService.findAllRestaurantsByOwnerEmail(ownerEmail);
+        List<RestaurantDTO> restaurantDTOList = allRestaurantsByOwnerEmail.stream()
+                .map(restaurantMapper::map)
+                .toList();
+        return new ResponseEntity<>(restaurantDTOList, HttpStatus.OK);
     }
 }
 

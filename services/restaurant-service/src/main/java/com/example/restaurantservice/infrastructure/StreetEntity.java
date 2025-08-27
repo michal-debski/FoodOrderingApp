@@ -25,6 +25,7 @@ public class StreetEntity {
 
     @Column(name = "name")
     private String name;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "street")
     @Fetch(value= FetchMode.JOIN)
     private Set<RestaurantStreetEntity> restaurantStreets;

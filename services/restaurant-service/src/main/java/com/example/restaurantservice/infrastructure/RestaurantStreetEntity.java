@@ -17,7 +17,7 @@ public class RestaurantStreetEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "restaurant_street_id")
-    private Integer restaurantStreetId;
+    private String restaurantStreetId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "street_id")
