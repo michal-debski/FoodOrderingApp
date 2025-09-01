@@ -1,12 +1,13 @@
 package com.example.restaurantservice.domain;
 
-import lombok.Builder;
-import lombok.Value;
-import lombok.With;
+import lombok.*;
 
-@With
-@Value
+
 @Builder
+@With
+@Data
+@Setter
+@Getter
 public class RestaurantStreet {
     String id;
     Street street;

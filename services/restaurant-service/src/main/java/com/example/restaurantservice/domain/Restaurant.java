@@ -11,6 +11,7 @@ import java.util.Set;
 @Getter
 public class Restaurant {
 
+    String restaurantId;
     String restaurantName;
     String phone;
     String email;

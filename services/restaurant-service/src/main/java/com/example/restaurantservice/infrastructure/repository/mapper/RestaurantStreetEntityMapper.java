@@ -15,13 +15,7 @@ public class RestaurantStreetEntityMapper {
     public RestaurantStreet mapFromEntity(RestaurantStreetEntity entity){
         return RestaurantStreet.builder()
                 .id(entity.getRestaurantStreetId())
-                .restaurant(Restaurant.builder()
-                        .restaurantId(entity.getRestaurant().getRestaurantId())
-                        .restaurantName(entity.getRestaurant().getRestaurantName())
-                        .email(entity.getRestaurant().getEmail())
-                        .address(entity.getRestaurant().getAddress())
-                        .phone(entity.getRestaurant().getPhone())
-                        .build())
+                .restaurantId(entity.getRestaurant().getRestaurantId())
                 .street(Street.builder()
                         .streetId(entity.getStreet().getStreetId())
                         .name(entity.getStreet().getName())
@@ -29,15 +23,15 @@ public class RestaurantStreetEntityMapper {
                 .build();
     }
 
-    public RestaurantStreetEntity mapToEntity(RestaurantStreet restaurantStreet) {
+    public RestaurantStreetEntity mapToEntity(RestaurantStreet restaurantStreet, Restaurant restaurant) {
         return RestaurantStreetEntity.builder()
                 .restaurantStreetId(restaurantStreet.getId())
                 .restaurant(RestaurantEntity.builder()
-                        .restaurantId(restaurantStreet.getRestaurant().getRestaurantId())
-                        .restaurantName(restaurantStreet.getRestaurant().getRestaurantName())
-                        .email(restaurantStreet.getRestaurant().getEmail())
-                        .address(restaurantStreet.getRestaurant().getAddress())
-                        .phone(restaurantStreet.getRestaurant().getPhone())
+                        .restaurantId(restaurant.getRestaurantId())
+                        .restaurantName(restaurant.getRestaurantName())
+                        .email(restaurant.getEmail())
+                        .address(restaurant.getAddress())
+                        .phone(restaurant.getPhone())
                         .build())
                 .street(StreetEntity.builder()
                         .streetId(restaurantStreet.getStreet().getStreetId())

@@ -36,13 +36,12 @@ public class RestaurantStreetService {
         List<RestaurantStreet> restaurantStreetsList = new ArrayList<>();
         preparationOfRestaurantStreets(restaurant, streetsId, restaurantStreetsList);
         log.info("Trying to save all given/prepared restaurant streets");
-        saveAllGivenStreets(restaurantStreetsList);
+        saveAllGivenStreets(restaurantStreetsList, restaurant);
     }
 
-    private void saveAllGivenStreets(List<RestaurantStreet> restaurantStreetsList) {
+    private void saveAllGivenStreets(List<RestaurantStreet> restaurantStreetsList, Restaurant restaurant) {
         for (RestaurantStreet restaurantStreet : restaurantStreetsList) {
-
-            restaurantStreetDAO.saveRestaurantStreet(restaurantStreet);
+            restaurantStreetDAO.saveRestaurantStreet(restaurantStreet, restaurant);
 
         }
     }
@@ -53,7 +52,7 @@ public class RestaurantStreetService {
             RestaurantStreet restaurantStreet = RestaurantStreet
                     .builder()
                     .street(street)
-                    .restaurant(restaurant)
+                    .restaurantId(restaurant.getRestaurantId())
                     .build();
             restaurantStreetsList.add(restaurantStreet);
 

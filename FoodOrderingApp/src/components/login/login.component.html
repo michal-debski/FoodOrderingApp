@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>FoodOrderingApp</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+<div class="container">
+  <h1>Login to OrderApp</h1>
+  <br>
+  <h2> Please insert your username and password to login</h2>
+  <br>
+  <form [formGroup]="userForm" (ngSubmit)="login()">
+    <div class="text-center">
+      <input type="email" formControlName="email" placeholder="Email">
+      <i class="bx bx-envelope"></i>
+    </div>
+    <div class="text-center">
+      <input type="password" formControlName="password" placeholder="Password">
+      <i class="bx bx-envelope"></i>
+    </div>
+    <div class="remember">
+      <label>
+        <input type="checkbox"> Remember me
+      </label>
+      <a href="#">Forgot password?</a>
+    </div>
+    <div class="d-flex justify-content-center align-items-center flex-column">
+      <button class="btn btn-primary mb-3">Login!</button>
+    </div>
+    <div class="register">
+      <p>No account?<br> <a href="#">Add as new user!</a> </p>
+    </div>
+  </form>
+</div>
+</html>

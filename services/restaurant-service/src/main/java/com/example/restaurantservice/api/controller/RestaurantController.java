@@ -50,6 +50,19 @@ public class RestaurantController {
                 .toList();
         return new ResponseEntity<>(restaurantDTOList, HttpStatus.OK);
     }
+
+    @GetMapping("/available")
+    public ResponseEntity<List<RestaurantDTO>> getAllRestaurantsByStreetName(
+            @RequestParam String streetName
+    ) {
+        List<Restaurant> allRestaurantsByStreetName = restaurantService.findAllByStreetName(streetName);
+
+        List<RestaurantDTO> restaurantDtoByStreetName = allRestaurantsByStreetName.stream()
+                .map(restaurantMapper::map)
+                .toList();
+
+        return new ResponseEntity<>(restaurantDtoByStreetName, HttpStatus.OK);
+    }
 }
 
 
