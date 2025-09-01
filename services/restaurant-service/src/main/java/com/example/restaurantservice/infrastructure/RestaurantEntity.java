@@ -8,7 +8,7 @@ import java.util.Set;
 @Getter
 @Setter
 @EqualsAndHashCode(of = "restaurantId")
-@ToString(of = {"restaurantId", "restaurantName", "email", "phone"})
+@ToString(of = {"restaurantId", "restaurantName", "email", "phone", "ownerEmail"})
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,9 +17,9 @@ import java.util.Set;
 public class RestaurantEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "restaurant_id")
-    private Integer restaurantId;
+    private String restaurantId;
     @Column(name = "name")
     private String restaurantName;
     @Column(name = "email")
@@ -28,6 +28,8 @@ public class RestaurantEntity {
     private String phone;
     @Column(name = "address")
     private String address;
+    @Column(name = "owner_email")
+    private String ownerEmail;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant", cascade = CascadeType.ALL)
     private Set<RestaurantStreetEntity> restaurantStreets;
 

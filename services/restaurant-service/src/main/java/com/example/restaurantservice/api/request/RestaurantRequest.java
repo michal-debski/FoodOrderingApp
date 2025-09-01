@@ -5,7 +5,6 @@ import jakarta.validation.constraints.Pattern;
 
 
 public record RestaurantRequest(
-        Integer restaurantId,
         String restaurantName,
         @Pattern(regexp = "^[+]\\d{2}\\s\\d{3}\\s\\d{3}\\s\\d{3}$")
         String phone,
@@ -13,6 +12,4 @@ public record RestaurantRequest(
         String email,
         String address
 ) {
-
-
 }

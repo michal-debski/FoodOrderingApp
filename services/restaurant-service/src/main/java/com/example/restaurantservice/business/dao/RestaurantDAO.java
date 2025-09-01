@@ -12,14 +12,15 @@ import java.util.Optional;
 public interface RestaurantDAO {
 
 
-    Optional<Restaurant> findRestaurantById(Integer id);
+    Optional<Restaurant> findRestaurantById(String id);
 
     List<Restaurant> findAllRestaurants();
 
     Restaurant saveRestaurant(Restaurant restaurant);
 
-    void deleteRestaurant(Integer restaurantId);
-
+    void deleteRestaurant(String restaurantId);
 
     List<Restaurant> findAllRestaurantByStreetName(String street);
+
+    List<Restaurant> findRestaurantsByOwnerEmail(String ownerEmail);
 }

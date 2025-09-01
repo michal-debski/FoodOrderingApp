@@ -26,7 +26,7 @@ public class RestaurantService {
         return restaurants;
     }
 
-    public Restaurant findRestaurantById(Integer id) {
+    public Restaurant findRestaurantById(String id) {
         Optional<Restaurant> restaurant = restaurantDAO.findRestaurantById(id);
         if (restaurant.isEmpty()) {
             throw new NotFoundException("Could not find restaurant by name: [%s]".formatted(id));
@@ -41,7 +41,7 @@ public class RestaurantService {
     }
 
     @Transactional
-    public void deleteRestaurant(Integer restaurantId) {
+    public void deleteRestaurant(String restaurantId) {
         log.info("Trying to delete Restaurant{}:", restaurantId);
         restaurantDAO.deleteRestaurant(restaurantId);
     }
@@ -49,6 +49,10 @@ public class RestaurantService {
     public List<Restaurant> findAllByStreetName(String street) {
         log.info("Trying to find all Restaurants by street{}:", street);
         return restaurantDAO.findAllRestaurantByStreetName(street);
+    }
+
+    public List<Restaurant> findAllRestaurantsByOwnerEmail(String ownerEmail) {
+        return restaurantDAO.findRestaurantsByOwnerEmail(ownerEmail);
     }
 }
 

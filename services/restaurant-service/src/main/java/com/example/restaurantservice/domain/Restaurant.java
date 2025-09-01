@@ -11,11 +11,11 @@ import java.util.Set;
 @Getter
 public class Restaurant {
 
-    Integer restaurantId;
     String restaurantName;
     String phone;
     String email;
     String address;
+    String ownerEmail;
     Set<RestaurantStreet> restaurantStreets;
 
 }
