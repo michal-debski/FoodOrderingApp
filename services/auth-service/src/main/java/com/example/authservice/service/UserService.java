@@ -14,7 +14,12 @@ public class UserService {
     private final UserRepository userRepository;
 
     public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
-
+        Optional<User> userOpt = userRepository.findByEmail(email);
+        if (!userOpt.isPresent()) {
+            System.out.println("User not found");
+            return Optional.empty();
+        }
+        userOpt.ifPresent(u -> System.out.println("Found user: " + u.getEmail()));
+        return userOpt;
     }
 }

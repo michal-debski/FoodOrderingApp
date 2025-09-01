@@ -2,7 +2,9 @@ package com.example.authservice.api.controller;
 
 import com.example.authservice.api.dto.LoginRequestDTO;
 import com.example.authservice.api.dto.LoginResponseDTO;
+import com.example.authservice.entity.User;
 import com.example.authservice.service.AuthService;
+import com.example.authservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,7 @@ import java.util.Optional;
 public class AuthController {
 
     private final AuthService authService;
+    private final UserService userService;
 
   @PostMapping("/login")
   public ResponseEntity<LoginResponseDTO> login(
@@ -30,9 +33,18 @@ public class AuthController {
          log.info("Unauthorized, token not found");
          return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
      }
-     String token = tokenOptional.get();
-     log.info("Successfully logged in with token: {}", token);
-     return ResponseEntity.ok().header("X-User-Email", authService.getEmailFromToken(token)).body(new LoginResponseDTO(token));
+      String token = tokenOptional.get();
+      Optional<User> userByEmail = userService.findByEmail(loginRequestDTO.getEmail());
+
+      if (userByEmail.isPresent()) {
+          String role = userByEmail.get().getRole();
+          log.info("Successfully logged in with token: {} and role: {}", token, role);
+          return ResponseEntity.ok().header(
+                  "X-User-Email",
+                  authService.getEmailFromToken(token)).body(new LoginResponseDTO(token, role));
+      } else {
+          return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+      }
   }
 
     @GetMapping("/validate")
