@@ -6,6 +6,7 @@ import com.example.restaurantservice.api.response.mapper.RestaurantMapper;
 import com.example.restaurantservice.business.RestaurantService;
 import com.example.restaurantservice.domain.Restaurant;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/restaurants")
@@ -40,14 +42,16 @@ public class RestaurantController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping
+    @GetMapping("/allRestaurants")
     public ResponseEntity<List<RestaurantDTO>> getAllRestaurantsByOwnerEmail(
             @RequestHeader("X-User-Email") String ownerEmail
     ) {
+        log.info("Received X-User-Email: {}", ownerEmail);
         List<Restaurant> allRestaurantsByOwnerEmail = restaurantService.findAllRestaurantsByOwnerEmail(ownerEmail);
         List<RestaurantDTO> restaurantDTOList = allRestaurantsByOwnerEmail.stream()
                 .map(restaurantMapper::map)
                 .toList();
+        log.info("Found {} restaurants, list below: \n{}", restaurantDTOList.size(), restaurantDTOList);
         return new ResponseEntity<>(restaurantDTOList, HttpStatus.OK);
     }
 

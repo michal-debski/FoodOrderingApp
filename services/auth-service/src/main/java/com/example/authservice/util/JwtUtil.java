@@ -24,11 +24,17 @@ public class JwtUtil {
     }
 
     public String generateToken(String email, String role) {
+        System.out.println("System.currentTimeMillis(): " + System.currentTimeMillis());
+        System.out.println("System.currentTimeMillis(): " + new Date(System.currentTimeMillis() + 1000 * 3600 * 10));
+        System.out.println("System.currentTimeMillis(): " + new Date(System.currentTimeMillis()));
+        System.out.println("new Date(): " + new Date());
+        Date date = new Date();
+        Date dateExpiration = new Date(System.currentTimeMillis() + 1000 * 3600 * 10);
         return Jwts.builder()
                 .subject(email)
                 .claim("role", role)
-                .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 3600 * 10))
+                .issuedAt(date)
+                .expiration(dateExpiration)
                 .signWith(secretKey)
                 .compact();
     }
@@ -48,7 +54,7 @@ public class JwtUtil {
     }
 
     public String getEmailFromToken(String token) {
-        SecretKey key = (SecretKey) secretKey; // lub stwórz SecretKey z bytesów, jeśli potrzebujesz
+        SecretKey key = (SecretKey) secretKey;
 
         String email = Jwts.parser()
                 .verifyWith((SecretKey) secretKey)

@@ -2,12 +2,10 @@ package com.example.restaurantservice.infrastructure.repository.mapper;
 
 
 import com.example.restaurantservice.domain.Restaurant;
-import com.example.restaurantservice.domain.RestaurantStreet;
 import com.example.restaurantservice.domain.Street;
 import com.example.restaurantservice.infrastructure.RestaurantEntity;
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -21,14 +19,11 @@ public class RestaurantEntityMapper {
                 .address(entity.getAddress())
                 .phone(entity.getPhone())
                 .ownerEmail(entity.getOwnerEmail())
-                .restaurantStreets(entity.getRestaurantStreets() == null ? null : entity.getRestaurantStreets().stream().map(
-                        restaurantStreetEntity ->
-                                RestaurantStreet.builder()
-                                        .id(restaurantStreetEntity.getRestaurantStreetId())
-                                        .street(Street.builder()
-                                                .streetId(restaurantStreetEntity.getStreet().getStreetId())
-                                                .name(restaurantStreetEntity.getStreet().getName())
-                                                .build())
+                .streets(entity.getStreets() == null ? null : entity.getStreets().stream().map(
+                        streetEntity ->
+                                Street.builder()
+                                        .streetId(streetEntity.getStreetId())
+                                        .name(streetEntity.getName())
                                         .build()
                 ).collect(Collectors.toSet()))
                 .build();
@@ -37,13 +32,11 @@ public class RestaurantEntityMapper {
 
     public RestaurantEntity mapToEntity(Restaurant restaurant){
         return RestaurantEntity.builder()
-                .restaurantId(UUID.randomUUID().toString())
                 .restaurantName(restaurant.getRestaurantName())
                 .email(restaurant.getEmail())
                 .address(restaurant.getAddress())
                 .phone(restaurant.getPhone())
                 .ownerEmail(restaurant.getOwnerEmail())
-                .restaurantStreets(null)
                 .build();
     }
 

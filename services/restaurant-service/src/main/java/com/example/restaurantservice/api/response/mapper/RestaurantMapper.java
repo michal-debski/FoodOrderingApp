@@ -3,7 +3,6 @@ package com.example.restaurantservice.api.response.mapper;
 
 import com.example.restaurantservice.api.request.RestaurantRequest;
 import com.example.restaurantservice.api.response.RestaurantDTO;
-import com.example.restaurantservice.api.response.RestaurantStreetDTO;
 import com.example.restaurantservice.api.response.StreetDTO;
 import com.example.restaurantservice.domain.Restaurant;
 import org.springframework.stereotype.Component;
@@ -20,18 +19,14 @@ public class RestaurantMapper {
                 .email(restaurant.getEmail())
                 .ownerEmail(restaurant.getOwnerEmail())
                 .address(restaurant.getAddress())
-                .restaurantStreets(restaurant.getRestaurantStreets()
+                .streets(restaurant.getStreets() != null
+                        ? restaurant.getStreets()
                         .stream()
-                        .map(restaurantStreet ->
-                                RestaurantStreetDTO.builder()
-                                        .restaurantId(restaurant.getRestaurantId())
-                                        .street(StreetDTO.builder()
-                                                .name(restaurantStreet.getStreet().getName())
-                                                .streetId(restaurantStreet.getStreet().getStreetId())
-                                                .build())
-                                        .build()
-                        ).collect(Collectors.toSet())
-                )
+                        .map(street ->
+                                new StreetDTO(street.getStreetId(), street.getName())
+                        )
+                        .collect(Collectors.toSet())
+                        : null)
                 .build();
     }
 

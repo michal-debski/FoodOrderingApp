@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {RouterLink, RouterLinkActive} from '@angular/router';
 import {RestaurantService} from '../../services/restaurant-service';
 import {RestaurantDTO} from '../../models/restaurant-dto';
@@ -9,10 +9,11 @@ import {RestaurantDTO} from '../../models/restaurant-dto';
     RouterLinkActive,
     RouterLink
   ],
+  standalone: true,
   templateUrl: './restaurants.component.html',
   styleUrl: './restaurants.component.css'
 })
-export class RestaurantsComponent {
+export class RestaurantsComponent implements OnInit{
   restaurants: RestaurantDTO[] = [];
 
   constructor(private restaurantService: RestaurantService) {}

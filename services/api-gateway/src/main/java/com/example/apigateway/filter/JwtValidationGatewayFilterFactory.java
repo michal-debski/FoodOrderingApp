@@ -49,7 +49,10 @@ public class JwtValidationGatewayFilterFactory extends AbstractGatewayFilterFact
 
                         if (userEmail != null) {
                             ServerWebExchange mutatedExchange = exchange.mutate()
-                                    .request(r -> r.headers(headers -> headers.set("X-User-Email", userEmail)))
+                                    .request(r -> r.headers(headers -> {
+                                        headers.set("X-User-Email", userEmail);
+                                        headers.set(HttpHeaders.AUTHORIZATION, token);
+                                    }))
                                     .build();
                             return chain.filter(mutatedExchange);
                         } else {

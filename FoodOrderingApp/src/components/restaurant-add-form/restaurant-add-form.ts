@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {RestaurantService} from '../../services/restaurant-service';
 import {Router} from '@angular/router';
 import {RestaurantRequest} from '../../models/restaurant.request';
@@ -20,8 +20,10 @@ export class RestaurantAddForm {
   ) {}
 
   addRestaurantForm : FormGroup = new FormGroup({
-    email: new FormControl(''),
-    password: new FormControl('')
+    restaurantName: new FormControl('', Validators.required),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    phone: new FormControl('', Validators.pattern(/^\+?\d{1,3}?[-.\s]?\d{3}[-.\s]?\d{3}[-.\s]?\d{3}$/)),
+    address: new FormControl('', Validators.required)
   });
 
   request: RestaurantRequest = new RestaurantRequest();
@@ -34,11 +36,11 @@ export class RestaurantAddForm {
     this.request.email = formValue.email;
     this.request.address = formValue.address;
     this.request.phone = formValue.phone;
-
+    console.log('Token w localStorage:', localStorage.getItem('token'));
     this.restaurant.addRestaurant(this.request).pipe(
       tap({
         next: (res: any) => {
-            this.router.navigate(['/restaurants']);
+            this.router.navigate(['/restaurants/allRestaurants']);
         },
         error: (err) => {
           console.error("Error Received Response: ", err);

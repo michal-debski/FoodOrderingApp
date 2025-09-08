@@ -17,6 +17,6 @@ public class Restaurant {
     String email;
     String address;
     String ownerEmail;
-    Set<RestaurantStreet> restaurantStreets;
+    Set<Street> streets;
 
 }

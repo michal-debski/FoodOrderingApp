@@ -41,6 +41,7 @@ export class LoginComponent {
     this.authorization.login(this.request).pipe(
       tap({
         next: (res: any) => {
+          localStorage.setItem('token', res.token);
           const role = res.role;
           localStorage.setItem('role', res.role);
           console.log("Role:" + res.role);

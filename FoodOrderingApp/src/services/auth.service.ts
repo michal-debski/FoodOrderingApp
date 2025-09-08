@@ -15,9 +15,9 @@ export class AuthService {
 
   login(request: LoginRequest): Observable<LoginResponse> {
     tap({
-      next: (res: any) => {
-        localStorage.setItem('token', res.token);
-        localStorage.setItem('role', res.role);
+      next: (res: LoginResponse) => {
+        localStorage.setItem('token', res.token!);
+        // localStorage.setItem('email', request.email!);
       },
       error: (err) => console.error('Login error', err)
     })

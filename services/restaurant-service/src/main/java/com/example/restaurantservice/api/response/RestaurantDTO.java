@@ -17,7 +17,8 @@ public record RestaurantDTO(
         String email,
         String address,
         String ownerEmail,
-        Set<RestaurantStreetDTO> restaurantStreets
+        Set<StreetDTO> streets
+
 ) {
 
 
