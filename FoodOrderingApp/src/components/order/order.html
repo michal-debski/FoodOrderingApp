@@ -1,0 +1,40 @@
+<article>
+  <div class="hero-container">
+    <div class="column-left">
+      <p>You can order a meal from below list</p>
+      <table>
+        <thead>
+        <tr>
+          <th>Meal Name</th>
+          <th>Category</th>
+          <th>Description</th>
+          <th>Price</th>
+
+          <th class="actions">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+          @for (meal of meals; track meal.category) {
+            <tr>
+              <td>{{ meal.name }}</td>
+              <td>{{meal.category}}</td>
+              <td>{{ meal.description }}</td>
+              <td>{{ meal.price }}</td>
+              <td>
+                <div>
+                  <div>
+                    <button (click)="decrease(meal)" class="quantity-button">-</button>
+                    {{ getQuantity(meal) }}
+                    <button (click)="increase(meal)" class="quantity-button">+</button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      <button (click)="finishOrder()" class="button">Finish order!</button>
+      <br>
+    </div>
+  </div>
+</article>

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -26,7 +27,15 @@ public class JwtValidationGatewayFilterFactory extends AbstractGatewayFilterFact
 
     @Override
     public GatewayFilter apply(Object config) {
+
         return (exchange, chain) -> {
+            if (exchange.getRequest().getMethod() == HttpMethod.OPTIONS) {
+                exchange.getResponse().getHeaders().add("Access-Control-Allow-Origin", "http://localhost:4200");
+                exchange.getResponse().getHeaders().add("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+                exchange.getResponse().getHeaders().add("Access-Control-Allow-Headers", "Authorization,Content-Type,X-User-Email");
+                exchange.getResponse().getHeaders().add("Access-Control-Allow-Credentials", "true");
+                return exchange.getResponse().setComplete();
+            }
             String token = exchange.getRequest()
                     .getHeaders()
                     .getFirst(HttpHeaders.AUTHORIZATION);
@@ -49,7 +58,10 @@ public class JwtValidationGatewayFilterFactory extends AbstractGatewayFilterFact
 
                         if (userEmail != null) {
                             ServerWebExchange mutatedExchange = exchange.mutate()
-                                    .request(r -> r.headers(headers -> headers.set("X-User-Email", userEmail)))
+                                    .request(r -> r.headers(headers -> {
+                                        headers.set("X-User-Email", userEmail);
+                                        headers.set(HttpHeaders.AUTHORIZATION, token);
+                                    }))
                                     .build();
                             return chain.filter(mutatedExchange);
                         } else {

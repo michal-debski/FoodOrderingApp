@@ -2,9 +2,8 @@ package com.example.restaurantservice.infrastructure;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -26,7 +25,6 @@ public class StreetEntity {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "street")
-    @Fetch(value= FetchMode.JOIN)
-    private Set<RestaurantStreetEntity> restaurantStreets;
+    @ManyToMany(mappedBy = "streets")
+    private Set<RestaurantEntity> restaurants = new HashSet<>();
 }

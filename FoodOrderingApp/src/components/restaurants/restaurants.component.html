@@ -1,0 +1,36 @@
+<article>
+  <div class="hero-container">
+    <div class="column-left">
+      <h1>Check out your restaurants!</h1>
+      <p>You can add or edit your restaurants</p>
+
+      <a routerLink="/restaurants/addRestaurant" class="button" routerLinkActive="active">Add new restaurant</a>
+
+      <table >
+        <thead>
+        <tr>
+          <th>Restaurant Name</th>
+          <th>Phone</th>
+          <th>Email</th>
+          <th class="actions">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+          @for (restaurant of restaurants; track restaurant.restaurantName) {
+            <tr>
+              <td>{{ restaurant.restaurantName }}</td>
+              <td>{{ restaurant.phone }}</td>
+              <td>{{ restaurant.email }}</td>
+              <td>
+                <a routerLink="/restaurants" class="button" routerLinkActive="active">View orders</a>
+                <a routerLink="/owner" class="button" routerLinkActive="active" (click)="selectRestaurant(restaurant.restaurantId)">Edit</a>
+                <a routerLink="/restaurants" class="button" routerLinkActive="active">Delete restaurant</a>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      <br>
+    </div>
+  </div>
+</article>

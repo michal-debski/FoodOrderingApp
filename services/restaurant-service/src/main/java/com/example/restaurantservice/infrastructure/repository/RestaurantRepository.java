@@ -6,11 +6,13 @@ import com.example.restaurantservice.exception.NotFoundException;
 import com.example.restaurantservice.infrastructure.RestaurantEntity;
 import com.example.restaurantservice.infrastructure.repository.mapper.RestaurantEntityMapper;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Repository
 @AllArgsConstructor
 public class RestaurantRepository implements RestaurantDAO {

@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/meals/{restaurantId}/meals")
+@RequestMapping("/meals/{restaurantId}")
 public class MealController {
 
     private final MealMenuService mealMenuService;

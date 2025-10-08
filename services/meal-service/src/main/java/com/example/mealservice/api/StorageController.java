@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("meals/{restaurantId}/meals/storage")
+@RequestMapping("meals/{restaurantId}/storage")
 public class StorageController {
 
     private final StorageService storageService;
@@ -32,11 +32,11 @@ public class StorageController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateIngredient(
+    public ResponseEntity<?> increaseIngredientQuantity(
             @PathVariable("restaurantId") String restaurantId,
             @RequestBody IngredientUpdateRequest ingredientRequest
     ) {
-        Ingredient ingredient = storageService.updateIngredientQuantity(ingredientRequest);
+        Ingredient ingredient = storageService.increaseIngredientQuantity(ingredientRequest);
         return ResponseEntity.ok(storageMapper.mapToDto(ingredient));
     }
 

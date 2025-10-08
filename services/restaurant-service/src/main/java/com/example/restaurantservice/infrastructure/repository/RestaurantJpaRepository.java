@@ -14,10 +14,10 @@ public interface RestaurantJpaRepository extends JpaRepository<RestaurantEntity,
     Optional<RestaurantEntity> findByRestaurantName(String name);
 
     @Query("""
-        SELECT rs.restaurant FROM RestaurantStreetEntity rs
-        JOIN rs.restaurant r
-        JOIN rs.street s
-        WHERE LOWER(s.name) LIKE LOWER(CONCAT('%',:street,'%'))
+        SELECT street.restaurants FROM StreetEntity street
+        JOIN street.restaurants r
+        JOIN street.name s
+        WHERE LOWER(s) LIKE LOWER(CONCAT('%',:street,'%'))
         """)
     List<RestaurantEntity> findAllByStreetName(final @Param("street") String street);
 

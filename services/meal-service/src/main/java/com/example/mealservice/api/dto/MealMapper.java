@@ -13,6 +13,7 @@ public class MealMapper {
 
     public MealDTO mapToDTO(Meal meal) {
         return MealDTO.builder()
+                .mealId(meal.mealId())
                 .name(meal.name())
                 .description(meal.description())
                 .category(meal.category().getName())

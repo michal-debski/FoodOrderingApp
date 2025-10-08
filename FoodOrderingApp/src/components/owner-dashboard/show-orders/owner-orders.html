@@ -1,0 +1,46 @@
+<article>
+  <div class="hero-container">
+    <div class="column-left">
+      <table>
+        <thead>
+        <tr>
+          <th>Order Number</th>
+          <th>Total Price</th>
+          <th>Status</th>
+          <th>Customer email</th>
+          <th>Order date</th>
+          <th>Order Items</th>
+          <th>Is Cancellable by user?</th>
+          <th class="actions">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+          @for (order of orders; track order.orderNumber) {
+            <tr>
+              <td>{{ order.orderNumber }}</td>
+              <td>{{ order.totalPrice }}</td>
+              <td>{{ order.status }}</td>
+              <td>{{ order.customerEmail }}</td>
+              <td>{{ order.orderDate | date:'dd MMM yyyy, HH:mm' }}</td>
+
+              <td>
+                <ul>
+                  @for (item of order.orderItems; track item.mealId) {
+                    <li>{{ item.mealId }} (quantity: {{ item.quantity }})</li>
+                  }
+                </ul>
+              </td>
+
+              <td>{{ order.isCancellable ? 'Yes' : 'No' }}</td>
+
+              <td>
+                <button (click)="cancelOrder(order.orderNumber)" [disabled]="!order.isCancellable">Cancel</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      <br>
+    </div>
+  </div>
+</article>

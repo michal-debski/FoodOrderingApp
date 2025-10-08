@@ -1,0 +1,23 @@
+<article>
+  <div class="column-left">
+    <h1>This is dashboard of your restaurant!</h1>
+    <p>You can edit your restaurant here!</p>
+    <div class="dashboard-wrapper">
+      <aside class="sidebar">
+        <button (click)="selectView('add-meal')">Add Meal</button>
+        <button (click)="selectView('show-orders')">Show Orders</button>
+        <button (click)="selectView('add-ingredient')">Add Ingredient</button>
+        <button (click)="selectView('show-storage')">Show Storage</button>
+      </aside>
+
+      <main class="content">
+        <div class="hero-container">
+          <app-add-meal *ngIf="selectedView === 'add-meal'"></app-add-meal>
+          <app-add-ingredient *ngIf="selectedView === 'add-ingredient'"></app-add-ingredient>
+        </div>
+        <app-owner-orders *ngIf="selectedView === 'show-orders'"></app-owner-orders>
+
+      </main>
+    </div>
+  </div>
+</article>

@@ -23,4 +23,6 @@ public interface OrderDAO {
     List<Order> findAll();
 
     void updateOrder(Order order);
+
+    List<Order> findOrdersByRestaurantId(String restaurantId);
 }

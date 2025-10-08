@@ -32,7 +32,7 @@ public class StorageService {
     }
 
     @Transactional
-    public Ingredient updateIngredientQuantity(IngredientUpdateRequest ingredient) {
+    public Ingredient increaseIngredientQuantity(IngredientUpdateRequest ingredient) {
         log.info("Trying to update ingredient");
         Optional<Ingredient> ingredientByName = storageDAO.findIngredientByName(ingredient.name());
         if(ingredientByName.isEmpty()) {
@@ -40,12 +40,16 @@ public class StorageService {
         }
 
         Ingredient foundIngredient = ingredientByName.get();
-        return storageDAO.updateIngredientQuantityInStorage(new Ingredient(
+        Ingredient updatedIngredient = new Ingredient(
                 foundIngredient.ingredientId(),
                 ingredient.name(),
-                ingredient.quantity(), ingredient.unitName(),
+                ingredient.quantity(),
+                ingredient.unitName(),
                 foundIngredient.restaurantId()
-        ));
+        );
+        System.out.println("Ingredient updated: " + updatedIngredient);
+        return storageDAO.updateIngredientQuantityInStorage(updatedIngredient);
+
     }
 
     public List<Ingredient> getAllIngredientsForGivenRestaurantId(String restaurantId) {

@@ -1,9 +1,11 @@
 package com.example.orderservice.domain;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -21,10 +23,5 @@ public class Order {
     public String restaurantId;
     public List<OrderItem> orderItems;
     public boolean isCancellable;
-
-    public boolean isCancellable(){
-        return LocalDateTime.now().isBefore(orderDate.toLocalDateTime().plusMinutes(10));
-    }
-
 
 }

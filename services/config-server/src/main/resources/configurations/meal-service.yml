@@ -4,6 +4,7 @@ eureka:
 spring:
   kafka:
     bootstrap-servers: localhost:9092
+    request-timeout-ms: 60000
   cloud:
     netflix:
       eureka:
