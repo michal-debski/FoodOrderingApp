@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -27,11 +26,8 @@ public class MealGrpcService extends MealServiceGrpc.MealServiceImplBase {
         try {
 
             log.info("Starting checkMealAvailability method in grpc");
-            List<Meal> meals = mealMenuService.findMealsWhichCannotBePrepared(request.getOrderItemsList()
-                    .stream()
-                    .map(orderItem -> orderItem.getMealId())
-                    .collect(Collectors.toList())
-            );
+            List<Meal> meals = mealMenuService.findMealsWhichCannotBePrepared(request.getOrderItemsList());
+
             log.info("Found {} meals,  MEALS: {}", meals.size(), meals);
             if (meals.isEmpty()){
                 MealCheckResponse mealCheckResponse = MealCheckResponse.newBuilder()

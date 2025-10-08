@@ -1,0 +1,32 @@
+<form [formGroup]="addMealForm" (ngSubmit)="addMeal()" novalidate >
+  <div class="form-group">
+    <label for="name">Meal Name:</label>
+    <input id="name" type="text" formControlName="name" />
+    <div class="error" *ngIf="addMealForm.get('name')?.invalid && addMealForm.get('name')?.touched">
+      Name is required.
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="category">Category:</label>
+    <input id="category" type="text" formControlName="category" />
+    <div class="error" *ngIf="addMealForm.get('category')?.invalid && addMealForm.get('category')?.touched">
+      Category is required.
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="description">Description:</label>
+    <textarea id="description" formControlName="description"></textarea>
+  </div>
+
+  <div class="form-group">
+    <label for="price">Price:</label>
+    <input id="price" type="number" formControlName="price" step="0.01" />
+    <div class="error" *ngIf="addMealForm.get('price')?.invalid && addMealForm.get('price')?.touched">
+      Price must be greater than 0.
+    </div>
+  </div>
+
+  <button type="submit" [disabled]="addMealForm.invalid">Add Meal</button>
+</form>

@@ -10,6 +10,7 @@ import java.util.Set;
 
 @Builder
 public record RestaurantDTO(
+        String restaurantId,
         String restaurantName,
         @Pattern(regexp = "^[+]\\d{2}\\s\\d{3}\\s\\d{3}\\s\\d{3}$")
         String phone,

@@ -14,6 +14,7 @@ public class RestaurantMapper {
 
     public RestaurantDTO map(Restaurant restaurant) {
         return RestaurantDTO.builder()
+                .restaurantId(restaurant.getRestaurantId())
                 .restaurantName(restaurant.getRestaurantName())
                 .phone(restaurant.getPhone())
                 .email(restaurant.getEmail())
@@ -29,7 +30,6 @@ public class RestaurantMapper {
                         : null)
                 .build();
     }
-
 
     public Restaurant mapFromDto(RestaurantRequest restaurant, String ownerEmail) {
         return Restaurant.builder()

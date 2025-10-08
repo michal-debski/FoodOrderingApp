@@ -19,7 +19,7 @@ export class RestaurantsComponent implements OnInit{
   constructor(private restaurantService: RestaurantService) {}
 
   ngOnInit(): void {
-    this.restaurantService.restaurants().subscribe({
+    this.restaurantService.getRestaurants().subscribe({
       next: (data) => {
         this.restaurants = data;
       },
@@ -27,6 +27,11 @@ export class RestaurantsComponent implements OnInit{
         console.error('Error occurred during getting restaurants', err)
       }
     });
+  }
+
+  selectRestaurant(restaurantId: string) {
+    localStorage.setItem('restaurantId', restaurantId);
+    console.log('Selected restaurantId:', restaurantId);
   }
 
 }

@@ -12,8 +12,7 @@
           <th>Restaurant Name</th>
           <th>Phone</th>
           <th>Email</th>
-          <th>Streets</th>
-          <th>Actions</th>
+          <th class="actions">Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -23,13 +22,8 @@
               <td>{{ restaurant.phone }}</td>
               <td>{{ restaurant.email }}</td>
               <td>
-                  @for (restaurantStreet of restaurant.restaurantStreets; track restaurantStreet.street.name) {
-                    {{ restaurantStreet.street.name }}
-                  }
-              </td>
-              <td>
-                <a routerLink="/restaurants" class="button" routerLinkActive="active">Add new streets</a>
-                <a routerLink="/restaurants" class="button" routerLinkActive="active">Edit</a>
+                <a routerLink="/restaurants" class="button" routerLinkActive="active">View orders</a>
+                <a routerLink="/owner" class="button" routerLinkActive="active" (click)="selectRestaurant(restaurant.restaurantId)">Edit</a>
                 <a routerLink="/restaurants" class="button" routerLinkActive="active">Delete restaurant</a>
               </td>
             </tr>

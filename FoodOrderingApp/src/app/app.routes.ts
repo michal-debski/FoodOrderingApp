@@ -4,6 +4,10 @@ import {HomeClientComponent} from '../components/homepage-client/home-client.com
 import {RestaurantsComponent} from '../components/restaurants/restaurants.component';
 import {RestaurantAddForm} from '../components/restaurant-add-form/restaurant-add-form';
 import {HomeOwnerComponent} from "../components/homepage-owner/home-owner.component";
+import {RestaurantListComponent} from '../components/restaurants/restaurant.list.component';
+import {Order} from '../components/order/order';
+import {OwnerDashboard} from '../components/owner-dashboard/owner-dashboard';
+import {ClientOrder} from '../components/client-order/client-order';
 
 export const routes: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
@@ -11,5 +15,10 @@ export const routes: Routes = [
   {path: 'home-client', component: HomeClientComponent },
   {path: 'home-owner', component: HomeOwnerComponent },
   {path: 'restaurants', component: RestaurantsComponent},
-  {path: 'restaurants/addRestaurant', component: RestaurantAddForm}
+  {path: 'restaurants/all-restaurants', component: RestaurantListComponent},
+  {path: 'restaurants/addRestaurant', component: RestaurantAddForm},
+  {path: 'restaurant/:id/meals', component: Order},
+  {path: 'owner', component: OwnerDashboard},
+  {path: 'orders/all', component: ClientOrder}
+
 ];

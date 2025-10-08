@@ -42,12 +42,22 @@ public class RestaurantController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/allRestaurants")
+    @GetMapping
     public ResponseEntity<List<RestaurantDTO>> getAllRestaurantsByOwnerEmail(
             @RequestHeader("X-User-Email") String ownerEmail
     ) {
         log.info("Received X-User-Email: {}", ownerEmail);
         List<Restaurant> allRestaurantsByOwnerEmail = restaurantService.findAllRestaurantsByOwnerEmail(ownerEmail);
+        List<RestaurantDTO> restaurantDTOList = allRestaurantsByOwnerEmail.stream()
+                .map(restaurantMapper::map)
+                .toList();
+        log.info("Found {} restaurants, list below: \n{}", restaurantDTOList.size(), restaurantDTOList);
+        return new ResponseEntity<>(restaurantDTOList, HttpStatus.OK);
+    }
+
+    @GetMapping("/allRestaurants")
+    public ResponseEntity<List<RestaurantDTO>> getAllRestaurants() {
+        List<Restaurant> allRestaurantsByOwnerEmail = restaurantService.findAllRestaurants();
         List<RestaurantDTO> restaurantDTOList = allRestaurantsByOwnerEmail.stream()
                 .map(restaurantMapper::map)
                 .toList();
@@ -67,6 +77,8 @@ public class RestaurantController {
 
         return new ResponseEntity<>(restaurantDtoByStreetName, HttpStatus.OK);
     }
+
+
 }
 
 

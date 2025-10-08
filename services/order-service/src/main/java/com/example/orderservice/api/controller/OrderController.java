@@ -4,8 +4,6 @@ import com.example.orderservice.api.dto.OrderDTO;
 import com.example.orderservice.api.dto.OrderRequestDTO;
 import com.example.orderservice.api.dto.mapper.OrderItemMapper;
 import com.example.orderservice.api.dto.mapper.OrderMapper;
-import com.example.orderservice.business.KafkaMessageProducerService;
-import com.example.orderservice.business.OrderItemService;
 import com.example.orderservice.business.OrderService;
 import com.example.orderservice.domain.Order;
 import com.example.orderservice.domain.OrderItem;
@@ -27,7 +25,6 @@ public class OrderController {
     private final OrderService orderService;
     private final OrderMapper orderMapper;
     private final OrderItemMapper orderItemMapper;
-    private final OrderItemService orderItemService;
 
     @PostMapping("/{restaurantId}/order")
     public ResponseEntity<?> placeOrder(
@@ -49,12 +46,10 @@ public class OrderController {
         return ResponseEntity.ok(orderDTOToShow);
     }
 
-    @DeleteMapping("/{restaurantId}/order/{orderNumber}")
+    @DeleteMapping("/{orderNumber}")
     public ResponseEntity<?> deleteOrder(
-            @PathVariable String restaurantId,
             @PathVariable String orderNumber
     ) {
-
         orderService.deleteOrder(orderNumber);
 
         return ResponseEntity.ok().build();
@@ -68,7 +63,7 @@ public class OrderController {
         log.info("email: " + email);
         List<Order> listOfOrders = orderService.findAllOrders();
         List<OrderDTO> list = listOfOrders.stream().map(orderMapper::mapToDTO).toList();
-
+        log.info("list: " + list);
         return ResponseEntity.ok(list);
     }
 
@@ -84,5 +79,16 @@ public class OrderController {
         orderByOrderNumber.setStatus(orderDTO.status());
         orderService.updateOrder(orderByOrderNumber);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{restaurantId}/orders")
+    public ResponseEntity<?> showOrdersForRestaurantEmail(
+            @PathVariable String restaurantId
+    ) {
+        List<OrderDTO> ordersByRestaurant = orderService.findOrdersByRestaurantId(restaurantId)
+                .stream()
+                .map(orderMapper::mapToDTO)
+                .toList();
+        return ResponseEntity.ok(ordersByRestaurant);
     }
 }

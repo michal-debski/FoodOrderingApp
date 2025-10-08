@@ -1,0 +1,31 @@
+<article>
+  <div class="hero-container">
+    <div class="column-left">
+      <h1>Check out restaurants!</h1>
+      <p>You can order a meal from below restaurants</p>
+      <table >
+        <thead>
+        <tr>
+          <th>Restaurant Name</th>
+          <th>Phone</th>
+          <th>Email</th>
+          <th class="actions">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+          @for (restaurant of restaurants; track restaurant.restaurantName) {
+            <tr>
+              <td>{{ restaurant.restaurantName }}</td>
+              <td>{{ restaurant.phone }}</td>
+              <td>{{ restaurant.email }}</td>
+              <td>
+                <a [routerLink]="['/restaurant', restaurant.restaurantId, 'meals']" class="button">Order!</a>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      <br>
+    </div>
+  </div>
+</article>

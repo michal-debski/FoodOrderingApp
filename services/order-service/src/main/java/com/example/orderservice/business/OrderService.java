@@ -1,8 +1,7 @@
 package com.example.orderservice.business;
 
-import com.example.mealservice.grpc.MealCheckRequest;
 import com.example.mealservice.grpc.MealCheckResponse;
-import com.example.mealservice.grpc.MealServiceGrpc;
+import com.example.mealservice.grpc.UnavailableMeal;
 import com.example.orderservice.business.dao.OrderDAO;
 import com.example.orderservice.domain.Order;
 import com.example.orderservice.domain.OrderItem;
@@ -27,16 +26,14 @@ public class OrderService {
 
     private final OrderDAO orderDAO;
 
-    private final OrderItemService orderItemService;
-
     private final MealServiceGrpcClient mealServiceGrpcClient;
 
     private final KafkaMessageProducerService kafkaMessageProducerService;
 
+    @Transactional
     public void deleteOrder(String orderNumber) {
         orderDAO.findOrderByOrderNumber(orderNumber).ifPresent(order -> {
             if (order.isCancellable()){
-                orderItemService.deleteOrderItemsByOrderOrderNumber(orderNumber);
                 orderDAO.deleteOrder(orderNumber);
             } else {
                 log.warn("You cannot delete order, because order has been ordered more than 10 minutes ago.");
@@ -66,10 +63,10 @@ public class OrderService {
                 .restaurantId(restaurantId)
                 .build();
         MealCheckResponse mealCheckResponse = mealServiceGrpcClient.checkMealAvailability(orderPlaced.getOrderNumber(), orderItems);
-        int unavailableMealsCount = mealCheckResponse.getUnavailableMealsCount();
+        List<UnavailableMeal> unavailableMeals = mealCheckResponse.getUnavailableMealsList();
 
-        if (unavailableMealsCount > 0 || !mealCheckResponse.getCanPrepare()) {
-            throw new UnavailableMealsException("One or more meals cannot be prepared.");
+        if (!unavailableMeals.isEmpty() || !mealCheckResponse.getCanPrepare()) {
+            throw new UnavailableMealsException(unavailableMeals);
         }
 
         orderPlaced.setOrderItems(orderItems);
@@ -88,8 +85,8 @@ public class OrderService {
         }
         orderPlaced.setTotalPrice(totalPrice.setScale(2, RoundingMode.HALF_EVEN));
         System.out.println(orderPlaced.getOrderItems());
-        System.out.println("Order Placed: " + orderPlaced + " !");
         Order savedOrder = orderDAO.saveOrder(orderPlaced);
+        System.out.println("Order Placed: " + orderPlaced + " !");
         kafkaMessageProducerService.sendMessage(savedOrder);
         return savedOrder;
 
@@ -102,6 +99,10 @@ public class OrderService {
     @Transactional
     public void updateOrder(Order order) {
         orderDAO.updateOrder(order);
+    }
+
+    public List<Order> findOrdersByRestaurantId(String restaurantId) {
+        return orderDAO.findOrdersByRestaurantId(restaurantId);
     }
 
     private String generateOrderNumber() {

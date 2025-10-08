@@ -11,11 +11,12 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "order_item")
+@Table(name = "order_item", schema = "order_service")
 public class OrderItemEntity {
     @Id
     @Column(name = "order_item_id")
     private String orderItemId;
+
     @Column(name = "quantity")
     private Integer quantity;
 

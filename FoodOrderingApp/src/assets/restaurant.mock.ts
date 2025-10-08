@@ -2,6 +2,7 @@ import {RestaurantDTO} from '../models/restaurant-dto';
 
 export const MOCK_RESTAURANTS: RestaurantDTO[] = [
   {
+    restaurantId: "1",
     restaurantName: "Bella Italia",
     phone: "+48 123 456 789",
     email: "contact@bellaitalia.pl",
@@ -15,6 +16,7 @@ export const MOCK_RESTAURANTS: RestaurantDTO[] = [
     ]
   },
   {
+    restaurantId: "2",
     restaurantName: "Sushi Zen",
     phone: "+48 234 567 890",
     email: "info@sushizen.pl",
@@ -28,6 +30,7 @@ export const MOCK_RESTAURANTS: RestaurantDTO[] = [
     ]
   },
   {
+    restaurantId: "3",
     restaurantName: "La Fiesta",
     phone: "+48 345 678 901",
     email: "kontakt@lafiesta.pl",
@@ -41,6 +44,7 @@ export const MOCK_RESTAURANTS: RestaurantDTO[] = [
     ]
   },
   {
+    restaurantId: "4",
     restaurantName: "Burger House",
     phone: "+48 456 789 012",
     email: "hello@burgerhouse.pl",
@@ -54,6 +58,7 @@ export const MOCK_RESTAURANTS: RestaurantDTO[] = [
     ]
   },
   {
+    restaurantId: "5",
     restaurantName: "Curry Corner",
     phone: "+48 567 890 123",
     email: "support@currycorner.pl",

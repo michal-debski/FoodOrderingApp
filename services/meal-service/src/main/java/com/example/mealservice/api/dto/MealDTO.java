@@ -8,6 +8,7 @@ import java.util.List;
 
 @Builder
 public record MealDTO(
+        String mealId,
         String name,
         String category,
         String description,

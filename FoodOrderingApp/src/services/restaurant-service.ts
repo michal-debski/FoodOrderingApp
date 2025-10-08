@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import {Observable} from 'rxjs';
 import {RestaurantDTO} from '../models/restaurant-dto';
-import {MOCK_RESTAURANTS} from '../assets/restaurant.mock';
 import {RestaurantRequest} from '../models/restaurant.request';
 
 
 const GET_RESTAURANTS_BY_STREET_URL = "http://localhost:8222/api/v1/restaurants/allRestaurants"
+const GET_RESTAURANTS = "http://localhost:8222/api/v1/restaurants/allRestaurants"
 const ADD_RESTAURANT = "http://localhost:8222/api/v1/restaurants/addRestaurant"
 
 @Injectable({
@@ -18,7 +18,7 @@ export class RestaurantService {
   }
 
   getRestaurants(): Observable<RestaurantDTO[]> {
-    return of(MOCK_RESTAURANTS);
+    return this.http.get<RestaurantDTO[]>(`${GET_RESTAURANTS}`);
   }
   restaurants(): Observable<RestaurantDTO[]> {
     const token = localStorage.getItem('token');
@@ -29,6 +29,14 @@ export class RestaurantService {
     });
 
     return this.http.get<RestaurantDTO[]>(GET_RESTAURANTS_BY_STREET_URL,{ headers });
+  }
+
+  allRestaurants(): Observable<RestaurantDTO[]> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.get<RestaurantDTO[]>(GET_RESTAURANTS,{ headers });
   }
 
   addRestaurant(request: RestaurantRequest): Observable<RestaurantDTO> {

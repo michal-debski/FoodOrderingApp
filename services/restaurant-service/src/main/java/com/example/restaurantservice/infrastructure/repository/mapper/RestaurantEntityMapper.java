@@ -14,6 +14,7 @@ public class RestaurantEntityMapper {
 
     public Restaurant mapFromEntity(RestaurantEntity entity){
         return Restaurant.builder()
+                .restaurantId(entity.getRestaurantId())
                 .restaurantName(entity.getRestaurantName())
                 .email(entity.getEmail())
                 .address(entity.getAddress())

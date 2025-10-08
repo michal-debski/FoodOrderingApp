@@ -13,7 +13,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "new_order")
+@Table(name = "new_order", schema = "order_service")
 public class OrderEntity {
 
     @Id
@@ -35,7 +35,7 @@ public class OrderEntity {
     @Column(name = "restaurant_id")
     private String restaurantId;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "order")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "order", orphanRemoval = true)
     private Set<OrderItemEntity> orderItems;
 
 

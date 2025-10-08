@@ -58,6 +58,12 @@ public class OrderRepository implements OrderDAO {
         orderJpaRepository.save(orderEntityMapper.mapToEntity(order));
     }
 
+    @Override
+    public List<Order> findOrdersByRestaurantId(String restaurantId) {
+        return orderJpaRepository.findOrdersByRestaurantId(restaurantId)
+                .stream().map(orderEntityMapper::mapFromEntity).toList();
+    }
+
 
     @Override
     public BigDecimal getTotalOrderPrice(String orderNumber) {

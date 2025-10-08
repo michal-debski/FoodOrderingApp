@@ -1,0 +1,55 @@
+table {
+  width: 100%;
+  text-align: center;
+  border-collapse: collapse;
+  border: 1px solid;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+
+thead th {
+  position: sticky;
+  top: 0;
+  background-color: black;
+  color: white;
+  z-index: 1;
+}
+
+th, td {
+  padding: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  border: 1px solid grey;
+}
+
+td ul {
+  list-style-type: disc;
+  padding-left: 20px;
+  text-align: left;
+}
+
+tr:hover {
+  background-color: orange;
+}
+
+button {
+  background-color: #000000;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 32px;
+  margin: 10px;
+  cursor: pointer;
+}
+button:disabled {
+  background-color: grey;
+  color: #ccc;
+  cursor: not-allowed;
+}
+

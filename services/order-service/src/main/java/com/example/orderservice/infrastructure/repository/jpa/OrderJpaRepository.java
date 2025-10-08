@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -30,4 +29,6 @@ public interface OrderJpaRepository extends JpaRepository<OrderEntity, Integer> 
                     """
     )
     BigDecimal getTotalOrderPrice(@Param("orderNumber") String orderNumber);
+
+    List<OrderEntity> findOrdersByRestaurantId(String restaurantId);
 }

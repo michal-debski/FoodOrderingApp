@@ -64,6 +64,5 @@ spring:
               predicates:
                 - Path=/api/v1/restaurants/**
               filters:
-                - RewritePath=/api/v1/restaurants/(?<segment>.*), /restaurants/${segment}
+                - RewritePath=/api/v1/restaurants(?<segment>/.*|), /restaurants${segment}
                 - JwtValidation
-

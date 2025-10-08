@@ -3,14 +3,14 @@
   <ng-container *ngIf="!isLoginPage">
   @if (role === 'USER'){
     <div class="nav-items">
-      <a href="#">Home</a>
+      <a href="home-client">Home</a>
       <a href="#">Logout</a>
-      <a href="/restaurants" routerLinkActive="routerLinkActive">Restaurants</a>
-      <a href="#">Orders</a>
+      <a href="/restaurants/all-restaurants" routerLinkActive="routerLinkActive">Restaurants</a>
+      <a href="/orders/all">Order</a>
     </div>
   } @else if (role === 'RESTAURANT_OWNER') {
     <div class="nav-items">
-      <a href="#">Home</a>
+      <a href="home-owner">Home</a>
       <a href="#">Logout</a>
       <a href="/restaurants" routerLinkActive="routerLinkActive">My Restaurants</a>
     </div>

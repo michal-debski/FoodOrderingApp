@@ -4,17 +4,16 @@ import com.example.mealservice.domain.Ingredient;
 import com.example.mealservice.domain.Meal;
 import com.example.mealservice.api.dto.MealUpdateRequest;
 import com.example.mealservice.domain.MealIngredient;
+
 import com.example.mealservice.exception.NotFoundException;
+import com.example.mealservice.grpc.OrderItem;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -47,7 +46,7 @@ public class MealMenuService {
     @Transactional
     public Meal makeMealForRestaurant(Meal meal) {
         log.info(
-                "Making meal for restaurant: [{}]",
+                "Start making meal for restaurant: [{}]",
                 meal.restaurantId()
         );
 
@@ -56,25 +55,9 @@ public class MealMenuService {
         List<String> ingredients = meal.ingredients()
                 .stream()
                 .map(MealIngredient::name).toList();
-        for (String ingredient : ingredients) {
-            if(!ingredientsName.contains(ingredient)) {
-                Optional<MealIngredient> mealIngredient = meal.ingredients()
-                        .stream()
-                        .filter(t -> t.name().equals(ingredient))
-                        .findFirst();
-                if(mealIngredient.isPresent()) {
-                    MealIngredient futureIngredient = mealIngredient.get();
-                    storageDAO.addNewIngredientToStore(
-                            Ingredient.builder()
-                                    .name(futureIngredient.name())
-                                    .unitName(String.valueOf(futureIngredient.unit()))
-                                    .quantity(futureIngredient.quantity())
-                                    .build(), meal.restaurantId());
-                }
-            }
-        }
+        addIngredientToStorage(meal, ingredients, ingredientsName);
         log.info(
-                "Making meal for restaurant successfully ended: [{}]",
+                "Making meal and added ingredients to the storage for restaurant successfully ended: [{}]",
                 meal.restaurantId()
         );
         return mealDAO.saveMeal(meal);
@@ -113,11 +96,11 @@ public class MealMenuService {
 
 
     @Transactional
-    public List<Meal> findMealsWhichCannotBePrepared(List<String> mealsId) {
-        log.info("Finding meals which cannot be prepared. MealsId: {}", mealsId);
-
-        List<Meal> meals = mealsId.stream()
-                .map(mealDAO::findMealById)
+    public List<Meal> findMealsWhichCannotBePrepared(List<OrderItem> orderItems) {
+        log.info("Finding meals which cannot be prepared. From order items: {}", orderItems);
+        HashMap<String, Integer> requiredIngredients = new HashMap<>();
+        List<Meal> meals = orderItems.stream()
+                .map((OrderItem orderItem) -> mealDAO.findMealById(orderItem.getMealId()))
                 .flatMap(Optional::stream)
                 .toList();
 
@@ -126,13 +109,18 @@ public class MealMenuService {
             throw new NotFoundException("No meals from list have been found");
         }
 
-        Map<String, Integer> requiredIngredients = meals.stream()
-                .flatMap(meal -> meal.ingredients().stream())
-                .collect(Collectors.toMap(
-                        MealIngredient::name,
-                        MealIngredient::quantity,
-                        Integer::sum
-                ));
+        for (OrderItem orderItem : orderItems) {
+            Meal meal = mealDAO.findMealById(orderItem.getMealId())
+                    .orElseThrow(() -> new NotFoundException("Meal not found"));
+
+            for (MealIngredient ingredient : meal.ingredients()) {
+                String name = ingredient.name();
+                int totalQuantity = ingredient.quantity() * orderItem.getQuantity();
+
+                requiredIngredients.merge(name, totalQuantity, Integer::sum);
+            }
+        }
+
         log.info("Current required ingredients: {}", requiredIngredients);
 
         Map<String, Integer> storageMap = storageDAO.getStorageMap();
@@ -155,5 +143,26 @@ public class MealMenuService {
                 .toList();
         log.info("Meals which cannot be prepared: {}", unavailableMeals);
         return unavailableMeals;
+    }
+
+    private void addIngredientToStorage(Meal meal, List<String> ingredients, List<String> ingredientsName) {
+        log.info("Start adding new ingredients: [{}]", ingredients);
+        for (String ingredient : ingredients) {
+            if(!ingredientsName.contains(ingredient)) {
+                Optional<MealIngredient> mealIngredient = meal.ingredients()
+                        .stream()
+                        .filter(t -> t.name().equals(ingredient))
+                        .findFirst();
+                if(mealIngredient.isPresent()) {
+                    MealIngredient futureIngredient = mealIngredient.get();
+                    storageDAO.addNewIngredientToStore(
+                            Ingredient.builder()
+                                    .name(futureIngredient.name())
+                                    .unitName(String.valueOf(futureIngredient.unit()))
+                                    .quantity(0)
+                                    .build(), meal.restaurantId());
+                }
+            }
+        }
     }
 }
