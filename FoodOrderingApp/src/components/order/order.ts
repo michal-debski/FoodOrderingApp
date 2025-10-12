@@ -76,7 +76,7 @@ export class Order {
       next: (order) => {
         this.orderService.clear();
         alert('Successfully performed order!');
-        this.router.navigate(['/restaurants']);
+        this.router.navigate(['/restaurants/all-restaurants']);
       },
       error: (err) => {
         if (err.status === 409 && err.error?.unavailableMeals) {

@@ -2,7 +2,7 @@ package com.example.orderservice.api.dto.mapper;
 
 import com.example.orderservice.api.dto.OrderDTO;
 import com.example.orderservice.api.dto.OrderItemDTO;
-import com.example.orderservice.api.dto.IngredientRemovalFromStorageMessage;
+import com.example.orderservice.api.dto.IngredientChangeStateInStorageMessage;
 import com.example.orderservice.domain.Order;
 import com.example.orderservice.domain.OrderItem;
 import org.springframework.stereotype.Component;
@@ -51,8 +51,8 @@ public class OrderMapper extends OffsetDateTimeMapper {
     }
 
 
-    public IngredientRemovalFromStorageMessage mapToIngredientRemovalFromStorageMessage(Order order) {
-        return IngredientRemovalFromStorageMessage.builder()
+    public IngredientChangeStateInStorageMessage mapToIngredientChangeStateInStorageMessage(Order order) {
+        return IngredientChangeStateInStorageMessage.builder()
                 .orderNumber(order.getOrderNumber())
                 .orderItems(order.getOrderItems()
                         .stream()

@@ -3,11 +3,9 @@ package com.example.mealservice.infrastructure.respository;
 import com.example.mealservice.business.MealDAO;
 import com.example.mealservice.domain.Meal;
 import com.example.mealservice.infrastructure.entity.MealEntity;
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
-
 
 import java.util.List;
 import java.util.Optional;
@@ -42,7 +40,7 @@ public class MealRepository implements MealDAO {
     public Meal saveMeal(Meal meal) {
         MealEntity mealEntity = mealEntityMapper.mapToEntity(meal);
         MealEntity entitySaved = mealJpaRepository.save(mealEntity);
-        log.info("###Saved!!!  + "  + entitySaved);
+        log.info("Saved: {} ", entitySaved);
         return mealEntityMapper.mapFromEntity(entitySaved);
     }
 

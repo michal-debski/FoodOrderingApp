@@ -1,27 +1,27 @@
 <nav>
   <div class="logo">FOOD ORDERING APP</div>
-  <ng-container *ngIf="!isLoginPage">
-  @if (role === 'USER'){
-    <div class="nav-items">
-      <a href="home-client">Home</a>
-      <a href="#">Logout</a>
-      <a href="/restaurants/all-restaurants" routerLinkActive="routerLinkActive">Restaurants</a>
-      <a href="/orders/all">Order</a>
-    </div>
-  } @else if (role === 'RESTAURANT_OWNER') {
-    <div class="nav-items">
-      <a href="home-owner">Home</a>
-      <a href="#">Logout</a>
-      <a href="/restaurants" routerLinkActive="routerLinkActive">My Restaurants</a>
-    </div>
-  } @else if (role === 'ADMIN') {
-    <div class="nav-items">
-      <a href="#">Home</a>
-      <a href="#">Logout</a>
-      <a href="/restaurants" routerLinkActive="routerLinkActive">All Restaurants</a>
-      <a href="#">All Orders</a>
-      <a href="#">All Users</a>
-    </div>
+  @if (!isLoginPage) {
+    <ng-container> @if (role === 'USER'){
+      <div class="nav-items">
+        <a href="home-client">Home</a>
+        <a href="#">Logout</a>
+        <a href="/restaurants/all-restaurants" routerLinkActive="routerLinkActive">Restaurants</a>
+        <a href="/orders/all">Order</a>
+      </div>
+    } @else if (role === 'RESTAURANT_OWNER') {
+      <div class="nav-items">
+        <a href="home-owner">Home</a>
+        <a href="#">Logout</a>
+        <a href="/restaurants" routerLinkActive="routerLinkActive">My Restaurants</a>
+      </div>
+    } @else if (role === 'ADMIN') {
+      <div class="nav-items">
+        <a href="#">Home</a>
+        <a href="#">Logout</a>
+        <a href="/restaurants" routerLinkActive="routerLinkActive">All Restaurants</a>
+        <a href="#">All Orders</a>
+        <a href="#">All Users</a>
+      </div>
+    }</ng-container>
   }
-  </ng-container>
 </nav>

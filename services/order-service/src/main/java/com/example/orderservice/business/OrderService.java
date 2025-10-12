@@ -34,7 +34,10 @@ public class OrderService {
     public void deleteOrder(String orderNumber) {
         orderDAO.findOrderByOrderNumber(orderNumber).ifPresent(order -> {
             if (order.isCancellable()){
+                log.info("Order can be cancelled. Deleting order {} from cancellable", orderNumber);
                 orderDAO.deleteOrder(orderNumber);
+                log.info("Order {} has been deleted successfully!", orderNumber);
+                kafkaMessageProducerService.sendMessageToRestoreIngredients(order);
             } else {
                 log.warn("You cannot delete order, because order has been ordered more than 10 minutes ago.");
             }
@@ -70,7 +73,6 @@ public class OrderService {
         }
 
         orderPlaced.setOrderItems(orderItems);
-        System.out.println(orderPlaced.getOrderItems());
         log.info("Creating order before saving order: {}", orderPlaced);
         BigDecimal totalPrice = BigDecimal.valueOf(0);
 
@@ -84,7 +86,6 @@ public class OrderService {
             throw new NotFoundException("You didn't choose any meals to your order");
         }
         orderPlaced.setTotalPrice(totalPrice.setScale(2, RoundingMode.HALF_EVEN));
-        System.out.println(orderPlaced.getOrderItems());
         Order savedOrder = orderDAO.saveOrder(orderPlaced);
         System.out.println("Order Placed: " + orderPlaced + " !");
         kafkaMessageProducerService.sendMessage(savedOrder);

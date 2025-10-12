@@ -6,7 +6,7 @@ import lombok.Builder;
 import java.util.List;
 
 @Builder
-public record IngredientRemovalFromStorageMessage(
+public record IngredientChangeStateInStorageMessage(
         String orderNumber,
         List<OrderItem> orderItems
 ){

@@ -1,10 +1,7 @@
 package com.example.mealservice.infrastructure.respository;
 
-import com.example.mealservice.api.dto.IngredientUpdateRequest;
-import com.example.mealservice.business.MealDAO;
 import com.example.mealservice.business.StorageDAO;
 import com.example.mealservice.domain.Ingredient;
-import com.example.mealservice.exception.NotFoundException;
 import com.example.mealservice.infrastructure.entity.IngredientEntity;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -44,10 +41,12 @@ public class StorageRepository implements StorageDAO {
 
     @Override
     public Ingredient updateIngredientQuantityInStorage(Ingredient ingredient) {
+        IngredientEntity saved = storageJpaRepository.save(
+                storageEntityMapper.mapToEntity(ingredient)
+        );
+        log.info("Ingredient updated successfully: {}", saved);
         return storageEntityMapper.mapToDomain(
-                storageJpaRepository.save(
-                        storageEntityMapper.mapToEntity(ingredient)
-                )
+                saved
         );
     }
 

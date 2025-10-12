@@ -1,5 +1,5 @@
-import {Observable, of} from 'rxjs';
-import {HttpHeaders} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {IngredientForMealDTO} from '../models/meal.ingredient.dto';
 
@@ -8,46 +8,18 @@ import {IngredientForMealDTO} from '../models/meal.ingredient.dto';
 })
 export class StorageService {
 
-  ingredientsForMeal: IngredientForMealDTO[] = [];
+  constructor(private http: HttpClient) {}
 
-
-  ngOnInit() {
-    this.ingredientsForMeal = [
-      {
-        name: 'Tomato',
-        quantity: 2,
-        unitName: 'pcs'
-      },
-      {
-        name: 'Cheese',
-        quantity: 100,
-        unitName: 'g'
-      },
-      {
-        name: 'Olive Oil',
-        quantity: 2,
-        unitName: 'tbsp'
-      },
-      {
-        name: 'Lettuce',
-        quantity: 1,
-        unitName: 'head'
-      },
-      {
-        name: 'Beef Patty',
-        quantity: 1,
-        unitName: 'pcs'
-      }
-    ];
-  }
   addIngredient(ingredient: IngredientForMealDTO): Observable<IngredientForMealDTO> {
     const restaurantId = localStorage.getItem('restaurantId');
-    const headers = new HttpHeaders({
-      'restaurantId': `${restaurantId}`
-    });
-    console.log("headers: " + headers.get('restaurantId'))
-    return of(ingredient);
+    const url = `http://localhost:8222/api/v1/meals/${restaurantId}/storage`;
 
-    // return this.http.post<MealDTO>(this.baseUrl, ingredient, { headers });
+    return this.http.post<IngredientForMealDTO>(url, ingredient);
+  }
+
+  getIngredients(restaurantId: string) {
+    return this.http.get<{ ingredients: IngredientForMealDTO[] }>(
+      `http://localhost:8222/api/v1/meals/${restaurantId}/storage`
+    );
   }
 }

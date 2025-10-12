@@ -1,10 +1,13 @@
 
 .form-group {
+  text-transform: uppercase;
+
   display: flex;
   flex-direction: column;
 }
 
 input, textarea {
+  text-transform: uppercase;
   padding: 8px;
   font-size: 1rem;
   border-radius: 4px;
@@ -12,6 +15,7 @@ input, textarea {
 }
 
 button {
+  text-transform: uppercase;
   padding: 10px 20px;
   font-size: 1rem;
   background-color: #000;
@@ -29,4 +33,36 @@ button:disabled {
 .error {
   color: red;
   font-size: 0.8rem;
+}
+.ingredients-list {
+  margin-top: 20px;
+  border-top: 1px solid #ddd;
+  padding-top: 10px;
+}
+
+.ingredient-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.ingredient-item span {
+  flex: 1;
+}
+
+.ingredient-select-group {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+#ingredients {
+  width: 200px;
+  height: 40px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  box-sizing: border-box;
 }
