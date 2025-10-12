@@ -32,6 +32,7 @@ p {
 }
 
 button {
+  text-transform: uppercase;
   background-color: #000000;
   border: none;
   color: white;
@@ -79,4 +80,20 @@ button {
 
 .list-section {
   flex: 2;
+}
+.icon-btn{
+  border: none;
+  background-color: transparent;
+  outline: 0;
+
+  i{
+    color: #446CB3;
+    font-size: 2em;
+    cursor: pointer;
+  }
+
+
+  i.spin-animation{
+  animation(spin, 0.5s, ease-in);
+  }
 }

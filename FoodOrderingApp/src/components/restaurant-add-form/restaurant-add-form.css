@@ -39,6 +39,7 @@ input.ng-invalid.ng-touched {
 }
 
 button {
+  text-transform: uppercase;
   background-color: black;
   color: white;
   padding: 12px;

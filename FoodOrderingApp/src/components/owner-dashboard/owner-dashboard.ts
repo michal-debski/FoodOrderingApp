@@ -1,12 +1,12 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {AddMeal} from './add-meal/add-meal';
-import {NgIf} from '@angular/common';
 import {OwnerOrders} from './show-orders/owner-orders';
 import {AddIngredient} from './add-ingredient/add-ingredient';
+import {ShowStorage} from './show-storage/show-storage';
 
 @Component({
   selector: 'owner-dashboard',
-  imports: [AddMeal, NgIf, OwnerOrders, AddIngredient],
+  imports: [AddMeal, OwnerOrders, AddIngredient, ShowStorage],
   templateUrl: './owner-dashboard.html',
   styleUrl: './owner-dashboard.css'
 })

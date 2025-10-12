@@ -21,6 +21,7 @@ public class StorageMapper {
         return Ingredient.builder()
                 .name(ingredientRequest.name())
                 .unitName(ingredientRequest.unitName())
+                .quantity(ingredientRequest.quantity())
                 .build();
     }
 

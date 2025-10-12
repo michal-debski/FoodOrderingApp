@@ -24,9 +24,7 @@ public class OrderRepository implements OrderDAO {
     @Override
     public Order saveOrder(Order order) {
         OrderEntity orderEntity = orderEntityMapper.mapToEntity(order);
-        System.out.println(orderEntity.getOrderItems());
         OrderEntity save = orderJpaRepository.save(orderEntity);
-        System.out.println( save.getOrderItems());
         return orderEntityMapper.mapFromEntity(save);
     }
 

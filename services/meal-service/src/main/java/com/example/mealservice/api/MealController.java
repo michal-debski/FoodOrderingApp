@@ -6,12 +6,14 @@ import com.example.mealservice.api.dto.MealUpdateRequest;
 import com.example.mealservice.business.MealMenuService;
 import com.example.mealservice.domain.Meal;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/meals/{restaurantId}")
@@ -39,6 +41,7 @@ public class MealController {
             @RequestBody MealDTO mealDTO
     ) {
 
+        log.info("MealDTO: {}", mealDTO);
         Meal mealToSave = mealMapper.mapForSave(mealDTO, restaurantId);
         Meal meal = mealMenuService.makeMealForRestaurant(mealToSave);
 

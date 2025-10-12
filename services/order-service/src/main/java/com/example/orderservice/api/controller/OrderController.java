@@ -60,10 +60,8 @@ public class OrderController {
     public ResponseEntity<?> showOrdersForCustomerEmail(
             @RequestHeader("X-User-Email") String email
     ) {
-        log.info("email: " + email);
         List<Order> listOfOrders = orderService.findAllOrders();
         List<OrderDTO> list = listOfOrders.stream().map(orderMapper::mapToDTO).toList();
-        log.info("list: " + list);
         return ResponseEntity.ok(list);
     }
 

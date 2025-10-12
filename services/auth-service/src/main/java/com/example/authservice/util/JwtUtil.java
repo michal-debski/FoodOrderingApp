@@ -24,9 +24,6 @@ public class JwtUtil {
     }
 
     public String generateToken(String email, String role) {
-        System.out.println("System.currentTimeMillis(): " + System.currentTimeMillis());
-        System.out.println("System.currentTimeMillis(): " + new Date(System.currentTimeMillis() + 1000 * 3600 * 10));
-        System.out.println("System.currentTimeMillis(): " + new Date(System.currentTimeMillis()));
         System.out.println("new Date(): " + new Date());
         Date date = new Date();
         Date dateExpiration = new Date(System.currentTimeMillis() + 1000 * 3600 * 10);

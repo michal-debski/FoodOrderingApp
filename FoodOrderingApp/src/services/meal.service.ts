@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {MealDTO} from '../models/meal.dto';
 import {OrderService} from './order.service';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {OrderItemDTO} from '../models/order.item.dto';
 
 @Injectable({
@@ -11,7 +11,6 @@ import {OrderItemDTO} from '../models/order.item.dto';
 export class MealService {
   meals: MealDTO[] = [];
   private baseUrl = 'http://localhost:8222/api/v1/meals';
-
   constructor(
     private orderService: OrderService,
     private http: HttpClient
@@ -44,11 +43,6 @@ export class MealService {
   }
 
   addMeal(meal: MealDTO): Observable<MealDTO> {
-    const headers = new HttpHeaders({
-      'restaurantId': meal.restaurantId
-    });
-    console.log("headers: " + headers.get('restaurantId'))
-
-    return this.http.post<MealDTO>(this.baseUrl, meal, { headers });
+    return this.http.post<MealDTO>(`${this.baseUrl}/${meal.restaurantId}`, meal);
   }
 }

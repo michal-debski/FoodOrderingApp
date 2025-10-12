@@ -1,0 +1,31 @@
+<article>
+  <div class="hero-container">
+    <div class="column-left">
+      <table>
+        <thead>
+        <tr>
+          <th>Ingredient name</th>
+          <th>Quantity</th>
+          <th>Unit name</th>
+          <th class="actions">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+          @for (ingredient of ingredients; track ingredient.unitName) {
+            <tr>
+              <td>{{ ingredient.name }}</td>
+              <td>
+                <input type="number" [(ngModel)]="ingredient.quantity" min="1"/>
+              </td>
+              <td>{{ ingredient.unitName }}</td>
+              <td>
+                <button type="button" (click)="changeQuantity(ingredient)">Change</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      <br>
+    </div>
+  </div>
+</article>

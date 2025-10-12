@@ -61,7 +61,7 @@ public class OrderEntityMapper {
                 .restaurantId(entity.getRestaurantId())
                 .status(entity.getStatus())
                 .totalPrice(entity.getTotalPrice())
-                .isCancellable(entity.getOrderDate().plusSeconds(5).isAfter(OffsetDateTime.now()))                .build();
+                .isCancellable(entity.getOrderDate().plusMinutes(5).isAfter(OffsetDateTime.now()))                .build();
     }
 
 }

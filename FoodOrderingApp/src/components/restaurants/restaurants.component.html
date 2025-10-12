@@ -22,9 +22,8 @@
               <td>{{ restaurant.phone }}</td>
               <td>{{ restaurant.email }}</td>
               <td>
-                <a routerLink="/restaurants" class="button" routerLinkActive="active">View orders</a>
-                <a routerLink="/owner" class="button" routerLinkActive="active" (click)="selectRestaurant(restaurant.restaurantId)">Edit</a>
-                <a routerLink="/restaurants" class="button" routerLinkActive="active">Delete restaurant</a>
+                <a routerLink="/owner" class="button" routerLinkActive="active" (click)="selectRestaurant(restaurant.restaurantId)">Dashboard</a>
+                <a routerLink="/restaurants" class="button" routerLinkActive="active">Delete</a>
               </td>
             </tr>
           }

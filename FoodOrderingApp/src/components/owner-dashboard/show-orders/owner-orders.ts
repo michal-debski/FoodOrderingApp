@@ -13,7 +13,6 @@ import {HttpClient} from '@angular/common/http';
 })
 export class OwnerOrders {
   orders: OrderDTO[] = [];
-  availableStatuses: string[] = ['PENDING', 'PREPARING', 'READY', 'COMPLETED', 'CANCELLED'];
   editingStatusFor: string | null = null;
 
   constructor(private http: HttpClient) {}

@@ -1,7 +1,7 @@
 package com.example.mealservice.config;
 
 
-import com.example.mealservice.domain.IngredientRemovalFromStorageMessage;
+import com.example.mealservice.domain.IngredientChangeStateInStorageMessage;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,7 +24,7 @@ public class KafkaConsumerConfig {
     private String bootstrapServers;
 
     @Bean
-    public ConsumerFactory<String, IngredientRemovalFromStorageMessage> mealCheckConsumerFactory() {
+    public ConsumerFactory<String, IngredientChangeStateInStorageMessage> mealCheckConsumerFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "groupId");
@@ -35,7 +35,7 @@ public class KafkaConsumerConfig {
         props.put(ErrorHandlingDeserializer.KEY_DESERIALIZER_CLASS, StringDeserializer.class.getName());
         props.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, JsonDeserializer.class.getName());
         props.put(JsonDeserializer.USE_TYPE_INFO_HEADERS, false);
-        props.put(JsonDeserializer.VALUE_DEFAULT_TYPE, "com.example.mealservice.domain.IngredientRemovalFromStorageMessage");
+        props.put(JsonDeserializer.VALUE_DEFAULT_TYPE, "com.example.mealservice.domain.IngredientChangeStateInStorageMessage");
 
         return new DefaultKafkaConsumerFactory<>(props);
     }
@@ -43,8 +43,8 @@ public class KafkaConsumerConfig {
 
     @Bean
     public KafkaListenerContainerFactory<
-            ConcurrentMessageListenerContainer<String, IngredientRemovalFromStorageMessage>> factory () {
-        ConcurrentKafkaListenerContainerFactory<String, IngredientRemovalFromStorageMessage> factory =
+            ConcurrentMessageListenerContainer<String, IngredientChangeStateInStorageMessage>> factory () {
+        ConcurrentKafkaListenerContainerFactory<String, IngredientChangeStateInStorageMessage> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(mealCheckConsumerFactory());
         return factory;

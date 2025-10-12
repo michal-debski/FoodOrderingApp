@@ -47,7 +47,6 @@ public class StorageService {
                 ingredient.unitName(),
                 foundIngredient.restaurantId()
         );
-        System.out.println("Ingredient updated: " + updatedIngredient);
         return storageDAO.updateIngredientQuantityInStorage(updatedIngredient);
 
     }
