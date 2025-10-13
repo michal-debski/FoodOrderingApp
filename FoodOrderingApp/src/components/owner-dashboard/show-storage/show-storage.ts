@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {IngredientForMealDTO} from '../../../models/meal.ingredient.dto';
 import {HttpClient} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
+import {StorageService} from '../../../services/storage.service';
 
 @Component({
   selector: 'app-show-storage',
@@ -12,10 +13,7 @@ import {FormsModule} from '@angular/forms';
 })
 export class ShowStorage {
   ingredients: IngredientForMealDTO[] = [];
-  temporaryQuantity?: number;
-  isActive?: boolean;
-
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private storageService: StorageService) {}
 
   ngOnInit(): void {
     const restaurantId = localStorage.getItem('restaurantId');
@@ -56,4 +54,12 @@ export class ShowStorage {
     });
   }
 
+  deleteIngredient(ingredient: IngredientForMealDTO) {
+    const restaurantId = localStorage.getItem('restaurantId');
+    if (!restaurantId) {
+      console.error('No restaurantId found in localStorage');
+      return;
+    }
+    return this.storageService.deleteIngredient(ingredient, restaurantId);
+  }
 }

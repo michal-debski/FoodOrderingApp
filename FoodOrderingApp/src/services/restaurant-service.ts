@@ -8,6 +8,7 @@ import {RestaurantRequest} from '../models/restaurant.request';
 const GET_RESTAURANTS_BY_STREET_URL = "http://localhost:8222/api/v1/restaurants/allRestaurants"
 const GET_RESTAURANTS = "http://localhost:8222/api/v1/restaurants/allRestaurants"
 const ADD_RESTAURANT = "http://localhost:8222/api/v1/restaurants/addRestaurant"
+const BASE_URL = "http://localhost:8222/api/v1/restaurants/"
 
 @Injectable({
   providedIn: 'root'
@@ -41,5 +42,10 @@ export class RestaurantService {
 
   addRestaurant(request: RestaurantRequest): Observable<RestaurantDTO> {
     return this.http.post<RestaurantDTO>(ADD_RESTAURANT, request);
+  }
+
+  deleteRestaurant(restaurantId: string) {
+    const concat = BASE_URL.concat(`${restaurantId}`);
+    return this.http.delete<RestaurantDTO>(concat);
   }
 }

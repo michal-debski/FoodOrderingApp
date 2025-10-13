@@ -71,4 +71,9 @@ public class StorageRepository implements StorageDAO {
         List<IngredientEntity> ingredientEntityList = storageJpaRepository.findAll().stream().toList();
         return ingredientEntityList.stream().map(storageEntityMapper::mapToDomain).toList();
     }
+
+    @Override
+    public void deleteIngredientFromStorage(String ingredientId, String restaurantId) {
+        storageJpaRepository.deleteById(ingredientId);
+    }
 }

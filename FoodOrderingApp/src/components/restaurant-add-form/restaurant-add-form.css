@@ -38,18 +38,6 @@ input.ng-invalid.ng-touched {
   margin-top: 4px;
 }
 
-button {
-  text-transform: uppercase;
-  background-color: black;
-  color: white;
-  padding: 12px;
-  border: none;
-  font-size: 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-top: 10px;
-}
-
 button:disabled {
   background-color: gray;
   cursor: not-allowed;

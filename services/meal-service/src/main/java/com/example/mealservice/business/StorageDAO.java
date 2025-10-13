@@ -1,10 +1,8 @@
 package com.example.mealservice.business;
 
-import com.example.mealservice.api.dto.IngredientUpdateRequest;
 import com.example.mealservice.domain.Ingredient;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -23,4 +21,6 @@ public interface StorageDAO {
     Map<String, Integer> getStorageMap();
 
     List<Ingredient> findAll();
+
+    void deleteIngredientFromStorage(String ingredientId, String restaurantId);
 }

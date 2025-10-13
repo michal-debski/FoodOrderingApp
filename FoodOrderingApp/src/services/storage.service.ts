@@ -22,4 +22,12 @@ export class StorageService {
       `http://localhost:8222/api/v1/meals/${restaurantId}/storage`
     );
   }
+
+  deleteIngredient(ingredient: IngredientForMealDTO, restaurantId:string) {
+    const url = `http://localhost:8222/api/v1/meals/${restaurantId}/storage`;
+    console.log(url)
+    console.log(ingredient)
+    return this.http.delete<void>(url, {body: ingredient}).subscribe();
+
+  }
 }

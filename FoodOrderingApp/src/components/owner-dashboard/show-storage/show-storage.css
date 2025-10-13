@@ -7,7 +7,12 @@ table {
   overflow: hidden;
 }
 
-
+input {
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  width: auto;
+}
 thead th {
   position: sticky;
   top: 0;
@@ -34,20 +39,6 @@ tr:hover {
   background-color: orange;
 }
 
-button {
-  text-transform: uppercase;
-  background-color: #000000;
-  border: none;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  border-radius: 32px;
-  margin: 10px;
-  cursor: pointer;
-}
 button:disabled {
   background-color: grey;
   color: #ccc;

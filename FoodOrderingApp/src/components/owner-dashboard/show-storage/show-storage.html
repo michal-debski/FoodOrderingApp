@@ -7,7 +7,7 @@
           <th>Ingredient name</th>
           <th>Quantity</th>
           <th>Unit name</th>
-          <th class="actions">Actions</th>
+          <th>Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -20,6 +20,8 @@
               <td>{{ ingredient.unitName }}</td>
               <td>
                 <button type="button" (click)="changeQuantity(ingredient)">Change</button>
+                <button type="button" (click)="deleteIngredient(ingredient)">Delete</button>
+
               </td>
             </tr>
           }

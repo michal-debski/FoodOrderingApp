@@ -26,7 +26,6 @@ public class MealController {
     public ResponseEntity<List<MealDTO>> showMeals(
             @PathVariable("restaurantId") String restaurantId
     ) {
-
         var meals = mealMenuService.findAllBySelectedRestaurant(restaurantId).stream()
                 .map(mealMapper::mapToDTO)
                 .toList();

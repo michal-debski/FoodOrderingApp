@@ -34,4 +34,8 @@ export class RestaurantsComponent implements OnInit{
     console.log('Selected restaurantId:', restaurantId);
   }
 
+  deleteRestaurant(restaurantId: string) {
+    console.log("Deleting")
+    this.restaurantService.deleteRestaurant(restaurantId).subscribe();
+  }
 }

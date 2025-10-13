@@ -41,7 +41,10 @@
   <button type="button" (click)="addIngredient()">Add Ingredient</button>
 
   <div formArrayName="ingredients">
-    <h4>Selected ingredients:</h4>
+    <div>
+      <h4>Selected ingredients:</h4>
+
+    </div>
 
     @for (ingredientGroup of ingredientsArray.controls; track $index) {
       <div [formGroupName]="$index" class="ingredient-item">
