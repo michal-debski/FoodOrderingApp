@@ -11,13 +11,13 @@
         </tr>
         </thead>
         <tbody>
-          @for (ingredient of ingredients; track ingredient.unitName) {
+          @for (ingredient of ingredients; track ingredient.unit) {
             <tr>
               <td>{{ ingredient.name }}</td>
               <td>
                 <input type="number" [(ngModel)]="ingredient.quantity" min="1"/>
               </td>
-              <td>{{ ingredient.unitName }}</td>
+              <td>{{ ingredient.unit }}</td>
               <td>
                 <button type="button" (click)="changeQuantity(ingredient)">Change</button>
                 <button type="button" (click)="deleteIngredient(ingredient)">Delete</button>

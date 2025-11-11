@@ -47,12 +47,12 @@ public class MealController {
         return new ResponseEntity<>(mealMapper.mapForSaveToDTO(meal), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{mealId}")
+    @DeleteMapping
     public ResponseEntity<?> deleteMealByRestaurant(
             @PathVariable String restaurantId,
-            @PathVariable String mealId
+            @RequestBody String mealName
     ) {
-        mealMenuService.deleteMeal(mealId);
+        mealMenuService.deleteMeal(mealName);
         return ResponseEntity.ok().build();
     }
 

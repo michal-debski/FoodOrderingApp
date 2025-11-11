@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} fr
 import {NgIf} from '@angular/common';
 import {IngredientForMealDTO} from '../../../models/meal.ingredient.dto';
 import {StorageService} from '../../../services/storage.service';
+import {DialogService} from '../../../services/dialog-service';
 
 @Component({
   selector: 'app-add-ingredient',
@@ -16,13 +17,27 @@ import {StorageService} from '../../../services/storage.service';
 })
 export class AddIngredient {
   addIngredientForm!: FormGroup;
-  constructor(private fb: FormBuilder, private storageService: StorageService) {}
+  constructor(private fb: FormBuilder,
+              private storageService: StorageService,
+              private dialogService: DialogService
+  ) {}
 
   ngOnInit(): void {
     this.addIngredientForm = this.fb.group({
       name: ['', Validators.required],
       quantity: [0, Validators.required],
       unitName: ['', Validators.required]
+    });
+  }
+
+  confirmAddIngredient() {
+    this.dialogService.openConfirmDialog({
+      type: 'add',
+      message: 'Do you confirm to add ingredient?'
+    }).subscribe(confirmed => {
+      if (confirmed) {
+        this.addIngredient();
+      }
     });
   }
 
@@ -39,6 +54,8 @@ export class AddIngredient {
       next: (ingredient: any) => {
         console.log('Added ingredient:', ingredient);
         this.addIngredientForm.reset();
+        location.reload();
+
       },
       error: (err: any) => {
         console.error('Error occured during add meal procedure:', err);

@@ -65,7 +65,6 @@ export class Order {
     }
     console.log('Sending order:', orderItems); // Add this line
 
-
     const requestBody = {orderItems};
     this.http.post<OrderRequestDto>(`http://localhost:8222/api/v1/orders/${this.restaurantId}/order`, requestBody, {
       headers: {

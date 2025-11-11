@@ -3,10 +3,11 @@ import {AddMeal} from './add-meal/add-meal';
 import {OwnerOrders} from './show-orders/owner-orders';
 import {AddIngredient} from './add-ingredient/add-ingredient';
 import {ShowStorage} from './show-storage/show-storage';
+import {ShowMeals} from './show-meals/show-meals';
 
 @Component({
   selector: 'owner-dashboard',
-  imports: [AddMeal, OwnerOrders, AddIngredient, ShowStorage],
+  imports: [AddMeal, OwnerOrders, AddIngredient, ShowStorage, ShowMeals],
   templateUrl: './owner-dashboard.html',
   styleUrl: './owner-dashboard.css'
 })

@@ -1,4 +1,4 @@
-<form [formGroup]="addIngredientForm" (ngSubmit)="addIngredient()" novalidate >
+<form [formGroup]="addIngredientForm" (ngSubmit)="confirmAddIngredient()" novalidate >
   <div class="form-group">
     <label for="name">Ingredient Name:</label>
     <input id="name" type="text" formControlName="name" />

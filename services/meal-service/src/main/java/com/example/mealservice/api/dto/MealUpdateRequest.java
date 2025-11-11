@@ -1,15 +1,13 @@
 package com.example.mealservice.api.dto;
 
-import com.example.mealservice.domain.Category;
-
 import java.math.BigDecimal;
+import java.util.List;
 
 public record MealUpdateRequest(
-        Integer mealId,
         String name,
-        Category category,
         String description,
-        BigDecimal price
+        BigDecimal price,
+        List<IngredientForMealDTO> ingredientsForMeal
 ) {
 
 

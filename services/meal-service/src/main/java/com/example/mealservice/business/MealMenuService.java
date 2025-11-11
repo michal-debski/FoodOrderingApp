@@ -7,6 +7,7 @@ import com.example.mealservice.domain.MealIngredient;
 
 import com.example.mealservice.exception.NotFoundException;
 import com.example.mealservice.grpc.OrderItem;
+import com.example.mealservice.infrastructure.entity.Unit;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -63,12 +64,12 @@ public class MealMenuService {
         return mealDAO.saveMeal(meal);
     }
 
-    public void deleteMeal(String id) {
+    public void deleteMeal(String mealName) {
         log.info(
-                "Trying to delete meal with id: [{}]",
-                id
+                "Trying to delete meal with name: [{}]",
+                mealName
         );
-        mealDAO.deleteById(id);
+        mealDAO.deleteByMealName(mealName);
     }
 
     public Optional<Meal> findMealById(String mealId) {
@@ -84,13 +85,30 @@ public class MealMenuService {
                 "Trying to update meal. Meal update request: [{}]",
                 mealUpdateRequest
         );
-        Meal mealUpdated = Meal.builder()
-                .mealId(mealId)
-                .name(mealUpdateRequest.name())
-                .description(mealUpdateRequest.description())
-                .price(mealUpdateRequest.price())
-                .build();
-        return mealDAO.findMealById(mealId).isPresent() ? mealDAO.updateMeal(mealUpdated) : null;
+        Optional<Meal> optionalMeal = mealDAO.findMealById(mealId);
+        if (optionalMeal.isPresent()) {
+            return mealDAO.updateMeal(Meal.builder()
+                    .mealId(optionalMeal.get().mealId())
+                    .category(optionalMeal.get().category())
+                    .name(mealUpdateRequest.name())
+                    .description(mealUpdateRequest.description())
+                    .price(mealUpdateRequest.price())
+                    .ingredients(
+                            mealUpdateRequest.ingredientsForMeal()
+                                    .stream()
+                                    .map(ingredientForMealDTO ->
+                                            new MealIngredient(
+                                                    ingredientForMealDTO.name(),
+                                                    ingredientForMealDTO.quantity(),
+                                                    Unit.valueOf(ingredientForMealDTO.unit())
+                                            )
+                                    )
+                                    .toList()
+                    )
+                    .build());
+        } else {
+            throw new NotFoundException("Meal not found");
+        }
 
     }
 

@@ -42,7 +42,7 @@ export class ShowStorage {
     const updatedIngredient = {
       name: ingredient.name,
       quantity: ingredient.quantity,
-      unitName: ingredient.unitName
+      unitName: ingredient.unit
     };
 
     this.http.put(
