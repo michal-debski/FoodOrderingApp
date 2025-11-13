@@ -16,7 +16,7 @@
           @if(selectedView === 'add-meal'){
             <app-add-meal></app-add-meal>
           } @else if (selectedView === 'show-meals'){
-            <app-show-meals></app-show-meals>
+            <app-show-meals [restaurantId]="selectedRestaurantId!"></app-show-meals>
           } @else if (selectedView === 'show-orders'){
             <app-owner-orders></app-owner-orders>
           } @else if (selectedView === 'add-ingredient'){

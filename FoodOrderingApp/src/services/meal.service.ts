@@ -15,11 +15,12 @@ export class MealService {
   constructor(
     private http: HttpClient
   ) {}
-  getMealsByRestaurant(restaurantId: string): Observable<MealDTO[]> {
-    return this.http.get<MealDTO[]>(`${this.baseUrl}/${restaurantId}`);
-  }
 
-  addMeal(meal: MealDTO): Observable<MealDTO> {
+  getMealsByRestaurant(restaurantId: string): Observable<MealDTO[]> {
+  return this.http.get<MealDTO[]>(`${this.baseUrl}/${restaurantId}`);
+}
+
+  addMeal(meal: MealDTO) {
     return this.http.post<MealDTO>(`${this.baseUrl}/${meal.restaurantId}`, meal);
   }
 
@@ -27,7 +28,7 @@ export class MealService {
     const restaurantId = localStorage.getItem('restaurantId');
     return this.http.delete<MealDTO>(`${this.baseUrl}/${restaurantId}`, {body: name}).subscribe();
   }
-  updateMeal(mealId: string, meal: MealUpdateRequest) {
-    return this.http.put<MealDTO>(`${this.baseUrl}/${mealId}`, meal);
+  updateMeal(restaurantId: string, mealId: string, meal: MealUpdateRequest) {
+    return this.http.put<MealDTO>(`${this.baseUrl}/${restaurantId}/${mealId}`, meal);
   }
 }

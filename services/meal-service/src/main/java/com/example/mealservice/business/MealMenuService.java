@@ -105,6 +105,7 @@ public class MealMenuService {
                                     )
                                     .toList()
                     )
+                    .restaurantId(optionalMeal.get().restaurantId())
                     .build());
         } else {
             throw new NotFoundException("Meal not found");

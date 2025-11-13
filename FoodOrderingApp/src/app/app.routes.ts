@@ -18,7 +18,7 @@ export const routes: Routes = [
   {path: 'restaurants/all-restaurants', component: RestaurantListComponent},
   {path: 'restaurants/addRestaurant', component: RestaurantAddForm},
   {path: 'restaurant/:id/meals', component: Order},
-  {path: 'owner', component: OwnerDashboard},
+  {path: 'owner/:id', component: OwnerDashboard},
   {path: 'orders/all', component: ClientOrder}
 
 ];

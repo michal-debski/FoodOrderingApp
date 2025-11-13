@@ -6,6 +6,6 @@ import lombok.Builder;
 public record IngredientDTO (
         String name,
         int quantity,
-        String unitName
+        String unit
 ) {
 }

@@ -59,7 +59,7 @@ public class MealController {
 
     @PutMapping("/{mealId}")
     public ResponseEntity<MealDTO> updateMeal(
-            @PathVariable Integer restaurantId,
+            @PathVariable String restaurantId,
             @PathVariable String mealId,
             @RequestBody MealUpdateRequest mealUpdateRequest
     ) {

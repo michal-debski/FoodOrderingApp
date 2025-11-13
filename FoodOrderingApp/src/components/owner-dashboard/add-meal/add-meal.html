@@ -1,4 +1,4 @@
-<form [formGroup]="addMealForm" (ngSubmit)="confirmAddMeal()" novalidate >
+<form [formGroup]="addMealForm" (ngSubmit)="confirmAddMeal()" novalidate>
   <div class="form-group">
     <label for="name">Meal Name:</label>
     <input id="name" type="text" formControlName="name" />
@@ -23,7 +23,10 @@
   <div class="form-group">
     <label for="price">Price:</label>
     <input id="price" type="number" formControlName="price" step="0.01" />
-    <div class="error" *ngIf="addMealForm.get('price')?.invalid && addMealForm.get('price')?.touched">
+    <div
+      class="error"
+      *ngIf="addMealForm.get('price')?.invalid && addMealForm.get('price')?.touched"
+    >
       Price must be greater than 0.
     </div>
   </div>
@@ -32,9 +35,7 @@
     <select id="ingredients" formControlName="selectedIngredient">
       <option value="" disabled>Select ingredient</option>
       @for (ingredient of ingredients; track ingredient.name) {
-        <option [ngValue]="ingredient">
-          {{ ingredient.name }} ({{ ingredient.name }})
-        </option>
+      <option [ngValue]="ingredient">{{ ingredient.name }} ({{ ingredient.name }})</option>
       }
     </select>
   </div>
@@ -43,28 +44,19 @@
   <div formArrayName="ingredients">
     <div>
       <h4>Selected ingredients:</h4>
-
     </div>
 
     @for (ingredientGroup of ingredientsArray.controls; track $index) {
-      <div [formGroupName]="$index" class="ingredient-item">
+    <div [formGroupName]="$index" class="ingredient-item">
       <span>
         {{ ingredientGroup.get('name')?.value }}
         {{ ingredientGroup.get('unit')?.value }}
       </span>
 
-        <input
-          type="number"
-          formControlName="quantity"
-          min="0.01"
-          step="1"
-          placeholder="Quantity"
-        />
+      <input type="number" formControlName="quantity" min="0.01" step="1" placeholder="Quantity" />
 
-        <button type="button" (click)="removeIngredient($index)">
-          Remove
-        </button>
-      </div>
+      <button type="button" (click)="removeIngredient($index)">Remove</button>
+    </div>
     }
   </div>
 

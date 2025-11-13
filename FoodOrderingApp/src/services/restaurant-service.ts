@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, signal} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {RestaurantDTO} from '../models/restaurant-dto';
@@ -17,6 +17,8 @@ const BASE_URL = "http://localhost:8222/api/v1/restaurants/"
 export class RestaurantService {
   constructor(private http: HttpClient) {
   }
+  selectedRestaurantId = signal<string | null>(null);
+
 
   getRestaurants(): Observable<RestaurantDTO[]> {
     return this.http.get<RestaurantDTO[]>(`${GET_RESTAURANTS}`);
@@ -47,5 +49,8 @@ export class RestaurantService {
   deleteRestaurant(restaurantId: string) {
     const concat = BASE_URL.concat(`${restaurantId}`);
     return this.http.delete<RestaurantDTO>(concat);
+  }
+  selectRestaurant(id: string) {
+    this.selectedRestaurantId.set(id);
   }
 }

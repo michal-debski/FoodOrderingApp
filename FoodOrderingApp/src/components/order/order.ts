@@ -31,10 +31,7 @@ export class Order {
     this.restaurantId = this.route.snapshot.paramMap.get('id')!;
     console.log('Restaurant ID:', this.restaurantId);
 
-    this.mealService.getMealsByRestaurant(this.restaurantId).subscribe(meals =>{
-      this.meals = meals;
-      console.log('Fetched meals:', this.meals);
-    })
+    this.mealService.getMealsByRestaurant(this.restaurantId);
   }
 
   increase(meal: MealDTO) {

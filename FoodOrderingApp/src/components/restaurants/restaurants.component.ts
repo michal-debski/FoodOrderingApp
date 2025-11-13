@@ -30,7 +30,7 @@ export class RestaurantsComponent implements OnInit{
   }
 
   selectRestaurant(restaurantId: string) {
-    localStorage.setItem('restaurantId', restaurantId);
+    this.restaurantService.selectRestaurant(restaurantId);
     console.log('Selected restaurantId:', restaurantId);
   }
 
