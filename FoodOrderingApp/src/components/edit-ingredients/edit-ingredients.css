@@ -1,0 +1,75 @@
+
+.ingredient-item {
+  margin-bottom: 1rem;
+}
+
+.ingredient-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.ingredient-info {
+  display: flex;
+  gap: 0.5rem;
+  min-width: 200px;
+  font-weight: 500;
+}
+
+.ingredient-name {
+  flex-shrink: 0;
+  font-size: 24px;
+}
+
+.ingredient-select-group {
+  font-size: 32px;
+}
+
+h4 {
+  font-size: 32px;
+}
+.ingredient-unit {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.ingredient-quantity {
+  width: 100px;
+}
+
+option {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+
+  border: 2px solid #dddddd;
+  background: #eeeeee;
+  padding: 10px;
+  transition: 0.4s;
+}
+
+select,
+::picker(select) {
+  font-size: 16px;
+  appearance: base-select;
+}
+
+select::picker-icon {
+  color: #999999;
+  transition: 0.4s rotate;
+}
+option:hover,
+option:focus {
+  background: rgb(165, 132, 23);
+}
+input {
+      display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  border-radius: 5px;
+  border: 2px solid #000000;
+  background: #ffffff;
+  padding: 10px;
+  transition: 0.4s;
+}

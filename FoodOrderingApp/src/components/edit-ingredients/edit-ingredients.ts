@@ -87,6 +87,7 @@ export class EditIngredients implements OnInit {
     const updatedIngredients = this.ingredientsArray.value as IngredientForMealDTO[];
     console.log(JSON.stringify(updatedIngredients));
     this.ingredientsChanged.emit(updatedIngredients);
+    this.onCancel();
   }
   confirmEditIngredients() {
     this.dialogService.openConfirmDialog({

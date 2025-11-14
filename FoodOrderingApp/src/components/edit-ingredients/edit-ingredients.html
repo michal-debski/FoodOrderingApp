@@ -17,14 +17,22 @@
 
     @for (ingredientGroup of ingredientsArray.controls; track $index) {
     <div [formGroupName]="$index" class="ingredient-item">
-      <span>
-        {{ ingredientGroup.get('name')?.value }}
-        {{ ingredientGroup.get('unit')?.value }}
-      </span>
+      <div class="ingredient-row">
+        <div class="ingredient-info">
+          <span class="ingredient-name">{{ ingredientGroup.get('name')?.value }}</span>
+          <span class="ingredient-unit">{{ ingredientGroup.get('unit')?.value }}</span>
+        </div>
 
-      <input type="number" formControlName="quantity" min="0.01" step="1" placeholder="Quantity" />
+        <input
+          type="number"
+          formControlName="quantity"
+          min="0.01"
+          step="1"
+          placeholder="Quantity"
+        />
 
-      <button type="button" (click)="removeIngredient($index)">Remove</button>
+        <button type="button" (click)="removeIngredient($index)">Remove</button>
+      </div>
     </div>
 
     }
