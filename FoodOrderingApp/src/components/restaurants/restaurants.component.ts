@@ -30,8 +30,12 @@ export class RestaurantsComponent implements OnInit{
   }
 
   selectRestaurant(restaurantId: string) {
-    localStorage.setItem('restaurantId', restaurantId);
+    this.restaurantService.selectRestaurant(restaurantId);
     console.log('Selected restaurantId:', restaurantId);
   }
 
+  deleteRestaurant(restaurantId: string) {
+    console.log("Deleting")
+    this.restaurantService.deleteRestaurant(restaurantId).subscribe();
+  }
 }

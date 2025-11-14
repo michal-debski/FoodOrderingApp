@@ -63,37 +63,21 @@ button {
   flex: 2;
   padding: 1rem;
   border-radius: 8px;
-  /*box-shadow: 0 0 10px rgba(0,0,0,0.1);*/
 }
 
 .add-meal-and-list {
   display: flex;
   flex-direction: row;
   gap: 2rem;
-  align-items: flex-start; /* ustawia komponenty przy górze */
+  align-items: flex-start;
 }
 
 .form-section {
   flex: 1;
-  width: auto; /* opcjonalnie, by formularz nie był zbyt szeroki */
+  width: auto;
 }
 
 .list-section {
   flex: 2;
 }
-.icon-btn{
-  border: none;
-  background-color: transparent;
-  outline: 0;
 
-  i{
-    color: #446CB3;
-    font-size: 2em;
-    cursor: pointer;
-  }
-
-
-  i.spin-animation{
-  animation(spin, 0.5s, ease-in);
-  }
-}

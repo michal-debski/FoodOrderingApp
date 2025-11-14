@@ -43,11 +43,12 @@ public class RestaurantRepository implements RestaurantDAO {
 
     @Override
     public void deleteRestaurant(String restaurantId) {
-        Optional<RestaurantEntity> repository = restaurantJpaRepository.findById(Integer.valueOf(restaurantId));
+        Optional<RestaurantEntity> repository = restaurantJpaRepository.findByRestaurantId(restaurantId);
         if (repository.isEmpty()) {
             throw new NotFoundException("Restaurant not found");
         } else {
             restaurantJpaRepository.delete(repository.get());
+            log.info("Successfully deleted restaurant {}", restaurantId);
         }
     }
 

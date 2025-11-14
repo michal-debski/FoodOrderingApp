@@ -45,8 +45,8 @@ public class MealRepository implements MealDAO {
     }
 
     @Override
-    public void deleteById(String id) {
-        mealJpaRepository.delete(mealJpaRepository.findById(id).get());
+    public void deleteByMealName(String mealName) {
+        mealJpaRepository.findByName(mealName).ifPresent(mealJpaRepository::delete);
     }
 
     @Override

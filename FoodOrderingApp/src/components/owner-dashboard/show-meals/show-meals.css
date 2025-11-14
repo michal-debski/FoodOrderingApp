@@ -1,17 +1,25 @@
+.column-left {
+  flex: 2;
+  padding: 1rem;
+  min-width: 70%;
+  max-width: 70%;
+
+}
+
+.column-right {
+  flex: 1;
+  padding: 1rem;
+  border-radius: 8px;
+  width: 300px;
+}
+
+
 table {
   width: 100%;
-  text-align: center;
   border-collapse: collapse;
   border: 1px solid;
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-}
-
-input {
-  font-size: 16px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  width: auto;
 }
 thead th {
   position: sticky;
@@ -22,6 +30,7 @@ thead th {
 }
 
 th, td {
+  text-align: center;
   padding: 10px;
   font-size: 16px;
   font-weight: bold;
@@ -45,3 +54,21 @@ button:disabled {
   cursor: not-allowed;
 }
 
+.column-left h1 {
+  margin-bottom: 1rem;
+  font-size: 3rem;
+}
+
+.hero-container {
+   display: flex;
+   align-items: flex-start;
+   gap: 2rem;
+   padding: 1rem;
+}
+
+.column-right {
+  flex: 1;
+  padding: 1rem;
+  border-radius: 8px;
+  min-width: 250px;
+}

@@ -26,4 +26,6 @@ public interface RestaurantJpaRepository extends JpaRepository<RestaurantEntity,
                 where rs.ownerEmail = :ownerEmail
     """)
     List<RestaurantEntity> findRestaurantByOwnerEmail(final @Param("ownerEmail") String ownerEmail);
+
+    Optional<RestaurantEntity> findByRestaurantId(String restaurantId);
 }

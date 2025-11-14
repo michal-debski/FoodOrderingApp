@@ -13,7 +13,7 @@ public class StorageMapper {
         return Ingredient.builder()
                 .name(ingredientDTO.name())
                 .quantity(ingredientDTO.quantity())
-                .unitName(ingredientDTO.unitName())
+                .unitName(ingredientDTO.unit())
                 .build();
     }
 
@@ -29,7 +29,7 @@ public class StorageMapper {
         return IngredientDTO.builder()
                 .name(ingredient.name())
                 .quantity(ingredient.quantity())
-                .unitName(ingredient.unitName())
+                .unit(ingredient.unitName())
                 .build();
     }
 

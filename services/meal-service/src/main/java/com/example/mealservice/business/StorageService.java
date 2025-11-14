@@ -58,4 +58,11 @@ public class StorageService {
     public List<Ingredient> findAllIngredientsByName() {
         return storageDAO.findAll();
     }
+
+    public void deleteIngredient(Ingredient ingredient, String restaurantId) {
+        storageDAO.findIngredientByName(ingredient.name()).ifPresent(found -> {
+            log.info("Trying to delete ingredient, ingredientId: {}", found.ingredientId());
+            storageDAO.deleteIngredientFromStorage(found.ingredientId(), restaurantId);
+        });
+    }
 }

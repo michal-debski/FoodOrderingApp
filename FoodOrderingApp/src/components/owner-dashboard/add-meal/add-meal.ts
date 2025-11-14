@@ -5,6 +5,7 @@ import {MealService} from '../../../services/meal.service';
 import {CommonModule} from '@angular/common';
 import {StorageService} from '../../../services/storage.service';
 import {IngredientForMealDTO} from '../../../models/meal.ingredient.dto';
+import {DialogService} from '../../../services/dialog-service';
 
 @Component({
   selector: 'app-add-meal',
@@ -24,7 +25,8 @@ export class AddMeal {
   addMealForm!: FormGroup;
   constructor(private fb: FormBuilder,
               private mealService: MealService,
-              private storageService: StorageService
+              private storageService: StorageService,
+              private dialogService: DialogService
   ) {}
 
   ngOnInit(): void {
@@ -56,6 +58,17 @@ export class AddMeal {
     });
   }
 
+  confirmAddMeal() {
+    this.dialogService.openConfirmDialog({
+      type: 'add',
+      message: 'Do you confirm to add meal?'
+    }).subscribe(confirmed => {
+      if (confirmed) {
+        this.addMeal();
+      }
+    });
+  }
+
   addMeal() {
     if (this.addMealForm.invalid) {
       this.addMealForm.markAllAsTouched();
@@ -70,6 +83,7 @@ export class AddMeal {
         console.log('Added meal:', meal);
         this.addMealForm.reset();
         this.ingredientsArray.clear();
+        location.reload();
       },
       error: (err: any) => {
         console.error('Error occured during add meal procedure:', err);
@@ -94,7 +108,6 @@ export class AddMeal {
 
     this.ingredientsArray.push(ingredientGroup);
     this.addMealForm.get('selectedIngredient')?.reset();
-
   }
 
   removeIngredient(index: number) {

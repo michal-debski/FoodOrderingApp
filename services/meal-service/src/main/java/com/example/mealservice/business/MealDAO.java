@@ -18,7 +18,7 @@ public interface MealDAO {
 
     Meal saveMeal(Meal meal);
 
-    void deleteById(String id);
+    void deleteByMealName(String name);
 
     List<Meal> findAllMealsBySelectedRestaurant(String id);
 

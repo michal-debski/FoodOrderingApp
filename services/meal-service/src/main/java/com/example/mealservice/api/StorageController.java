@@ -7,11 +7,13 @@ import com.example.mealservice.api.dto.StorageMapper;
 import com.example.mealservice.business.StorageService;
 import com.example.mealservice.domain.Ingredient;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("meals/{restaurantId}/storage")
@@ -31,6 +33,17 @@ public class StorageController {
         return ResponseEntity.ok(storageMapper.mapToDto(newIngredientToStore));
     }
 
+    @DeleteMapping
+    public ResponseEntity<Void> deleteIngredient(
+            @PathVariable("restaurantId") String restaurantId,
+            @RequestBody IngredientRequest ingredientRequest
+    ) {
+        log.info("Received request to delete ingredient: {} from storage for restaurant {}", ingredientRequest, restaurantId);
+        Ingredient ingredient = storageMapper.mapIngredientRequestToDomain(ingredientRequest);
+        storageService.deleteIngredient(ingredient, restaurantId);
+        return ResponseEntity.ok().build();
+    }
+
     @PutMapping
     public ResponseEntity<?> increaseIngredientQuantity(
             @PathVariable("restaurantId") String restaurantId,
@@ -41,7 +54,7 @@ public class StorageController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllIngredients( @PathVariable("restaurantId") String restaurantId){
+    public ResponseEntity<?> getAllIngredients(@PathVariable("restaurantId") String restaurantId){
         List<Ingredient> allIngredientsForGivenRestaurantId =
                 storageService.getAllIngredientsForGivenRestaurantId(restaurantId);
         StorageConditionResponse storageConditionResponse = storageMapper.mapToStorageCondition(allIngredientsForGivenRestaurantId);

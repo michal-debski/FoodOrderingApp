@@ -31,10 +31,7 @@ export class Order {
     this.restaurantId = this.route.snapshot.paramMap.get('id')!;
     console.log('Restaurant ID:', this.restaurantId);
 
-    this.mealService.getMealsByRestaurant(this.restaurantId).subscribe(meals =>{
-      this.meals = meals;
-      console.log('Fetched meals:', this.meals);
-    })
+    this.mealService.getMealsByRestaurant(this.restaurantId);
   }
 
   increase(meal: MealDTO) {
@@ -64,7 +61,6 @@ export class Order {
       return;
     }
     console.log('Sending order:', orderItems); // Add this line
-
 
     const requestBody = {orderItems};
     this.http.post<OrderRequestDto>(`http://localhost:8222/api/v1/orders/${this.restaurantId}/order`, requestBody, {

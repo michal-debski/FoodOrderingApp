@@ -1,0 +1,51 @@
+<article>
+  <div class="hero-container">
+    <div class="column-left">
+      <table>
+        <thead>
+        <tr>
+          <th>Meal name</th>
+          <th>Category</th>
+          <th>Description</th>
+          <th>Price</th>
+          <th>Required Ingredients</th>
+          <th class="actions">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+          @for (meal of meals(); track meal.name) {
+            <tr>
+              <td>{{ meal.name }}</td>
+              <td>{{ meal.category }}</td>
+              <td>{{ meal.description }}</td>
+              <td>{{ meal.price }}</td>
+              <td>
+                <ul>
+                  @for (ingredient of meal.ingredientsForMeal; track ingredient.name) {
+                    <li>{{ ingredient.name }}, quantity: {{ ingredient.quantity }} {{ingredient.unit}}</li>
+                  }
+                </ul>
+              </td>
+              <td>
+                <button type=button class="btn btn-primary"  (click)="confirmDeleteMeal(meal.name)">Delete me</button>
+                <button (click)="startEditing(meal)">Edit Meal</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      <br>
+    </div>
+    <div class="column-right" >
+      @if(selectedView() === 'app-edit-meal') {
+        <app-edit-meal
+        [restaurantId]="restaurantId"
+        [meal]="editingMeal"
+        (mealUpdated)="onMealUpdated($event)"/>
+      }
+    </div>
+  </div>
+
+
+</article>
+

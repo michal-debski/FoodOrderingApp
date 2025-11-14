@@ -1,0 +1,46 @@
+<form [formGroup]="editMealForm" novalidate >
+  <div class="form-group">
+    <label for="name">Meal Name:</label>
+    <input id="name" type="text" formControlName="name" placeholder="{{meal?.name}}" />
+    <div class="error" *ngIf="editMealForm.get('name')?.invalid && editMealForm.get('name')?.touched">
+      Name is required.
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="category">Category:</label>
+    <input id="category" type="text" formControlName="category" placeholder="{{meal?.category}}" />
+  </div>
+
+  <div class="form-group">
+    <label for="description">Description:</label>
+    <textarea id="description" type="text" formControlName="description" placeholder="{{meal?.description}}" ></textarea>
+  </div>
+
+  <div class="form-group">
+    <label for="price">Price:</label>
+    <input id="price" type="number" formControlName="price" step="0.01" placeholder="{{meal?.price}}"  />
+    <div class="error" *ngIf="editMealForm.get('price')?.invalid && editMealForm.get('price')?.touched">
+      Price must be greater than 0.
+    </div>
+  </div>
+  <div>
+    <button type="button" (click)="openIngredientsModal()">Edit Ingredients</button>
+
+<div class="modal-backdrop" *ngIf="showIngredientsModal">
+  <div class="modal-content">
+    <app-edit-ingredients
+    [meal]="meal"
+    (ingredientsChanged)="onIngredientsChanged($event)" 
+    [restaurantId]="restaurantId"
+    (close)="closeIngredientsModal()"
+    />
+    <button class="close-btn" (click)="closeIngredientsModal()">✖</button>
+  </div>
+</div>
+    
+
+  </div>
+
+  <button type="submit" [disabled]="editMealForm.invalid" (click)="onSubmit()">Edit Meal</button>
+</form>

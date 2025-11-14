@@ -4,6 +4,8 @@ p {
 }
 
 a {
+  text-transform: uppercase;
+  font-weight: bold;
   background-color: #000000;
   border: none;
   color: white;

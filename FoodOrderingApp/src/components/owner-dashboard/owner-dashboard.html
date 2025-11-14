@@ -6,6 +6,7 @@
     <div class="dashboard-wrapper">
       <aside class="sidebar">
         <button (click)="selectView('add-meal')">Add Meal</button>
+        <button (click)="selectView('show-meals')">Show Meals</button>
         <button (click)="selectView('show-orders')">Show Orders</button>
         <button (click)="selectView('add-ingredient')">Add Ingredient</button>
         <button (click)="selectView('show-storage')">Show Storage</button>
@@ -14,6 +15,8 @@
         <div class="hero-container">
           @if(selectedView === 'add-meal'){
             <app-add-meal></app-add-meal>
+          } @else if (selectedView === 'show-meals'){
+            <app-show-meals [restaurantId]="selectedRestaurantId!"></app-show-meals>
           } @else if (selectedView === 'show-orders'){
             <app-owner-orders></app-owner-orders>
           } @else if (selectedView === 'add-ingredient'){
