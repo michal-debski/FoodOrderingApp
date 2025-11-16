@@ -9,8 +9,16 @@
 
   <div class="form-group">
     <label for="category">Category:</label>
-    <input id="category" type="text" formControlName="category" />
-    <div class="error" *ngIf="addMealForm.get('category')?.invalid && addMealForm.get('category')?.touched">
+    <select id="category" formControlName="category">
+      <option value="" selected>Select category</option>
+      @for (category of categories; track category) {
+      <option [ngValue]="category">{{ category }}</option>
+      }
+    </select>
+    <div
+      class="error"
+      *ngIf="addMealForm.get('category')?.invalid && addMealForm.get('category')?.touched"
+    >
       Category is required.
     </div>
   </div>
@@ -41,23 +49,32 @@
   </div>
   <button type="button" (click)="addIngredient()">Add Ingredient</button>
 
-  <div formArrayName="ingredients">
-    <div>
-      <h4>Selected ingredients:</h4>
+  <div class="selected-ingredients">
+    <div formArrayName="ingredients">
+      <div>
+        <h4>Selected ingredients:</h4>
+      </div>
+
+      @for (ingredientGroup of ingredientsArray.controls; track $index) {
+      <div [formGroupName]="$index" class="ingredient-item">
+        <span>
+          {{ ingredientGroup.get('name')?.value }}
+          {{ ingredientGroup.get('unit')?.value }}
+        </span>
+
+        <input
+          class="quantity"
+          type="number"
+          formControlName="quantity"
+          min="1"
+          step="1"
+          placeholder="Quantity"
+        />
+
+        <button type="button" (click)="removeIngredient($index)">Remove</button>
+      </div>
+      }
     </div>
-
-    @for (ingredientGroup of ingredientsArray.controls; track $index) {
-    <div [formGroupName]="$index" class="ingredient-item">
-      <span>
-        {{ ingredientGroup.get('name')?.value }}
-        {{ ingredientGroup.get('unit')?.value }}
-      </span>
-
-      <input type="number" formControlName="quantity" min="0.01" step="1" placeholder="Quantity" />
-
-      <button type="button" (click)="removeIngredient($index)">Remove</button>
-    </div>
-    }
   </div>
 
   <button type="submit" [disabled]="addMealForm.invalid">Add Meal</button>

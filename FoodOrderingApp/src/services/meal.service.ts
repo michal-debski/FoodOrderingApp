@@ -17,6 +17,8 @@ export class MealService {
   ) {}
 
   getMealsByRestaurant(restaurantId: string): Observable<MealDTO[]> {
+    console.log(restaurantId);
+    console.log(`${this.baseUrl}/${restaurantId}`)
   return this.http.get<MealDTO[]>(`${this.baseUrl}/${restaurantId}`);
 }
 

@@ -1,33 +1,41 @@
-import {Component} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {MealDTO} from '../../../models/meal.dto';
-import {MealService} from '../../../services/meal.service';
-import {CommonModule} from '@angular/common';
-import {StorageService} from '../../../services/storage.service';
-import {IngredientForMealDTO} from '../../../models/meal.ingredient.dto';
-import {DialogService} from '../../../services/dialog-service';
+import { Component } from '@angular/core';
+import {
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { MealDTO } from '../../../models/meal.dto';
+import { MealService } from '../../../services/meal.service';
+import { CommonModule } from '@angular/common';
+import { StorageService } from '../../../services/storage.service';
+import { IngredientForMealDTO } from '../../../models/meal.ingredient.dto';
+import { DialogService } from '../../../services/dialog-service';
+import { Category } from '../../../models/category';
 
 @Component({
   selector: 'app-add-meal',
   standalone: true,
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    CommonModule
-  ],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
   templateUrl: './add-meal.html',
-  styleUrl: './add-meal.css'
+  styleUrl: './add-meal.css',
 })
 export class AddMeal {
   ingredients: IngredientForMealDTO[] = [];
   selectedIngredient?: IngredientForMealDTO;
-
+  category = Category;
+  categories: string[] = [];
   addMealForm!: FormGroup;
-  constructor(private fb: FormBuilder,
-              private mealService: MealService,
-              private storageService: StorageService,
-              private dialogService: DialogService
-  ) {}
+  constructor(
+    private fb: FormBuilder,
+    private mealService: MealService,
+    private storageService: StorageService,
+    private dialogService: DialogService
+  ) {
+    this.categories = Object.values(this.category);
+  }
 
   ngOnInit(): void {
     this.addMealForm = this.fb.group({
@@ -37,7 +45,6 @@ export class AddMeal {
       price: [0, [Validators.required, Validators.min(0.01)]],
       ingredients: this.fb.array([]),
       selectedIngredient: [null],
-
     });
     this.loadIngredients();
   }
@@ -54,19 +61,21 @@ export class AddMeal {
       next: (data) => {
         this.ingredients = data.ingredients;
       },
-      error: (err) => console.error('Error fetching ingredients:', err)
+      error: (err) => console.error('Error fetching ingredients:', err),
     });
   }
 
   confirmAddMeal() {
-    this.dialogService.openConfirmDialog({
-      type: 'add',
-      message: 'Do you confirm to add meal?'
-    }).subscribe(confirmed => {
-      if (confirmed) {
-        this.addMeal();
-      }
-    });
+    this.dialogService
+      .openConfirmDialog({
+        type: 'add',
+        message: 'Do you confirm to add meal?',
+      })
+      .subscribe((confirmed) => {
+        if (confirmed) {
+          this.addMeal();
+        }
+      });
   }
 
   addMeal() {
@@ -76,7 +85,11 @@ export class AddMeal {
     }
 
     const restaurantId = localStorage.getItem('restaurantId');
-    const request: MealDTO = { ...this.addMealForm.value, restaurantId, ingredientsForMeal: this.addMealForm.value.ingredients };
+    const request: MealDTO = {
+      ...this.addMealForm.value,
+      restaurantId,
+      ingredientsForMeal: this.addMealForm.value.ingredients,
+    };
 
     this.mealService.addMeal(request).subscribe({
       next: (meal: any) => {
@@ -87,7 +100,7 @@ export class AddMeal {
       },
       error: (err: any) => {
         console.error('Error occured during add meal procedure:', err);
-      }
+      },
     });
   }
 
@@ -95,14 +108,12 @@ export class AddMeal {
     const ingredient = this.addMealForm.get('selectedIngredient')?.value;
     if (!ingredient) return;
 
-    const alreadyExists = this.ingredientsArray.value.some(
-      (i: any) => i.name === ingredient.name
-    );
+    const alreadyExists = this.ingredientsArray.value.some((i: any) => i.name === ingredient.name);
     if (alreadyExists) return;
 
     const ingredientGroup = this.fb.group({
       name: [ingredient.name],
-      unit: [ingredient.unitName],
+      unit: [ingredient.unit],
       quantity: [1, [Validators.required, Validators.min(0.01)]],
     });
 
@@ -113,5 +124,4 @@ export class AddMeal {
   removeIngredient(index: number) {
     this.ingredientsArray.removeAt(index);
   }
-
 }

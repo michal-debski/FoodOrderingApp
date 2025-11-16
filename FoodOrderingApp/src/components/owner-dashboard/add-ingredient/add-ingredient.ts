@@ -4,6 +4,7 @@ import {NgIf} from '@angular/common';
 import {IngredientForMealDTO} from '../../../models/meal.ingredient.dto';
 import {StorageService} from '../../../services/storage.service';
 import {DialogService} from '../../../services/dialog-service';
+import { Unit } from '../../../models/unit';
 
 @Component({
   selector: 'app-add-ingredient',
@@ -17,16 +18,23 @@ import {DialogService} from '../../../services/dialog-service';
 })
 export class AddIngredient {
   addIngredientForm!: FormGroup;
+
+  unit = Unit;
+  units: string[] = [];
+
   constructor(private fb: FormBuilder,
               private storageService: StorageService,
               private dialogService: DialogService
-  ) {}
+  ) {
+      this.units = Object.values(this.unit);
+
+  }
 
   ngOnInit(): void {
     this.addIngredientForm = this.fb.group({
       name: ['', Validators.required],
       quantity: [0, Validators.required],
-      unitName: ['', Validators.required]
+      unit: ['', Validators.required]
     });
   }
 
