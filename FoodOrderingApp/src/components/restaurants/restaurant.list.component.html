@@ -19,7 +19,7 @@
               <td>{{ restaurant.phone }}</td>
               <td>{{ restaurant.email }}</td>
               <td>
-                <a [routerLink]="['/restaurant', restaurant.restaurantId, 'meals']" class="button">Order!</a>
+                <a [routerLink]="['/restaurant', restaurant.restaurantId, 'meals']" class="button" routerLinkActive="active">Order!</a>
               </td>
             </tr>
           }

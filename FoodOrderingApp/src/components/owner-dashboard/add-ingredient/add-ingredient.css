@@ -1,17 +1,29 @@
-
 .form-group {
   text-transform: uppercase;
   display: flex;
   flex-direction: column;
 }
 
-input, textarea {
+textarea {
+  width: 25%;
   padding: 8px;
   font-size: 1rem;
   border-radius: 6px;
   border: 1px solid #ccc;
 }
 
+select,
+input {
+  text-transform: uppercase;
+  width: 25%;
+  justify-content: flex-start;
+  gap: 10px;
+  border-radius: 5px;
+  background: #ffffff;
+  padding: 10px;
+  transition: 0.4s;
+  border: 1px solid #ccc;
+}
 
 button:disabled {
   background-color: grey;

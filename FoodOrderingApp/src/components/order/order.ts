@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MealService} from '../../services/meal.service';
 import {MealDTO} from '../../models/meal.dto';
@@ -17,7 +17,7 @@ import {OrderRequestDto} from '../../models/order.request.dto';
 export class Order {
   @Output() quantityChanged = new EventEmitter<{ mealId: string, quantity: number }>();
   meals: MealDTO[] = [];
-  restaurantId!: string;
+  @Input({ required: true }) restaurantId!: string;
 
   constructor(private mealService: MealService,
               private route: ActivatedRoute,
@@ -28,10 +28,13 @@ export class Order {
   ) {}
 
   ngOnInit(): void {
-    this.restaurantId = this.route.snapshot.paramMap.get('id')!;
+    this.restaurantId = this.route.snapshot.paramMap.get('restaurantId')!;
     console.log('Restaurant ID:', this.restaurantId);
 
-    this.mealService.getMealsByRestaurant(this.restaurantId);
+    this.mealService.getMealsByRestaurant(this.restaurantId).subscribe((meals) => {
+  this.meals = meals;
+});
+
   }
 
   increase(meal: MealDTO) {
@@ -52,7 +55,6 @@ export class Order {
     return meal.mealId;
   }
   finishOrder() {
-    this.restaurantId = this.route.snapshot.paramMap.get('id')!;
     console.log('Restaurant ID:', this.restaurantId);
 
     const orderItems: OrderItemDTO[] = this.orderService.getOrderItems();
@@ -60,7 +62,7 @@ export class Order {
       alert('Cart is empty!');
       return;
     }
-    console.log('Sending order:', orderItems); // Add this line
+    console.log('Sending order:', orderItems); 
 
     const requestBody = {orderItems};
     this.http.post<OrderRequestDto>(`http://localhost:8222/api/v1/orders/${this.restaurantId}/order`, requestBody, {
