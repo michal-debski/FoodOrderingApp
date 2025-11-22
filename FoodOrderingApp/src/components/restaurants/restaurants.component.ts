@@ -19,7 +19,7 @@ export class RestaurantsComponent implements OnInit{
   constructor(private restaurantService: RestaurantService) {}
 
   ngOnInit(): void {
-    this.restaurantService.getRestaurants().subscribe({
+    this.restaurantService.getRestaurantsByUser().subscribe({
       next: (data) => {
         this.restaurants = data;
       },
@@ -36,6 +36,15 @@ export class RestaurantsComponent implements OnInit{
 
   deleteRestaurant(restaurantId: string) {
     console.log("Deleting")
-    this.restaurantService.deleteRestaurant(restaurantId).subscribe();
+    this.restaurantService.deleteRestaurant(restaurantId).subscribe({
+      next: (restaurant: any) => {
+        console.log('Delete restaurant:', restaurant);
+        location.reload();
+      },
+      error: (err: any) => {
+        console.error('Error occured during deleting restaurant procedure:', err);
+      },
+    });
+   
   }
 }

@@ -1,4 +1,4 @@
-package com.example.authservice.service;
+package com.example.authservice.business.service;
 
 import com.example.authservice.api.dto.LoginRequestDTO;
 import com.example.authservice.util.JwtUtil;
@@ -20,8 +20,8 @@ public class AuthService {
     public Optional<String> authenticate(LoginRequestDTO loginRequestDTO) {
         Optional<String> token = userService.findByEmail(loginRequestDTO.getEmail())
                 .filter(u -> passwordEncoder.matches(loginRequestDTO.getPassword(),
-                        u.getPassword()))
-                .map(u -> jwtUtil.generateToken(u.getEmail(), u.getRole()));
+                        u.password()))
+                .map(u -> jwtUtil.generateToken(u.email(), u.role()));
         return token;
     }
 

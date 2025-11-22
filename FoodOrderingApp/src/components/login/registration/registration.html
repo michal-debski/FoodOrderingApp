@@ -1,0 +1,30 @@
+<form [formGroup]="registrationForm" (ngSubmit)="confirmationRegisterNewUser()" novalidate class="form-container">
+  <div class="form-group">
+    <label for="email">Email:</label>
+    <input id="email" type="text" formControlName="email" />
+    <div class="error" *ngIf="registrationForm.get('email')?.invalid && registrationForm.get('email')?.touched">
+      Email is required.
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="password">Password:</label>
+    <input id="password" type="text" formControlName="password" />
+    <div class="error" *ngIf="registrationForm.get('password')?.invalid && registrationForm.get('password')?.touched">
+      Password is required.
+    </div>
+  </div>
+  
+  <div class="form-group">
+    <label for="role">Role:</label>
+    <select id="role" formControlName="role">
+      <option value="" selected>Select role</option>
+      @for (role of roles; track role) {
+      <option [ngValue]="role">{{ roleLabels[role] }}</option>
+      }
+    </select>
+  </div>
+
+  <button type="submit" [disabled]="registrationForm.invalid">Register!</button>
+  <button routerLink="/login">Go to login page!</button>
+</form>
