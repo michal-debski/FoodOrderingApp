@@ -36,11 +36,11 @@ a {
 
 .column-left p {
   margin-bottom: 2rem;
-  font-size:1.5rem;
+  font-size: 1.5rem;
   line-height: 1.5;
 }
 
-.hero-image{
+.hero-image {
   width: 50%;
   height: 50%;
 }
@@ -63,7 +63,8 @@ thead th {
   z-index: 1;
 }
 
-th, td {
+th,
+td {
   padding: 10px;
   font-size: 16px;
   font-weight: bold;
@@ -99,6 +100,12 @@ button {
   border-radius: 32px;
   margin: 10px;
   cursor: pointer;
-
+  
 }
 
+.spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}

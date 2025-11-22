@@ -4,14 +4,12 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgb(0, 0, 0); 
+  background: rgb(184, 175, 175); 
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;        
+  flex-direction: column; 
+
 }
 
-.blurred {
-  filter: blur(2px);
-  pointer-events: none; 
-}

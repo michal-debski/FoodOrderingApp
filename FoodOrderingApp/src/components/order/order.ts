@@ -64,7 +64,7 @@ export class Order {
   trackByMealId(index: number, meal: MealDTO) {
     return meal.mealId;
   }
-  finishOrder() {
+  async finishOrder() {
     console.log('Restaurant ID:', this.restaurantId);
 
     const orderItems: OrderItemDTO[] = this.orderService.getOrderItems();
@@ -73,35 +73,35 @@ export class Order {
       return;
     }
     console.log('Sending order:', orderItems);
-    this.isPreparing = true;
     const requestBody = { orderItems };
-    this.http
-      .post<OrderRequestDto>(
-        `http://localhost:8222/api/v1/orders/${this.restaurantId}/order`,
-        requestBody,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-            'X-User-Email': 'user@example.com',
-          },
-        }
-      )
-      .subscribe({
-        next: (order) => {
-          this.isPreparing = false;
-          this.orderService.clear();
-          alert('Successfully performed order!');
-          this.router.navigate(['/restaurants/all-restaurants']);
-        },
-        error: (err) => {
-          this.isPreparing = false;
-          if (err.status === 409 && err.error?.unavailableMeals) {
-            const missing = err.error.unavailableMeals.join(', ');
-            alert(`Cannot prepare meals: ${missing}, missing ingredients`);
-          } else {
-            alert('Error occurred while performing order.');
+    this.isPreparing = true;
+    try {
+      await firstValueFrom(
+        this.http.post<OrderRequestDto>(
+          `http://localhost:8222/api/v1/orders/${this.restaurantId}/order`,
+          requestBody,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+              'X-User-Email': 'user@example.com',
+            },
           }
-        },
-      });
+        )
+      );
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+
+      this.isPreparing = false;
+      this.orderService.clear();
+      ('Successfully performed order!');
+      this.router.navigate(['/restaurants/all-restaurants']);
+    } catch (err: any) {
+      this.isPreparing = false;
+      if (err.status === 409 && err.error?.unavailableMeals) {
+        const missing = err.error.unavailableMeals.join(', ');
+        alert(`Cannot prepare meals: ${missing}, missing ingredients`);
+      } else {
+        alert('Error occurred while performing order.');
+      }
+    }
   }
 }
