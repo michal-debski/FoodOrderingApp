@@ -23,7 +23,7 @@
               <td>{{ restaurant.email }}</td>
               <td>
                 <a [routerLink]="['/owner', restaurant.restaurantId]" class="button" routerLinkActive="active">Dashboard</a>
-                <a routerLink="/restaurants" class="button" routerLinkActive="active" (click)="deleteRestaurant(restaurant.restaurantId)">Delete</a>
+                <a class="button" routerLinkActive="active" (click)="deleteRestaurant(restaurant.restaurantId)">Delete</a>
               </td>
             </tr>
           }

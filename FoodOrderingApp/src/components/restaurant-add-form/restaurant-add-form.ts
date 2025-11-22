@@ -40,7 +40,7 @@ export class RestaurantAddForm {
     this.restaurant.addRestaurant(this.request).pipe(
       tap({
         next: (res: any) => {
-            this.router.navigate(['/restaurants/allRestaurants']);
+            this.router.navigate(['/restaurants']);
         },
         error: (err) => {
           console.error("Error Received Response: ", err);

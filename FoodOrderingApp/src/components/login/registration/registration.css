@@ -1,0 +1,30 @@
+.form-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+  margin: 30px auto;
+  padding: 20px;
+}
+.form-group {
+  align-content: center;
+  text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
+}
+
+.error {
+  color: red;
+  font-size: 0.8rem;
+}
+
+select,
+input {
+  text-transform: uppercase;
+  justify-content: flex-start;
+  gap: 10px;
+  border-radius: 5px;
+  background: #ffffff;
+  padding: 10px;
+  transition: 0.4s;
+  border: 1px solid #ccc;
+}

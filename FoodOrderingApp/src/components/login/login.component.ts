@@ -62,4 +62,15 @@ export class LoginComponent {
       })
     ).subscribe();
   }
+  
+  logout() {
+  this.authorization.logout().subscribe({
+    next: () => {
+      localStorage.clear();
+      this.router.navigate(['/login']);
+    },
+    error: (err) => console.error(err)
+  });
+}
+
 }

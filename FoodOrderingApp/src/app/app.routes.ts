@@ -8,17 +8,19 @@ import {RestaurantListComponent} from '../components/restaurants/restaurant.list
 import {Order} from '../components/order/order';
 import {OwnerDashboard} from '../components/owner-dashboard/owner-dashboard';
 import {ClientOrder} from '../components/client-order/client-order';
+import { Registration } from '../components/login/registration/registration';
+import { AuthGuard } from '../services/auth.guard';
 
 export const routes: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
   {path: 'login', component: LoginComponent},
-  {path: 'home-client', component: HomeClientComponent },
-  {path: 'home-owner', component: HomeOwnerComponent },
-  {path: 'restaurants', component: RestaurantsComponent},
-  {path: 'restaurants/all-restaurants', component: RestaurantListComponent},
-  {path: 'restaurants/addRestaurant', component: RestaurantAddForm},
-  {path: 'restaurant/:restaurantId/meals', component: Order},
-  {path: 'owner/:id', component: OwnerDashboard},
-  {path: 'orders/all', component: ClientOrder}
-
+  {path: 'home-client', component: HomeClientComponent, canActivate: [AuthGuard]},
+  {path: 'home-owner', component: HomeOwnerComponent, canActivate: [AuthGuard]},
+  {path: 'restaurants', component: RestaurantsComponent,  canActivate: [AuthGuard]},
+  {path: 'restaurants/allRestaurants', component: RestaurantListComponent,  canActivate: [AuthGuard]},
+  {path: 'restaurants/addRestaurant', component: RestaurantAddForm,  canActivate: [AuthGuard]},
+  {path: 'restaurant/:restaurantId/meals', component: Order, canActivate: [AuthGuard]},
+  {path: 'owner/:id', component: OwnerDashboard, canActivate: [AuthGuard]},
+  {path: 'orders/all', component: ClientOrder, canActivate: [AuthGuard]},
+  {path: 'register', component: Registration}
 ];

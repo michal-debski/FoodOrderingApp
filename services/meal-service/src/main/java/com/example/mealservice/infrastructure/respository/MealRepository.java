@@ -17,10 +17,8 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class MealRepository implements MealDAO {
 
-
     private final MealJpaRepository mealJpaRepository;
     private final MealEntityMapper mealEntityMapper;
-
 
     @Override
     public Set<Meal> findAllMealsByCategory(String category) {
