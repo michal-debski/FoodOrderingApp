@@ -88,11 +88,11 @@ export class Order {
           }
         )
       );
-      await new Promise((resolve) => setTimeout(resolve, 5000));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
       this.isPreparing = false;
       this.orderService.clear();
-      ('Successfully performed order!');
+      alert('Successfully performed order!');
       this.router.navigate(['/restaurants/all-restaurants']);
     } catch (err: any) {
       this.isPreparing = false;

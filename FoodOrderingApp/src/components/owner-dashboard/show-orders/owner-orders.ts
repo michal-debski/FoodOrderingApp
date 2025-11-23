@@ -1,41 +1,47 @@
 import { Component } from '@angular/core';
-import {DatePipe} from '@angular/common';
-import {OrderDTO} from '../../../models/order.dto';
-import {HttpClient} from '@angular/common/http';
-import { OrderItemWithMealResponse } from '../../../models/order.item.with.meal.response';
+import { DatePipe, NgIf } from '@angular/common';
+import { OrderDTO } from '../../../models/order.dto';
+import { HttpClient } from '@angular/common/http';
 import { OrderWithMealDataResponse } from '../../../models/order.with.meal.data.response';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { OrderStatus } from '../../../models/order.status';
+import { OrderService } from '../../../services/order.service';
 
 @Component({
   selector: 'app-owner-orders',
-  imports: [
-    DatePipe
-  ],
+  imports: [DatePipe, MatFormFieldModule, MatSelectModule],
   templateUrl: './owner-orders.html',
-  styleUrl: './owner-orders.css'
+  styleUrl: './owner-orders.css',
 })
 export class OwnerOrders {
   orders: OrderWithMealDataResponse[] = [];
   editingStatusFor: string | null = null;
+  orderStatus = OrderStatus;
+  selectedStatus?: OrderStatus;
 
-  constructor(private http: HttpClient) {}
+  orderStatuses: string[] = Object.values(this.orderStatus);
+  constructor(private http: HttpClient, private orderService: OrderService) {}
 
   ngOnInit(): void {
     const restaurantId = localStorage.getItem('restaurantId');
     if (restaurantId) {
-      this.http.get<OrderWithMealDataResponse[]>(`http://localhost:8222/api/v1/orders/${restaurantId}/orders`)
+      this.http
+        .get<OrderWithMealDataResponse[]>(
+          `http://localhost:8222/api/v1/orders/${restaurantId}/orders`
+        )
         .subscribe({
-          next: (data) => this.orders = data,
-          error: (err) => console.error('Failed to fetch orders:', err)
+          next: (data) => (this.orders = data),
+          error: (err) => console.error('Failed to fetch orders:', err),
         });
     } else {
       console.warn('No restaurantId in localStorage.');
     }
-
   }
 
   cancelOrder(orderNumber: string): void {
     alert(`Mock: cancelling order ${orderNumber}`);
-    this.orders = this.orders.map(order =>
+    this.orders = this.orders.map((order) =>
       order.orderNumber === orderNumber
         ? { ...order, status: 'CANCELLED', isCancellable: false }
         : order
@@ -46,10 +52,12 @@ export class OwnerOrders {
     this.editingStatusFor = this.editingStatusFor === orderNumber ? null : orderNumber;
   }
 
-  updateStatus(order: OrderDTO, newStatus: string) {
-    order.status = newStatus;
-    this.editingStatusFor = null;
-
-    alert(`Status zamówienia ${order.orderNumber} zmieniony na ${newStatus}`);
+  updateStatus(order: OrderDTO, newStatus: OrderStatus) {
+    if (order.status === newStatus) {
+      alert(`Order status has selected status, please select other type`);
+    } else {
+      this.orderService.updateOrderStatus(order, newStatus);
+      alert(`Order status changed for  ${order.orderNumber} to ${newStatus}`);
+    }
   }
 }

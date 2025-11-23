@@ -2,6 +2,7 @@ package com.example.orderservice.api.controller;
 
 import com.example.orderservice.api.dto.OrderDTO;
 import com.example.orderservice.api.dto.OrderRequestDTO;
+import com.example.orderservice.api.dto.OrderUpdateStatusRequest;
 import com.example.orderservice.api.dto.OrderWithMealDataResponse;
 import com.example.orderservice.api.dto.mapper.OrderItemMapper;
 import com.example.orderservice.api.dto.mapper.OrderMapper;
@@ -74,7 +75,6 @@ public class OrderController {
                                 .stream()
                                 .map(OrderItem::getMealId))
                         .toList()).getBody();
-        log.info("Gotcha MealDataResponses: {}", mealDataResponses);
         if(mealDataResponses != null && !mealDataResponses.isEmpty()) {
             list = listOfOrders
                     .stream()
@@ -88,13 +88,14 @@ public class OrderController {
     @PutMapping("/{orderNumber}")
     public ResponseEntity<?> updateOrderStatus(
             @PathVariable String orderNumber,
-            @RequestBody OrderDTO orderDTO
+            @RequestBody OrderUpdateStatusRequest orderUpdateStatusRequest
     ) {
+        log.info("Called update status");
         Order orderByOrderNumber = orderService.findByOrderNumber(orderNumber)
                 .orElseThrow(() ->
                         new NotFoundException("Order with order number [%s] does not exist".formatted(orderNumber))
                 );
-        orderByOrderNumber.setStatus(orderDTO.status());
+        orderByOrderNumber.setStatus(orderUpdateStatusRequest.status());
         orderService.updateOrder(orderByOrderNumber);
         return ResponseEntity.ok().build();
     }
