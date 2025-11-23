@@ -26,4 +26,5 @@ public interface MealDAO {
 
     Meal updateMeal(Meal meal);
 
+    List<Meal> findMealsByIds(List<String> mealIds);
 }

@@ -2,8 +2,11 @@ package com.example.orderservice.api.controller;
 
 import com.example.orderservice.api.dto.OrderDTO;
 import com.example.orderservice.api.dto.OrderRequestDTO;
+import com.example.orderservice.api.dto.OrderWithMealDataResponse;
 import com.example.orderservice.api.dto.mapper.OrderItemMapper;
 import com.example.orderservice.api.dto.mapper.OrderMapper;
+import com.example.orderservice.api.feign.MealClient;
+import com.example.orderservice.api.feign.MealDataResponse;
 import com.example.orderservice.business.OrderService;
 import com.example.orderservice.domain.Order;
 import com.example.orderservice.domain.OrderItem;
@@ -13,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +29,7 @@ public class OrderController {
     private final OrderService orderService;
     private final OrderMapper orderMapper;
     private final OrderItemMapper orderItemMapper;
+    private final MealClient mealClient;
 
     @PostMapping("/{restaurantId}/order")
     public ResponseEntity<?> placeOrder(
@@ -60,8 +65,23 @@ public class OrderController {
     public ResponseEntity<?> showOrdersForCustomerEmail(
             @RequestHeader("X-User-Email") String email
     ) {
+        List<OrderWithMealDataResponse> list = new ArrayList<>();
         List<Order> listOfOrders = orderService.findAllOrders();
-        List<OrderDTO> list = listOfOrders.stream().map(orderMapper::mapToDTO).toList();
+        List<MealDataResponse> mealDataResponses = mealClient.getAllMealsById(
+                listOfOrders
+                        .stream()
+                        .flatMap(order -> order.getOrderItems()
+                                .stream()
+                                .map(OrderItem::getMealId))
+                        .toList()).getBody();
+        log.info("Gotcha MealDataResponses: {}", mealDataResponses);
+        if(mealDataResponses != null && !mealDataResponses.isEmpty()) {
+            list = listOfOrders
+                    .stream()
+                    .map(order -> orderMapper.mapToOrderWithMealDataResponse(order, mealDataResponses))
+                    .toList();
+
+        }
         return ResponseEntity.ok(list);
     }
 
@@ -83,10 +103,23 @@ public class OrderController {
     public ResponseEntity<?> showOrdersForRestaurantEmail(
             @PathVariable String restaurantId
     ) {
-        List<OrderDTO> ordersByRestaurant = orderService.findOrdersByRestaurantId(restaurantId)
-                .stream()
-                .map(orderMapper::mapToDTO)
-                .toList();
-        return ResponseEntity.ok(ordersByRestaurant);
+        List<OrderWithMealDataResponse> list = new ArrayList<>();
+        List<Order> ordersByRestaurant = orderService.findOrdersByRestaurantId(restaurantId);
+        List<MealDataResponse> mealDataResponses = mealClient.getAllMealsById(
+                ordersByRestaurant
+                        .stream()
+                        .flatMap(order -> order.getOrderItems()
+                                .stream()
+                                .map(OrderItem::getMealId))
+                        .toList()).getBody();
+        log.info("Gotcha MealDataResponses: {}", mealDataResponses);
+        if(mealDataResponses != null && !mealDataResponses.isEmpty()) {
+            list = ordersByRestaurant
+                    .stream()
+                    .map(order -> orderMapper.mapToOrderWithMealDataResponse(order, mealDataResponses))
+                    .toList();
+
+        }
+        return ResponseEntity.ok(list);
     }
 }

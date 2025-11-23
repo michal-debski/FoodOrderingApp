@@ -6,6 +6,8 @@ import com.example.mealservice.domain.MealIngredient;
 import com.example.mealservice.infrastructure.entity.Unit;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 import static com.example.mealservice.domain.Category.fromDisplayName;
 
 @Component
@@ -87,5 +89,15 @@ public class MealMapper {
                         .toList()
                 )
                 .build();
+    }
+
+    public List<MealDataResponse> mapToMealDataResponse(List<Meal> meals) {
+        return meals.stream()
+                .map(meal -> new MealDataResponse(
+                        meal.mealId(),
+                        meal.name(),
+                        meal.price())
+                )
+                .toList();
     }
 }

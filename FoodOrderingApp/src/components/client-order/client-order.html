@@ -28,7 +28,10 @@
               <td>
                 <ul>
                   @for (item of order.orderItems; track item.mealId) {
-                    <li>{{ item.mealId }} (quantity: {{ item.quantity }})</li>
+                    <li>
+                      <p class="order-item-p">{{ item.mealName }}</p> 
+                      <p class="order-item-p">(quantity: {{ item.quantity }}, unit price: {{item.unitPrice}} )</p>
+                    </li>
                   }
                 </ul>
               </td>

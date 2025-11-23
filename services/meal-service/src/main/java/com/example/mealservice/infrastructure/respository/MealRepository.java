@@ -68,4 +68,11 @@ public class MealRepository implements MealDAO {
         );
     }
 
+    @Override
+    public List<Meal> findMealsByIds(List<String> mealIds) {
+        return mealEntityMapper.mapFromEntities(
+                mealJpaRepository.findAllByMealIdIn(mealIds)
+        );
+    }
+
 }

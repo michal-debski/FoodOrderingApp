@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import {DatePipe} from '@angular/common';
 import {OrderDTO} from '../../../models/order.dto';
 import {HttpClient} from '@angular/common/http';
+import { OrderItemWithMealResponse } from '../../../models/order.item.with.meal.response';
+import { OrderWithMealDataResponse } from '../../../models/order.with.meal.data.response';
 
 @Component({
   selector: 'app-owner-orders',
@@ -12,7 +14,7 @@ import {HttpClient} from '@angular/common/http';
   styleUrl: './owner-orders.css'
 })
 export class OwnerOrders {
-  orders: OrderDTO[] = [];
+  orders: OrderWithMealDataResponse[] = [];
   editingStatusFor: string | null = null;
 
   constructor(private http: HttpClient) {}
@@ -20,7 +22,7 @@ export class OwnerOrders {
   ngOnInit(): void {
     const restaurantId = localStorage.getItem('restaurantId');
     if (restaurantId) {
-      this.http.get<OrderDTO[]>(`http://localhost:8222/api/v1/orders/${restaurantId}/orders`)
+      this.http.get<OrderWithMealDataResponse[]>(`http://localhost:8222/api/v1/orders/${restaurantId}/orders`)
         .subscribe({
           next: (data) => this.orders = data,
           error: (err) => console.error('Failed to fetch orders:', err)

@@ -1,6 +1,7 @@
 package com.example.mealservice.api;
 
 import com.example.mealservice.api.dto.MealDTO;
+import com.example.mealservice.api.dto.MealDataResponse;
 import com.example.mealservice.api.dto.MealMapper;
 import com.example.mealservice.api.dto.MealUpdateRequest;
 import com.example.mealservice.business.MealMenuService;
@@ -16,13 +17,13 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/meals/{restaurantId}")
+@RequestMapping("/meals")
 public class MealController {
 
     private final MealMenuService mealMenuService;
     private final MealMapper mealMapper;
 
-    @GetMapping
+    @GetMapping("/{restaurantId}")
     public ResponseEntity<List<MealDTO>> showMeals(
             @PathVariable("restaurantId") String restaurantId
     ) {
@@ -34,7 +35,7 @@ public class MealController {
     }
 
 
-    @PostMapping
+    @PostMapping("/{restaurantId}")
     public ResponseEntity<?> addMealToMenu(
             @PathVariable String restaurantId,
             @RequestBody MealDTO mealDTO
@@ -47,7 +48,7 @@ public class MealController {
         return new ResponseEntity<>(mealMapper.mapForSaveToDTO(meal), HttpStatus.OK);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{restaurantId}")
     public ResponseEntity<?> deleteMealByRestaurant(
             @PathVariable String restaurantId,
             @RequestBody String mealName
@@ -57,7 +58,7 @@ public class MealController {
     }
 
 
-    @PutMapping("/{mealId}")
+    @PutMapping("/{restaurantId}/{mealId}")
     public ResponseEntity<MealDTO> updateMeal(
             @PathVariable String restaurantId,
             @PathVariable String mealId,
@@ -68,5 +69,15 @@ public class MealController {
         MealDTO mealDTO = mealMapper.mapToDTO(updatedMeal);
 
         return new ResponseEntity<>(mealDTO, HttpStatus.OK);
+    }
+
+    @PostMapping("/")
+    public ResponseEntity<List<MealDataResponse>> getAllMealsById(@RequestBody List<String>mealIds) {
+        log.info("MealIds list: " + mealIds);
+        List<Meal> meals = mealMenuService.findMealsById(mealIds);
+        List<MealDataResponse> mealDataResponses =
+                mealMapper.mapToMealDataResponse(meals);
+
+        return new ResponseEntity<>(mealDataResponses, HttpStatus.OK);
     }
 }

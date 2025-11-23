@@ -184,4 +184,8 @@ public class MealMenuService {
             }
         }
     }
+
+    public List<Meal> findMealsById(List<String> mealIds) {
+        return mealDAO.findMealsByIds(mealIds);
+    }
 }
