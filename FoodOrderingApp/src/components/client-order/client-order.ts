@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {OrderDTO} from '../../models/order.dto';
 import {HttpClient} from '@angular/common/http';
 import {DatePipe} from '@angular/common';
+import { OrderWithMealDataResponse } from '../../models/order.with.meal.data.response';
 
 @Component({
   selector: 'app-client-dashboard',
@@ -12,12 +13,12 @@ import {DatePipe} from '@angular/common';
   styleUrl: './client-order.css'
 })
 export class ClientOrder {
-  orders: OrderDTO[] = [];
-
-
+  orders: OrderWithMealDataResponse[] = [];
   constructor(private http: HttpClient) {}
+
   ngOnInit(): void {
-      this.http.get<OrderDTO[]>(`http://localhost:8222/api/v1/orders/all`, {
+    console.log(localStorage.getItem('email'));
+      this.http.get<OrderWithMealDataResponse[]>(`http://localhost:8222/api/v1/orders/all`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'X-User-Email': `${localStorage.getItem('email')}`

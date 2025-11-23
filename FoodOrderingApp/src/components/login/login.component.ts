@@ -38,12 +38,14 @@ export class LoginComponent {
     this.request.email = formValue.email;
     this.request.password = formValue.password;
 
+    console.log("rerquest email: "+ this.request.email);
     this.authorization.login(this.request).pipe(
       tap({
         next: (res: any) => {
           localStorage.setItem('token', res.token);
           const role = res.role;
           localStorage.setItem('role', res.role);
+          localStorage.setItem('email', this.request.email!);
           console.log("Role:" + res.role);
           if (role === 'RESTAURANT_OWNER') {
             console.log("Received Response:" + res.token);

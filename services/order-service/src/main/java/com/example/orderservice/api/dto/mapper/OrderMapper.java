@@ -1,12 +1,12 @@
 package com.example.orderservice.api.dto.mapper;
 
-import com.example.orderservice.api.dto.OrderDTO;
-import com.example.orderservice.api.dto.OrderItemDTO;
-import com.example.orderservice.api.dto.IngredientChangeStateInStorageMessage;
+import com.example.orderservice.api.dto.*;
+import com.example.orderservice.api.feign.MealDataResponse;
 import com.example.orderservice.domain.Order;
 import com.example.orderservice.domain.OrderItem;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -64,5 +64,35 @@ public class OrderMapper extends OffsetDateTimeMapper {
                         .toList()
                 )
                 .build();
+    }
+
+    public OrderWithMealDataResponse mapToOrderWithMealDataResponse(Order order, List<MealDataResponse> mealDataResponses) {
+
+        List<OrderItemWithMealResponse> orderItemWithMealResponses = mealDataResponses.stream().map(
+                        mealDataResponse -> new OrderItemWithMealResponse(
+                                mealDataResponse.mealId(),
+                                getQuantityForGivenMealDataResponse(order, mealDataResponse),
+                                mealDataResponse.name(),
+                                mealDataResponse.price()
+                        ))
+                .toList();
+        return new OrderWithMealDataResponse(
+                order.orderNumber,
+                order.totalPrice,
+                order.status,
+                order.customerEmail,
+                mapOffsetDateTimeToString(order.getOrderDate()),
+                orderItemWithMealResponses,
+                order.isCancellable()
+        );
+    }
+
+    private static Integer getQuantityForGivenMealDataResponse(Order order, MealDataResponse mealDataResponse) {
+        return order.orderItems
+                .stream()
+                .filter(orderItem -> orderItem.getMealId().equals(mealDataResponse.mealId()))
+                .findFirst()
+                .map(OrderItem::getQuantity)
+                .orElseThrow(() -> new RuntimeException("No meal found"));
     }
 }

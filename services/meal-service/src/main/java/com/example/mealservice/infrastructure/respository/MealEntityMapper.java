@@ -58,4 +58,26 @@ public class MealEntityMapper {
                 .build();
     }
 
+    public List<Meal> mapFromEntities(List<MealEntity> allByIdIn) {
+        return allByIdIn.stream().map(mealEntity -> {
+                    List<MealIngredient> ingredients = mealEntity.getIngredients().stream()
+                            .map(ingredientEntity -> new MealIngredient(
+                                    ingredientEntity.getName(),
+                                    ingredientEntity.getQuantity(),
+                                    ingredientEntity.getUnit()
+                            ))
+                            .toList();
+
+               return Meal.builder()
+                        .mealId(mealEntity.getMealId())
+                        .price(mealEntity.getPrice())
+                        .name(mealEntity.getName())
+                        .description(mealEntity.getDescription())
+                        .category(Category.fromDisplayName(mealEntity.getCategory()))
+                        .ingredients(ingredients)
+                        .restaurantId(mealEntity.getRestaurantId())
+                        .build();
+        })
+                .toList();
+    }
 }
