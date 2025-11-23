@@ -38,10 +38,31 @@
 
             <td>{{ order.isCancellable ? 'Yes' : 'No' }}</td>
 
-            <td>
-              <button (click)="cancelOrder(order.orderNumber)" [disabled]="!order.isCancellable">
+            <td class="actions">
+              <button
+                class="normal-button"
+                (click)="cancelOrder(order.orderNumber)"
+                [disabled]="!order.isCancellable"
+              >
                 Cancel
               </button>
+              @if(order.status !== "Completed") {
+
+              <mat-form-field>
+                <mat-select [(value)]="selectedStatus">
+                  @for (orderStatus of orderStatuses; track orderStatus) {
+                  <mat-option [value]="orderStatus">{{ orderStatus }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+              <button
+                class="small-button"
+                mat-raised-button
+                (click)="updateStatus(order, selectedStatus!)"
+              >
+                ✓
+              </button>
+              }
             </td>
           </tr>
           }
