@@ -1,6 +1,4 @@
 import { Component, effect, Input, signal } from '@angular/core';
-import {DatePipe} from '@angular/common';
-import {OrderDTO} from '../../../models/order.dto';
 import {HttpClient} from '@angular/common/http';
 import {MealDTO} from '../../../models/meal.dto';
 import {MealService} from '../../../services/meal.service';
@@ -22,7 +20,6 @@ export class ShowMeals {
   editingMeal?: MealDTO;
 
   constructor(
-    private http: HttpClient,
     private mealService: MealService,
     private dialogService: DialogService
   ) {}
@@ -32,14 +29,9 @@ export class ShowMeals {
 
   this.mealService.getMealsByRestaurant(this.restaurantId).subscribe({
     next: (data) => this.meals.set(data),
-    error: (err) => console.error('❌ Error fetching meals', err),
+    error: (err) => console.error('Error fetching meals', err),
   });
 }
-
-
-
-
-
   confirmDeleteMeal(name: string) {
     this.dialogService.openConfirmDialog({
       type: 'delete',
@@ -54,7 +46,9 @@ export class ShowMeals {
 
   startEditing(meal: MealDTO) {
     this.editingMeal = { ...meal };
-    this.selectedView.set('app-edit-meal');  }
+    this.selectedView.set('app-edit-meal');  
+  }
+
   onMealUpdated(updatedMeal: MealDTO) {
     this.meals.update((meals) =>
       meals.map((m) => (m.name === updatedMeal.name ? updatedMeal : m))

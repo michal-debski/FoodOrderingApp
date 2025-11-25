@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, signal} from '@angular/core';
 import { OrderDTO } from '../../models/order.dto';
 import { HttpClient } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 import { OrderWithMealDataResponse } from '../../models/order.with.meal.data.response';
 import { DialogService } from '../../services/dialog-service';
+import { OrderService } from '../../services/order.service';
 
 @Component({
   selector: 'app-client-dashboard',
@@ -12,25 +13,22 @@ import { DialogService } from '../../services/dialog-service';
   styleUrl: './client-order.css',
 })
 export class ClientOrder {
-  orders: OrderWithMealDataResponse[] = [];
-  constructor(private http: HttpClient, private dialogService: DialogService) {}
+  orders = signal<OrderWithMealDataResponse[]>([]);
+  constructor(
+    private http: HttpClient, 
+    private dialogService: DialogService,
+    private orderService: OrderService
+  ) {}
 
   ngOnInit(): void {
     console.log(localStorage.getItem('email'));
-    this.http
-      .get<OrderWithMealDataResponse[]>(`http://localhost:8222/api/v1/orders/all`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-          'X-User-Email': `${localStorage.getItem('email')}`,
-        },
-      })
-      .subscribe({
-        next: (data) => {
+    this.orderService.getOrderWithMealDataResponse().subscribe({
+      next: (data) => {
           console.log('Orders received:', data);
-          this.orders = data;
+          this.orders.set(data)
         },
-        error: (err) => console.error('Failed to fetch orders:', err),
-      });
+        error: (err) => console.error('Failed to fetch orders:', err)    
+    })
   }
 
   confirmFinishOrder(orderNumber: string) {
@@ -42,6 +40,8 @@ export class ClientOrder {
       .subscribe((confirmed) => {
         if (confirmed) {
           this.cancelOrder(orderNumber);
+          this.orders.update((orders) => orders.filter((o) => o.orderNumber !== orderNumber));
+
         }
       });
   }
