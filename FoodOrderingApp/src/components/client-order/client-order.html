@@ -36,7 +36,7 @@
                 </ul>
               </td>
               <td>
-                <button (click)="cancelOrder(order.orderNumber)" [disabled]="!order.isCancellable">Cancel</button>
+                <button (click)="confirmFinishOrder(order.orderNumber)" [disabled]="!order.isCancellable">Cancel</button>
               </td>
             </tr>
           }

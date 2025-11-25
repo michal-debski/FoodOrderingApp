@@ -38,7 +38,7 @@ export class LoginComponent {
     this.request.email = formValue.email;
     this.request.password = formValue.password;
 
-    console.log("rerquest email: "+ this.request.email);
+    console.log("request email: "+ this.request.email);
     this.authorization.login(this.request).pipe(
       tap({
         next: (res: any) => {

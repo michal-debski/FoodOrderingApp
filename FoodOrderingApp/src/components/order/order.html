@@ -33,7 +33,7 @@
           }
         </tbody>
       </table>
-      <button (click)="finishOrder()" class="button">Finish order!</button>
+      <button (click)="confirmFinishOrder()" class="button">Finish order!</button>
       <div *ngIf="isPreparing" class="spinner">
         <app-spinner></app-spinner>
         <p>Order is still under validation</p>
