@@ -4,6 +4,8 @@ import { OrderItemDTO } from '../models/order.item.dto';
 import { OrderDTO } from '../models/order.dto';
 import { OrderStatus } from '../models/order.status';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { OrderWithMealDataResponse } from '../models/order.with.meal.data.response';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +15,16 @@ export class OrderService {
   private items: Map<string, OrderItemDTO> = new Map();
 
   constructor(private http: HttpClient) {}
+
+  getOrderWithMealDataResponse(): Observable<OrderWithMealDataResponse[]> {
+    return this.http
+      .get<OrderWithMealDataResponse[]>(`http://localhost:8222/api/v1/orders/all`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'X-User-Email': `${localStorage.getItem('email')}`,
+        },
+      });
+  }
 
   updateOrderStatus(order: OrderDTO, status: OrderStatus) {
     const OrderUpdateStatusRequest = {
