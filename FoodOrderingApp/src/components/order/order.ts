@@ -9,6 +9,7 @@ import { OrderRequestDto } from '../../models/order.request.dto';
 import { Spinner } from '../shared/spinner/spinner';
 import { firstValueFrom, timer } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { DialogService } from '../../services/dialog-service';
 
 @Component({
   selector: 'app-meals',
@@ -29,6 +30,7 @@ export class Order {
     private route: ActivatedRoute,
     private router: Router,
     private orderService: OrderService,
+    private dialogService: DialogService,
     private http: HttpClient
   ) {}
 
@@ -64,6 +66,20 @@ export class Order {
   trackByMealId(index: number, meal: MealDTO) {
     return meal.mealId;
   }
+
+  confirmFinishOrder() {
+    this.dialogService
+      .openConfirmDialog({
+        type: 'finish',
+        message: 'Do you confirm to finish order?',
+      })
+      .subscribe((confirmed) => {
+        if (confirmed) {
+          this.finishOrder();
+        }
+      });
+  }
+
   async finishOrder() {
     console.log('Restaurant ID:', this.restaurantId);
 

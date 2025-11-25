@@ -41,6 +41,10 @@ export class Dialog {
         this.title = 'Edit confirmation';
         this.confirmText = 'Save';
         break;
+      case 'finish':
+        this.title = 'Finish order';
+        this.confirmText = 'Finish';
+        break;
     }
   }
 
