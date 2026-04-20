@@ -1,19 +1,16 @@
 eureka:
   instance:
-    hostname: localhost
+    hostname: auth-service
+  client:
+    service-url:
+      defaultZone: http://discovery-service:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
 
 spring:
-  cloud:
-    netflix:
-      eureka:
-        instance:
-          hostname: localhost
-        client:
-          serviceUrl:
-            defaultZone: http://localhost:8761/eureka/
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/food-ordering
+    url: jdbc:postgresql://postgres:5432/food-ordering
     username: postgres
     password: postgres
   jpa:

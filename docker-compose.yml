@@ -1,11 +1,23 @@
-version: "3"
 services:
+  # --- INFRASTRUKTURA ---
+  postgres:
+    image: postgres:17
+    container_name: postgres
+    environment:
+      POSTGRES_DB: food_ordering
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - food-ordering
+
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
-    ports:
-      - "22181:2181"
+    networks:
+      - food-ordering
 
   kafka:
     image: confluentinc/cp-kafka:latest
@@ -13,11 +25,153 @@ services:
       - zookeeper
     environment:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,EXTERNAL://localhost:29092
-      KAFKA_LISTENERS: PLAINTEXT://:9092,EXTERNAL://:29092
+      # KLUCZOWA ZMIANA: PLAINTEXT jest teraz dostępny pod nazwą 'kafka' dla innych kontenerów
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,EXTERNAL://localhost:29092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     ports:
-      - "9092:9092"
       - "29092:29092"
+    networks:
+      - food-ordering
+
+  # --- SERWISY WSPÓLNE ---
+  api-gateway-service:
+    image: amazoncorretto:21-alpine-jdk
+    container_name: api-gateway-service
+    working_dir: /app
+    volumes:
+      - ./services/api-gateway/build/libs/api-gateway-0.0.1-SNAPSHOT.jar:/app/api-gateway.jar
+    command: java -jar api-gateway.jar
+    environment:
+      SPRING_CONFIG_IMPORT: optional:configserver:http://config-service:8888
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      - config-service
+      - discovery-service
+    ports:
+      - "8222:8222"
+    networks:
+      - food-ordering
+  config-service:
+    image: amazoncorretto:21-alpine-jdk
+    container_name: config-service
+    working_dir: /app
+    volumes:
+      - ./services/config-server/build/libs/config-server-0.0.1-SNAPSHOT.jar:/app/config-service.jar
+      - ./services/config-server/src/main/resources/configurations:/app/configs
+    command: java -jar config-service.jar
+    ports:
+      - "8888:8888"
+    networks:
+      - food-ordering
+
+  discovery-service:
+    image: amazoncorretto:21-alpine-jdk
+    container_name: discovery-service
+    working_dir: /app
+    volumes:
+      - ./services/discovery/build/libs/discovery-0.0.1-SNAPSHOT.jar:/app/discovery-service.jar
+    command: java -jar discovery-service.jar
+    depends_on:
+      - config-service
+    ports:
+      - "8761:8761"
+    networks:
+      - food-ordering
+
+  # --- FRONTEND ---
+  frontend:
+    build:
+      context: ./FoodOrderingApp
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - auth-service
+      - meal-service
+      - restaurant-service
+      - order-service
+    networks:
+      - food-ordering
+
+  # --- MIKROSERWISY ---
+  auth-service:
+    image: amazoncorretto:21-alpine-jdk
+    container_name: auth-service
+    working_dir: /app
+    volumes:
+      - ./services/auth-service/build/libs/auth-service-0.0.1-SNAPSHOT.jar:/app/auth-service.jar
+    command: java -jar auth-service.jar
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/food_ordering
+      SPRING_CONFIG_IMPORT: optional:configserver:http://config-service:8888
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      - postgres
+      - config-service
+      - discovery-service
+    ports:
+      - "8220:8220"
+    networks:
+      - food-ordering
+
+  order-service:
+    image: amazoncorretto:21-alpine-jdk
+    container_name: order-service
+    working_dir: /app
+    volumes:
+      - ./services/order-service/build/libs/order-service-0.0.1-SNAPSHOT.jar:/app/order-service.jar
+    command: java -jar order-service.jar
+    environment:
+      SPRING_CONFIG_IMPORT: optional:configserver:http://config-service:8888
+    depends_on:
+      - postgres
+      - config-service
+      - discovery-service
+      - kafka
+    ports:
+      - "8091:8091"
+    networks:
+      - food-ordering
+
+  restaurant-service:
+    image: amazoncorretto:21-alpine-jdk
+    container_name: restaurant-service
+    working_dir: /app
+    volumes:
+      - ./services/restaurant-service/build/libs/restaurant-service-0.0.1-SNAPSHOT.jar:/app/restaurant-service.jar
+    command: java -jar restaurant-service.jar
+    environment:
+      SPRING_CONFIG_IMPORT: optional:configserver:http://config-service:8888
+    depends_on:
+      - config-service
+      - discovery-service
+      - postgres
+    ports:
+      - "8092:8092"
+    networks:
+      - food-ordering
+
+  meal-service:
+    image: amazoncorretto:21-alpine-jdk
+    container_name: meal-service
+    working_dir: /app
+    volumes:
+      - ./services/meal-service/build/libs/meal-service-0.0.1-SNAPSHOT.jar:/app/meal-service.jar
+    command: java -jar meal-service.jar
+    environment:
+      SPRING_CONFIG_IMPORT: optional:configserver:http://config-service:8888
+    depends_on:
+      - config-service
+      - discovery-service
+      - postgres
+    ports:
+      - "8090:8090"
+    networks:
+      - food-ordering
+
+networks:
+  food-ordering:
+    driver: bridge

@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {IngredientForMealDTO} from '../../../models/meal.ingredient.dto';
 import {HttpClient} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
@@ -12,29 +12,32 @@ import {StorageService} from '../../../services/storage.service';
   styleUrl: './show-storage.css'
 })
 export class ShowStorage {
+  @Input({ required: true }) restaurantId!: string;
   ingredients: IngredientForMealDTO[] = [];
   constructor(private http: HttpClient, private storageService: StorageService) {}
 
   ngOnInit(): void {
-    const restaurantId = localStorage.getItem('restaurantId');
-    if (restaurantId) {
-      this.http.get<{ ingredients: IngredientForMealDTO[] }>(`http://localhost:8222/api/v1/meals/${restaurantId}/storage`)
-        .subscribe({
-          next: (data) => {
-            console.log('Fetched data:', data);
-            this.ingredients = data.ingredients
-          },
-          error: (err) => console.error('Failed to fetch ingredients:', err)
-        });
+    if (this.restaurantId) {
+        this.fetchIngredients();
     } else {
-      console.warn('No restaurantId in localStorage.');
+      console.warn('No restaurantId found');
     }
   }
 
+  fetchIngredients(): void {
+    this.http.get<{ ingredients: IngredientForMealDTO[] }>(`http://localhost:8222/api/v1/meals/${this.restaurantId}/storage`)
+            .subscribe({
+              next: (data) => {
+                console.log('Fetched data:', data);
+                this.ingredients = data.ingredients
+              },
+              error: (err) => console.error('Failed to fetch ingredients:', err)
+            });
+  }
+
   changeQuantity(ingredient: IngredientForMealDTO) {
-    const restaurantId = localStorage.getItem('restaurantId');
-    if (!restaurantId) {
-      console.error('No restaurantId found in localStorage');
+    if (!this.restaurantId) {
+      console.error('No restaurantId found');
       return;
     }
     console.log();
@@ -46,7 +49,7 @@ export class ShowStorage {
     };
 
     this.http.put(
-      `http://localhost:8222/api/v1/meals/${restaurantId}/storage`,
+      `http://localhost:8222/api/v1/meals/${this.restaurantId}/storage`,
       updatedIngredient
     ).subscribe({
       next: (res) => console.log('Ingredient updated', res),
@@ -55,11 +58,15 @@ export class ShowStorage {
   }
 
   deleteIngredient(ingredient: IngredientForMealDTO) {
-    const restaurantId = localStorage.getItem('restaurantId');
-    if (!restaurantId) {
-      console.error('No restaurantId found in localStorage');
+    if (!this.restaurantId) {
+      console.error('No restaurantId');
       return;
     }
-    return this.storageService.deleteIngredient(ingredient, restaurantId);
+    this.storageService.deleteIngredient(ingredient, this.restaurantId)
+             .subscribe({
+               next: () => {
+                 this.fetchIngredients();
+               }
+             });
   }
 }

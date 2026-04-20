@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { DatePipe, NgIf } from '@angular/common';
 import { OrderDTO } from '../../../models/order.dto';
 import { HttpClient } from '@angular/common/http';
@@ -15,6 +15,7 @@ import { OrderService } from '../../../services/order.service';
   styleUrl: './owner-orders.css',
 })
 export class OwnerOrders {
+  @Input({ required: true }) restaurantId!: string;
   orders: OrderWithMealDataResponse[] = [];
   editingStatusFor: string | null = null;
   orderStatus = OrderStatus;
@@ -24,18 +25,17 @@ export class OwnerOrders {
   constructor(private http: HttpClient, private orderService: OrderService) {}
 
   ngOnInit(): void {
-    const restaurantId = localStorage.getItem('restaurantId');
-    if (restaurantId) {
+    if (this.restaurantId) {
       this.http
         .get<OrderWithMealDataResponse[]>(
-          `http://localhost:8222/api/v1/orders/${restaurantId}/orders`
+          `http://localhost:8222/api/v1/orders/${this.restaurantId}/orders`
         )
         .subscribe({
           next: (data) => (this.orders = data),
           error: (err) => console.error('Failed to fetch orders:', err),
         });
     } else {
-      console.warn('No restaurantId in localStorage.');
+      console.warn('No restaurantId found');
     }
   }
 

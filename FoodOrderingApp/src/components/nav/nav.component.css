@@ -47,3 +47,13 @@ button {
   gap: 1rem;
   padding: 0 2rem;
 }
+
+.nav-link {
+  cursor: pointer;
+  padding: 8px 12px;
+}
+
+
+
+
+

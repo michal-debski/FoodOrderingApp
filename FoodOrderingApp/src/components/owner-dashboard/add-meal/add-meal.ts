@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -23,6 +23,7 @@ import { Category } from '../../../models/category';
   styleUrl: './add-meal.css',
 })
 export class AddMeal {
+  @Input({ required: true }) restaurantId!: string;
   ingredients: IngredientForMealDTO[] = [];
   selectedIngredient?: IngredientForMealDTO;
   category = Category;
@@ -54,11 +55,11 @@ export class AddMeal {
   }
 
   loadIngredients() {
-    const restaurantId = localStorage.getItem('restaurantId');
-    if (!restaurantId) return;
+    if (!this.restaurantId) return;
 
-    this.storageService.getIngredients(restaurantId).subscribe({
+    this.storageService.getIngredients(this.restaurantId).subscribe({
       next: (data) => {
+        console.log('Fetched ingredients:', data);
         this.ingredients = data.ingredients;
       },
       error: (err) => console.error('Error fetching ingredients:', err),
@@ -84,10 +85,9 @@ export class AddMeal {
       return;
     }
 
-    const restaurantId = localStorage.getItem('restaurantId');
     const request: MealDTO = {
       ...this.addMealForm.value,
-      restaurantId,
+      restaurantId: this.restaurantId,
       ingredientsForMeal: this.addMealForm.value.ingredients,
     };
 

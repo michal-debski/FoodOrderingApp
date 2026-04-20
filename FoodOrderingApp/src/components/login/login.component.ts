@@ -64,7 +64,7 @@ export class LoginComponent {
       })
     ).subscribe();
   }
-  
+
   logout() {
   this.authorization.logout().subscribe({
     next: () => {

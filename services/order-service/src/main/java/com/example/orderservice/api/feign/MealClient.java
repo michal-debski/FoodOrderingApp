@@ -9,7 +9,7 @@ import java.util.List;
 
 @FeignClient(
         name = "meal-service",
-        url = "http://localhost:8222/",
+        url = "http://api-gateway-service:8222/",
         configuration = FeignClientInterceptor.class
 )
 public interface MealClient {

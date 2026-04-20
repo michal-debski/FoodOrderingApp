@@ -64,7 +64,7 @@ public class MealMapper {
                         .stream()
                         .map(ingredientForMealDTO ->
                                 new MealIngredient(
-                                        ingredientForMealDTO.name(),
+                                        ingredientForMealDTO.name().toLowerCase(),
                                         ingredientForMealDTO.quantity(),
                                         Unit.valueOf(ingredientForMealDTO.unit())))
                         .toList()
