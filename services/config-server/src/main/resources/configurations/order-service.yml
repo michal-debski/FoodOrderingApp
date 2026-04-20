@@ -1,6 +1,11 @@
 eureka:
   instance:
-    hostname: localhost
+    hostname: order-service
+  client:
+    service-url:
+      defaultZone: http://discovery-service:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
 
 spring:
   kafka:
@@ -8,18 +13,10 @@ spring:
     delivery-timeout-ms: 180000
     request-timeout-ms: 60000
     max-block-ms: 60000
-    bootstrap-servers: localhost:9092
-  cloud:
-    netflix:
-      eureka:
-        instance:
-          hostname: localhost
-        client:
-          serviceUrl:
-            defaultZone: http://localhost:8761/eureka/
+    bootstrap-servers: kafka:9092
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/food-ordering
+    url: jdbc:postgresql://postgres:5432/food_ordering
     username: postgres
     password: postgres
   jpa:
@@ -47,5 +44,5 @@ grpc:
 
 order:
   service:
-    address: localhost
+    address: meal-service
     grpc: 9090

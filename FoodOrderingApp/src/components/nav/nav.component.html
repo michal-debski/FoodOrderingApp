@@ -5,20 +5,20 @@
     @if (role === 'USER'){
     <div class="nav-items">
       <a href="home-client">Home</a>
-      <button (click)="logout()">Logout</button>
+      <a (click)="logout()" class="nav-link">Logout</a>
       <a href="/restaurants/allRestaurants" routerLinkActive="routerLinkActive">Restaurants</a>
       <a href="/orders/all">Order</a>
     </div>
     } @else if (role === 'RESTAURANT_OWNER') {
     <div class="nav-items">
       <a href="home-owner">Home</a>
-      <button (click)="logout()" style="background: lightblue; font-size: 20px">LOGOUT</button>    
+      <a (click)="logout()" class="nav-link">Logout</a>    
       <a href="/restaurants" routerLinkActive="routerLinkActive">My Restaurants</a>
     </div>
     } @else if (role === 'ADMIN') {
     <div class="nav-items">
       <a href="#">Home</a>
-      <button (click)="logout()">Logout</button>
+      <a (click)="logout()">Logout</a>
       <a href="/restaurants" routerLinkActive="routerLinkActive">All Restaurants</a>
       <a href="#">All Orders</a>
       <a href="#">All Users</a>

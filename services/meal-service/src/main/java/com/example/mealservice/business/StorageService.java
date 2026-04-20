@@ -28,7 +28,6 @@ public class StorageService {
             throw new AlreadyExistsException("Ingredient already exists in db");
         }
             return storageDAO.addNewIngredientToStore(ingredient, restaurantId);
-
     }
 
     @Transactional

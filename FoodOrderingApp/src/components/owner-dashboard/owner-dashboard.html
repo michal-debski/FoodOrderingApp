@@ -14,15 +14,15 @@
       <main class="content">
         <div class="hero-container">
           @if(selectedView === 'add-meal'){
-            <app-add-meal></app-add-meal>
+            <app-add-meal [restaurantId]="selectedRestaurantId!"></app-add-meal>
           } @else if (selectedView === 'show-meals'){
             <app-show-meals [restaurantId]="selectedRestaurantId!"></app-show-meals>
           } @else if (selectedView === 'show-orders'){
-            <app-owner-orders></app-owner-orders>
+            <app-owner-orders [restaurantId]="selectedRestaurantId!"></app-owner-orders>
           } @else if (selectedView === 'add-ingredient'){
-            <app-add-ingredient></app-add-ingredient>
+            <app-add-ingredient [restaurantId]="selectedRestaurantId!"></app-add-ingredient>
           } @else if (selectedView === 'show-storage') {
-            <app-show-storage></app-show-storage>
+            <app-show-storage [restaurantId]="selectedRestaurantId!"></app-show-storage>
           }
         </div>
       </main>

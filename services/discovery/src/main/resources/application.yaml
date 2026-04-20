@@ -1,11 +1,11 @@
 spring:
     config:
-      import: optional:configserver:http://localhost:8888
+      import: optional:configserver:http://config-service:8888
     application:
       name: discovery-service
 eureka:
   instance:
-    hostname: localhost
+    hostname: discovery-service
   client:
     registerWithEureka: false
     fetch-registry: false

@@ -23,11 +23,11 @@ export class StorageService {
     );
   }
 
-  deleteIngredient(ingredient: IngredientForMealDTO, restaurantId:string) {
+  deleteIngredient(ingredient: IngredientForMealDTO, restaurantId:string): Observable<any> {
     const url = `http://localhost:8222/api/v1/meals/${restaurantId}/storage`;
     console.log(url)
     console.log(ingredient)
-    return this.http.delete<void>(url, {body: ingredient}).subscribe();
+    return this.http.delete<void>(url, {body: ingredient});
 
   }
 }

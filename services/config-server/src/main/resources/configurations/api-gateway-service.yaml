@@ -2,21 +2,21 @@ server:
   port: 8222
 auth:
   service:
-    url: lb://AUTH-SERVICE
+    url: http://auth-service:8220
+eureka:
+  client:
+    service-url:
+      defaultZone: http://discovery-service:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
 spring:
   cloud:
-    netflix:
-      eureka:
-        client:
-          serviceUrl:
-            defaultZone: http://localhost:8761/eureka/
-            register-with-eureka: true
-            fetch-registry: true
     gateway:
       globalcors:
         corsConfigurations:
           '[/**]':
             allowedOrigins:
+              - http://localhost
               - http://localhost:4200
             allowedMethods:
               - GET

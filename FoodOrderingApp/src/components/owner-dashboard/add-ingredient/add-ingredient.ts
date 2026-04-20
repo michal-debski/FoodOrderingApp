@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {NgIf} from '@angular/common';
 import {IngredientForMealDTO} from '../../../models/meal.ingredient.dto';
@@ -21,6 +21,7 @@ export class AddIngredient {
 
   unit = Unit;
   units: string[] = [];
+  @Input({ required: true }) restaurantId!: string;
 
   constructor(private fb: FormBuilder,
               private storageService: StorageService,
@@ -55,8 +56,7 @@ export class AddIngredient {
       return;
     }
 
-    const restaurantId = localStorage.getItem('restaurantId');
-    const request: IngredientForMealDTO = { ...this.addIngredientForm.value, restaurantId };
+    const request: IngredientForMealDTO = { ...this.addIngredientForm.value, restaurantId: this.restaurantId };
 
     this.storageService.addIngredient(request).subscribe({
       next: (ingredient: any) => {
