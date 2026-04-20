@@ -1,5 +1,4 @@
 services:
-  # --- INFRASTRUKTURA ---
   postgres:
     image: postgres:17
     container_name: postgres
@@ -25,7 +24,6 @@ services:
       - zookeeper
     environment:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      # KLUCZOWA ZMIANA: PLAINTEXT jest teraz dostępny pod nazwą 'kafka' dla innych kontenerów
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,EXTERNAL://localhost:29092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
@@ -35,7 +33,6 @@ services:
     networks:
       - food-ordering
 
-  # --- SERWISY WSPÓLNE ---
   api-gateway-service:
     image: amazoncorretto:21-alpine-jdk
     container_name: api-gateway-service
@@ -80,7 +77,6 @@ services:
     networks:
       - food-ordering
 
-  # --- FRONTEND ---
   frontend:
     build:
       context: ./FoodOrderingApp
@@ -96,7 +92,6 @@ services:
     networks:
       - food-ordering
 
-  # --- MIKROSERWISY ---
   auth-service:
     image: amazoncorretto:21-alpine-jdk
     container_name: auth-service
