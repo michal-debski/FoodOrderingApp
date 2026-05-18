@@ -5,3 +5,9 @@ spring:
     name: MEAL-SERVICE
 flyway:
   table: flyway_schema_history_meal
+
+logging:
+  level:
+    com.example.mealservice.api: INFO
+    com.example.mealservice.business: INFO
+    root: INFO

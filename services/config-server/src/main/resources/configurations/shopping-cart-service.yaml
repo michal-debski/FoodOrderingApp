@@ -1,0 +1,15 @@
+eureka:
+  instance:
+    hostname: shopping-cart-service
+  client:
+    service-url:
+      defaultZone: http://discovery-service:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+spring:
+  data:
+    redis:
+      host: redis
+      port: 6379
+server:
+  port: 8093

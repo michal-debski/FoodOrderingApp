@@ -19,6 +19,7 @@ public class MealMapper {
                 .name(meal.name())
                 .description(meal.description())
                 .category(meal.category().getName())
+                .restaurantId(meal.restaurantId())
                 .price(meal.price())
                 .ingredientsForMeal(meal.ingredients()
                         .stream()

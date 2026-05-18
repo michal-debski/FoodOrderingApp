@@ -73,9 +73,7 @@ public class MealMenuService {
     }
 
     public Optional<Meal> findMealById(String mealId) {
-         log.info(
-                 "Trying to find meal with id: [{}]",
-                 mealId);
+         log.info("Trying to find meal with id: [{}]", mealId);
         return mealDAO.findMealById(mealId);
     }
 
@@ -113,7 +111,6 @@ public class MealMenuService {
 
     }
 
-
     @Transactional
     public List<Meal> findMealsWhichCannotBePrepared(List<OrderItem> orderItems) {
         log.info("Finding meals which cannot be prepared. From order items: {}", orderItems);
@@ -134,22 +131,23 @@ public class MealMenuService {
 
             for (MealIngredient ingredient : meal.ingredients()) {
                 String name = ingredient.name();
-                int totalQuantity = ingredient.quantity() * orderItem.getQuantity();
-
-                requiredIngredients.merge(name, totalQuantity, Integer::sum);
+                int totalQuantityBase = (ingredient.quantity() * orderItem.getQuantity()) * ingredient.unit().getFactor();
+                log.debug("Processing ingredient {} from meal: {} {} * {} order quantity = {} GR", 
+                        name, ingredient.quantity(), ingredient.unit(), orderItem.getQuantity(), totalQuantityBase);
+                requiredIngredients.merge(name, totalQuantityBase, Integer::sum);
             }
         }
 
-        log.info("Current required ingredients: {}", requiredIngredients);
+        log.info("Current required ingredients (in GR): {}", requiredIngredients);
 
         Map<String, Integer> storageMap = storageDAO.getStorageMap();
-        log.info("Current storage map: {}", storageMap);
+        log.info("Current storage map (in GR): {}", storageMap);
 
         Set<String> insufficientIngredientIds = requiredIngredients.entrySet().stream()
                 .filter(entry -> {
                     int required = entry.getValue();
-                    int available = storageMap.get(entry.getKey());
-                    log.info("Ingredient: {}, Required: {}, Available: {}", entry.getKey(), required, available);
+                    Integer available = storageMap.getOrDefault(entry.getKey(), 0);
+                    log.info("Ingredient: {}, Required: {} GR, Available: {} GR", entry.getKey(), required, available);
                     return required > available;
                 })
                 .map(Map.Entry::getKey)
@@ -179,7 +177,8 @@ public class MealMenuService {
                                     .name(futureIngredient.name())
                                     .unitName(String.valueOf(futureIngredient.unit()))
                                     .quantity(0)
-                                    .build(), meal.restaurantId());
+                                    .restaurantId(meal.restaurantId())
+                                    .build());
                 }
             }
         }

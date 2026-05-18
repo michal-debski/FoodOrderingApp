@@ -12,7 +12,7 @@ public interface StorageDAO {
 
     List<Ingredient> findAllIngredientsByRestaurantId(String restaurantId);
 
-    Ingredient addNewIngredientToStore(Ingredient ingredient, String restaurantId);
+    Ingredient addNewIngredientToStore(Ingredient ingredient);
 
     Ingredient updateIngredientQuantityInStorage(Ingredient ingredient);
 

@@ -6,6 +6,7 @@ import com.example.mealservice.api.dto.MealMapper;
 import com.example.mealservice.api.dto.MealUpdateRequest;
 import com.example.mealservice.business.MealMenuService;
 import com.example.mealservice.domain.Meal;
+import com.example.mealservice.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -79,5 +80,12 @@ public class MealController {
                 mealMapper.mapToMealDataResponse(meals);
 
         return new ResponseEntity<>(mealDataResponses, HttpStatus.OK);
+    }
+    @GetMapping("/meal/{id}")
+    public ResponseEntity<MealDTO> getMealById(@PathVariable("id") String id) {
+        Meal meal = mealMenuService.findMealById(id)
+                .orElseThrow(() -> new NotFoundException("Meal not found with id: " + id));
+        MealDTO mealDTO = mealMapper.mapToDTO(meal);
+        return new ResponseEntity<>(mealDTO, HttpStatus.OK);
     }
 }

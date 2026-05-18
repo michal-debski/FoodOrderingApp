@@ -1,32 +1,52 @@
 <article>
   <div class="hero-container">
-  <div class="column-left">
-    <h1>This is dashboard of your restaurant!</h1>
-    <p>You can edit your restaurant here!</p>
-    <div class="dashboard-wrapper">
-      <aside class="sidebar">
-        <button (click)="selectView('add-meal')">Add Meal</button>
-        <button (click)="selectView('show-meals')">Show Meals</button>
-        <button (click)="selectView('show-orders')">Show Orders</button>
-        <button (click)="selectView('add-ingredient')">Add Ingredient</button>
-        <button (click)="selectView('show-storage')">Show Storage</button>
-      </aside>
-      <main class="content">
-        <div class="hero-container">
+    <div class="column-left">
+      <h1>This is dashboard of your restaurant!</h1>
+      <p class="subtitle">You can edit your restaurant here!</p>
+
+      <div class="dashboard-wrapper">
+        <aside class="sidebar">
+          <button
+            (click)="selectView('add-meal')"
+            [class.active]="selectedView === 'add-meal'">
+            Add Meal
+          </button>
+          <button
+            (click)="selectView('show-meals')"
+            [class.active]="selectedView === 'show-meals'">
+            Show Meals
+          </button>
+          <button
+            (click)="selectView('show-orders')"
+            [class.active]="selectedView === 'show-orders'">
+            Show Orders
+          </button>
+          <button
+            (click)="selectView('add-ingredient')"
+            [class.active]="selectedView === 'add-ingredient'">
+            Add Ingredient
+          </button>
+          <button
+            (click)="selectView('show-storage')"
+            [class.active]="selectedView === 'show-storage'">
+            Show Storage
+          </button>
+        </aside>
+
+        <main class="content">
           @if(selectedView === 'add-meal'){
-            <app-add-meal [restaurantId]="selectedRestaurantId!"></app-add-meal>
+          <app-add-meal [restaurantId]="selectedRestaurantId!"></app-add-meal>
           } @else if (selectedView === 'show-meals'){
-            <app-show-meals [restaurantId]="selectedRestaurantId!"></app-show-meals>
+          <app-show-meals [restaurantId]="selectedRestaurantId!"></app-show-meals>
           } @else if (selectedView === 'show-orders'){
-            <app-owner-orders [restaurantId]="selectedRestaurantId!"></app-owner-orders>
+          <app-owner-orders [restaurantId]="selectedRestaurantId!"></app-owner-orders>
           } @else if (selectedView === 'add-ingredient'){
-            <app-add-ingredient [restaurantId]="selectedRestaurantId!"></app-add-ingredient>
+          <app-add-ingredient [restaurantId]="selectedRestaurantId!"></app-add-ingredient>
           } @else if (selectedView === 'show-storage') {
-            <app-show-storage [restaurantId]="selectedRestaurantId!"></app-show-storage>
+          <app-show-storage [restaurantId]="selectedRestaurantId!"></app-show-storage>
           }
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
-  </div>
   </div>
 </article>

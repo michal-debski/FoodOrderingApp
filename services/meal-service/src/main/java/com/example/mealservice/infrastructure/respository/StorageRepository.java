@@ -3,6 +3,7 @@ package com.example.mealservice.infrastructure.respository;
 import com.example.mealservice.business.StorageDAO;
 import com.example.mealservice.domain.Ingredient;
 import com.example.mealservice.infrastructure.entity.IngredientEntity;
+import com.example.mealservice.infrastructure.entity.Unit;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,11 +32,10 @@ public class StorageRepository implements StorageDAO {
 
 
     @Override
-    public Ingredient addNewIngredientToStore(Ingredient ingredient, String restaurantId) {
+    public Ingredient addNewIngredientToStore(Ingredient ingredient) {
         IngredientEntity ingredientEntity = storageEntityMapper.mapToEntity(ingredient);
-        ingredientEntity.setRestaurantId(restaurantId);
         IngredientEntity savedIngredient = storageJpaRepository.save(ingredientEntity);
-        log.info("Ingredient added to database");
+        log.info("Ingredient " + savedIngredient.getName() + " for restaurant " + savedIngredient.getRestaurantId() + "added to database");
         return storageEntityMapper.mapToDomain(savedIngredient);
     }
 
@@ -61,7 +61,19 @@ public class StorageRepository implements StorageDAO {
         return storageJpaRepository.findAll().stream()
                 .collect(Collectors.toMap(
                         IngredientEntity::getName,
-                        IngredientEntity::getQuantity,
+                        ingredient -> {
+                            int factor = 1;
+                            if (ingredient.getUnitName() != null && !ingredient.getUnitName().isEmpty()) {
+                                try {
+                                    factor = Unit.valueOf(ingredient.getUnitName()).getFactor();
+                                } catch (IllegalArgumentException e) {
+                                    log.warn("Unknown unit: {} for ingredient: {}, assuming GR", ingredient.getUnitName(), ingredient.getName());
+                                }
+                            }
+                            int quantityInGrams = ingredient.getQuantity() * factor;
+                            log.debug("Stock conversion: {} {} = {} GR", ingredient.getQuantity(), ingredient.getUnitName(), quantityInGrams);
+                            return quantityInGrams;
+                        },
                         Integer::sum
                 ));
     }

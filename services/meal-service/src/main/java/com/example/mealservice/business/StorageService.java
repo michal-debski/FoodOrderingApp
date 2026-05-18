@@ -27,7 +27,7 @@ public class StorageService {
             log.info("Ingredient with name {} already exists", ingredient.name());
             throw new AlreadyExistsException("Ingredient already exists in db");
         }
-            return storageDAO.addNewIngredientToStore(ingredient, restaurantId);
+            return storageDAO.addNewIngredientToStore(ingredient);
     }
 
     @Transactional
@@ -51,7 +51,12 @@ public class StorageService {
     }
 
     public List<Ingredient> getAllIngredientsForGivenRestaurantId(String restaurantId) {
-        return storageDAO.findAllIngredientsByRestaurantId(restaurantId);
+        List<Ingredient> allIngredientsByRestaurantId = storageDAO.findAllIngredientsByRestaurantId(restaurantId);
+        log.info(
+                "Available ingredients for restaurantId " + restaurantId +": [{}]",
+                allIngredientsByRestaurantId
+        );
+        return allIngredientsByRestaurantId;
     }
 
     public List<Ingredient> findAllIngredientsByName() {

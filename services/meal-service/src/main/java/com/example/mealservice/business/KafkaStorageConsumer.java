@@ -4,13 +4,17 @@ import com.example.mealservice.domain.Ingredient;
 import com.example.mealservice.domain.IngredientChangeStateInStorageMessage;
 import com.example.mealservice.api.dto.IngredientUpdateRequest;
 import com.example.mealservice.domain.MealIngredient;
+import com.example.mealservice.domain.OrderItem;
+import com.example.mealservice.infrastructure.entity.Unit;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Component
 @AllArgsConstructor
 public class KafkaStorageConsumer {
@@ -24,22 +28,30 @@ public class KafkaStorageConsumer {
             containerFactory = "factory"
     )
     void getIngredientRemovalFromStorageMessage(IngredientChangeStateInStorageMessage ingredientChangeStateInStorageMessage) {
-        System.out.println("Received: " + ingredientChangeStateInStorageMessage);
+        log.info("Received order for ingredient removal: {}", ingredientChangeStateInStorageMessage);
+        List<MealIngredient> allNeededIngredients = new ArrayList<>();
 
-        List<MealIngredient> allIngredientsFromMealsIncludedInMessage = ingredientChangeStateInStorageMessage.orderItems()
-                .stream()
-                .flatMap(orderItem -> mealMenuService.findMealById(orderItem.getMealId())
-                        .stream()
-                )
-                .toList()
-                .stream()
-                .flatMap(meal -> meal.ingredients().stream())
-                .toList();
+        for (OrderItem item : ingredientChangeStateInStorageMessage.orderItems()) {
+            mealMenuService.findMealById(item.getMealId()).ifPresent(meal -> {
+                log.info("Processing meal: {} (mealId: {}), quantity: {}", meal.name(), item.getMealId(), item.getQuantity());
+                for (MealIngredient mi : meal.ingredients()) {
+                    int totalBaseQuantity = mi.quantity() * mi.unit().getFactor() * item.getQuantity();
+                    log.debug("Ingredient: {}, Original: {} {}, Factor: {}, Total in GR: {}", 
+                            mi.name(), mi.quantity(), mi.unit(), mi.unit().getFactor(), totalBaseQuantity);
 
-        List<Ingredient> matchingIngredient = mapToIngredientList(allIngredientsFromMealsIncludedInMessage);
+                    allNeededIngredients.add(new MealIngredient(
+                            mi.name(),
+                            totalBaseQuantity,
+                            mi.unit()
+                    ));
+                }
+            });
+        }
 
-        changeQuantityOfIngredientInStorage(matchingIngredient, allIngredientsFromMealsIncludedInMessage);
-
+        log.info("Total ingredients needed: {}", allNeededIngredients);
+        List<Ingredient> matchingIngredient = mapToIngredientList(allNeededIngredients);
+        log.info("Matching ingredients from storage: {}", matchingIngredient);
+        changeQuantityOfIngredientInStorage(matchingIngredient, allNeededIngredients);
     }
 
     @KafkaListener(
@@ -50,19 +62,28 @@ public class KafkaStorageConsumer {
     void getIngredientChangeStateInStorageWhenOrderCancellation(
             IngredientChangeStateInStorageMessage ingredientChangeStateInStorageMessage
     ) {
-        System.out.println("Received: " + ingredientChangeStateInStorageMessage + ", when order has been cancelled");
+        log.info("Received order cancellation for ingredient return: {}", ingredientChangeStateInStorageMessage);
 
         List<MealIngredient> allIngredientsFromMealsIncludedInMessage = ingredientChangeStateInStorageMessage.orderItems()
                 .stream()
-                .flatMap(orderItem -> mealMenuService.findMealById(orderItem.getMealId())
-                        .stream()
-                )
+                .flatMap(orderItem -> {
+                    var mealOptional = mealMenuService.findMealById(orderItem.getMealId());
+                    if (mealOptional.isEmpty()) {
+                        log.warn("Meal not found for mealId: {}", orderItem.getMealId());
+                    } else {
+                        log.info("Processing cancellation for meal: {} (mealId: {})", 
+                                mealOptional.get().name(), orderItem.getMealId());
+                    }
+                    return mealOptional.stream();
+                })
                 .toList()
                 .stream()
                 .flatMap(meal -> meal.ingredients().stream())
                 .toList();
 
+        log.info("Total ingredients to return: {}", allIngredientsFromMealsIncludedInMessage);
         List<Ingredient> matchingIngredient = mapToIngredientList(allIngredientsFromMealsIncludedInMessage);
+        log.info("Matching ingredients from storage: {}", matchingIngredient);
 
         changeQuantityOfIngredientInStorageWhenOrderHasBeenCancelled(
                 matchingIngredient,
@@ -92,18 +113,27 @@ public class KafkaStorageConsumer {
             List<Ingredient> matchingIngredient,
             List<MealIngredient> allIngredientsFromMealsIncludedInMessage
     ) {
-        for (Ingredient ingredient : matchingIngredient) {
-            allIngredientsFromMealsIncludedInMessage.stream()
-                    .filter(found -> ingredient.name().equals(found.name()))
-                    .map(found -> {
-                        return new IngredientUpdateRequest(
-                                ingredient.name(),
-                                ingredient.quantity() - found.quantity(),
-                                ingredient.unitName()
-                                );
-                    }
+        log.info("Starting ingredient removal from storage");
+        for (Ingredient storageIng : matchingIngredient) {
+            int totalNeededInGrams = allIngredientsFromMealsIncludedInMessage.stream()
+                    .filter(found -> storageIng.name().equals(found.name()))
+                    .mapToInt(found -> found.quantity() * found.unit().getFactor())
+                    .sum();
 
-                    ).forEachOrdered(storageService::increaseIngredientQuantity);
+            int currentStockInGrams = storageIng.quantity() * Unit.valueOf(storageIng.unitName()).getFactor();
+            int newQuantityInGrams = currentStockInGrams - totalNeededInGrams;
+
+            log.info("Ingredient: {}", storageIng.name());
+            log.info("  Current storage: {} {} (= {} GR)", storageIng.quantity(), storageIng.unitName(), currentStockInGrams);
+            log.info("  Needed: {} GR", totalNeededInGrams);
+            log.info("  New quantity: {} GR", newQuantityInGrams);
+
+            storageService.increaseIngredientQuantity(new IngredientUpdateRequest(
+                    storageIng.name(),
+                    newQuantityInGrams,
+                    "GR"
+            ));
+            log.info("  Saved to database: {} = {} GR", storageIng.name(), newQuantityInGrams);
         }
     }
 
@@ -111,18 +141,27 @@ public class KafkaStorageConsumer {
             List<Ingredient> matchingIngredient,
             List<MealIngredient> allIngredientsFromMealsIncludedInMessage
     ) {
+        log.info("Starting ingredient return to storage (order cancelled)");
         for (Ingredient ingredient : matchingIngredient) {
-            allIngredientsFromMealsIncludedInMessage.stream()
+            int totalReturnedInGrams = allIngredientsFromMealsIncludedInMessage.stream()
                     .filter(found -> ingredient.name().equals(found.name()))
-                    .map(found -> {
-                                return new IngredientUpdateRequest(
-                                        ingredient.name(),
-                                        ingredient.quantity() + found.quantity(),
-                                        ingredient.unitName()
-                                );
-                            }
+                    .mapToInt(found -> found.quantity() * found.unit().getFactor())
+                    .sum();
 
-                    ).forEachOrdered(storageService::increaseIngredientQuantity);
+            int currentStockInGrams = ingredient.quantity() * Unit.valueOf(ingredient.unitName()).getFactor();
+            int newQuantityInGrams = currentStockInGrams + totalReturnedInGrams;
+
+            log.info("Ingredient: {}", ingredient.name());
+            log.info("  Current storage: {} {} (= {} GR)", ingredient.quantity(), ingredient.unitName(), currentStockInGrams);
+            log.info("  Returning: {} GR", totalReturnedInGrams);
+            log.info("  New quantity: {} GR", newQuantityInGrams);
+
+            storageService.increaseIngredientQuantity(new IngredientUpdateRequest(
+                    ingredient.name(),
+                    newQuantityInGrams,
+                    "GR"
+            ));
+            log.info("  Saved to database: {} = {} GR", ingredient.name(), newQuantityInGrams);
         }
     }
 }

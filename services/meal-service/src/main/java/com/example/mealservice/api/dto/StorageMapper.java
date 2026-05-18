@@ -17,11 +17,12 @@ public class StorageMapper {
                 .build();
     }
 
-    public Ingredient mapIngredientRequestToDomain(IngredientRequest ingredientRequest) {
+    public Ingredient mapIngredientRequestToDomain(IngredientRequest ingredientRequest, String restaurantId) {
         return Ingredient.builder()
                 .name(ingredientRequest.name())
                 .unitName(ingredientRequest.unitName())
                 .quantity(ingredientRequest.quantity())
+                .restaurantId(restaurantId)
                 .build();
     }
 

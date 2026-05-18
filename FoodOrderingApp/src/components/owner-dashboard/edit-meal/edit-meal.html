@@ -1,46 +1,50 @@
-<form [formGroup]="editMealForm" novalidate >
+<form [formGroup]="editMealForm" novalidate>
   <div class="form-group">
-    <label for="name">Meal Name:</label>
-    <input id="name" type="text" formControlName="name" placeholder="{{meal?.name}}" />
-    <div class="error" *ngIf="editMealForm.get('name')?.invalid && editMealForm.get('name')?.touched">
+    <label for="name">Meal Name</label>
+    <input id="name" type="text" formControlName="name" [placeholder]="meal?.name || 'Enter meal name'" />
+    <div class="error-message" *ngIf="editMealForm.get('name')?.invalid && editMealForm.get('name')?.touched">
       Name is required.
     </div>
   </div>
 
   <div class="form-group">
-    <label for="category">Category:</label>
-    <input id="category" type="text" formControlName="category" placeholder="{{meal?.category}}" />
+    <label for="category">Category</label>
+    <input id="category" type="text" formControlName="category" [placeholder]="meal?.category || 'Enter category'" />
   </div>
 
   <div class="form-group">
-    <label for="description">Description:</label>
-    <textarea id="description" type="text" formControlName="description" placeholder="{{meal?.description}}" ></textarea>
+    <label for="description">Description</label>
+    <textarea id="description" formControlName="description" [placeholder]="meal?.description || 'Enter description'"></textarea>
   </div>
 
   <div class="form-group">
-    <label for="price">Price:</label>
-    <input id="price" type="number" formControlName="price" step="0.01" placeholder="{{meal?.price}}"  />
-    <div class="error" *ngIf="editMealForm.get('price')?.invalid && editMealForm.get('price')?.touched">
+    <label for="price">Price ($)</label>
+    <input id="price" type="number" formControlName="price" step="0.01" [placeholder]="meal?.price || '0.00'" />
+    <div class="error-message" *ngIf="editMealForm.get('price')?.invalid && editMealForm.get('price')?.touched">
       Price must be greater than 0.
     </div>
   </div>
-  <div>
-    <button type="button" (click)="openIngredientsModal()">Edit Ingredients</button>
 
-<div class="modal-backdrop" *ngIf="showIngredientsModal">
-  <div class="modal-content">
-    <app-edit-ingredients
-    [meal]="meal"
-    (ingredientsChanged)="onIngredientsChanged($event)" 
-    [restaurantId]="restaurantId"
-    (close)="closeIngredientsModal()"
-    />
-    <button class="close-btn" (click)="closeIngredientsModal()">✖</button>
-  </div>
-</div>
-    
-
+  <div class="ingredients-action-row">
+    <button type="button" class="btn-outline" (click)="openIngredientsModal()">
+      <span>⚙</span> Edit Ingredients
+    </button>
   </div>
 
-  <button type="submit" [disabled]="editMealForm.invalid" (click)="onSubmit()">Edit Meal</button>
+  <div class="modal-backdrop" *ngIf="showIngredientsModal">
+    <div class="modal-content">
+      <button class="close-btn" (click)="closeIngredientsModal()">✖</button>
+
+      <app-edit-ingredients
+        [meal]="meal"
+        (ingredientsChanged)="onIngredientsChanged($event)"
+        [restaurantId]="restaurantId"
+        (close)="closeIngredientsModal()"
+      />
+    </div>
+  </div>
+
+  <button type="submit" [disabled]="editMealForm.invalid" (click)="onSubmit()" class="btn-black submit-btn">
+    Save Changes
+  </button>
 </form>

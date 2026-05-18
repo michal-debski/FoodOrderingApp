@@ -7,7 +7,7 @@
         <processorPath useClasspath="false">
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.38/57f8f5e02e92a30fd21b80cbd426a4172b5f8e29/lombok-1.18.38.jar" />
         </processorPath>
-        <module name="order-service.main" />
+        <module name="shopping-cart.main" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="21" />
@@ -35,6 +35,9 @@
       <module name="restaurant-service" options="-parameters" />
       <module name="restaurant-service.main" options="-parameters" />
       <module name="restaurant-service.test" options="-parameters" />
+      <module name="shopping-cart" options="-parameters" />
+      <module name="shopping-cart.main" options="-parameters" />
+      <module name="shopping-cart.test" options="-parameters" />
       <module name="user" options="-parameters" />
       <module name="user.main" options="-parameters" />
       <module name="user.test" options="-parameters" />

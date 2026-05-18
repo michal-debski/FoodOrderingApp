@@ -10,6 +10,7 @@ import {OwnerDashboard} from '../components/owner-dashboard/owner-dashboard';
 import {ClientOrder} from '../components/client-order/client-order';
 import { Registration } from '../components/login/registration/registration';
 import { AuthGuard } from '../services/auth.guard';
+import { Cart } from '../components/cart/cart';
 
 export const routes: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
@@ -22,5 +23,6 @@ export const routes: Routes = [
   {path: 'restaurant/:restaurantId/meals', component: Order, canActivate: [AuthGuard]},
   {path: 'owner/:id', component: OwnerDashboard, canActivate: [AuthGuard]},
   {path: 'orders/all', component: ClientOrder, canActivate: [AuthGuard]},
+  {path: 'shoppingcart', component: Cart, canActivate: [AuthGuard]},
   {path: 'register', component: Registration}
 ];

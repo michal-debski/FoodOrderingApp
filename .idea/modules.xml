@@ -7,6 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/meal-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/meal-service.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/order-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/order-service.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/restaurant-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/restaurant-service.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/shopping-cart.main.iml" filepath="$PROJECT_DIR$/.idea/modules/shopping-cart.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/user.main.iml" filepath="$PROJECT_DIR$/.idea/modules/user.main.iml" />
     </modules>
   </component>

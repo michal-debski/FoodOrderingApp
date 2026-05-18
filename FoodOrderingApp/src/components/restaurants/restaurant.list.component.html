@@ -2,30 +2,37 @@
   <div class="hero-container">
     <div class="column-left">
       <h1>Check out restaurants!</h1>
-      <p>You can order a meal from below restaurants</p>
-      <table >
-        <thead>
-        <tr>
-          <th>Restaurant Name</th>
-          <th>Phone</th>
-          <th>Email</th>
-          <th class="actions">Actions</th>
-        </tr>
-        </thead>
-        <tbody>
+      <p class="subtitle">You can order a meal from below restaurants</p>
+
+      <!-- Wrapper dający zaokrąglone rogi i nowoczesny cień -->
+      <div class="dashboard-wrapper">
+        <table>
+          <thead>
+          <tr>
+            <th>Restaurant Name</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th class="actions text-center">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
           @for (restaurant of restaurants; track restaurant.restaurantName) {
-            <tr>
-              <td>{{ restaurant.restaurantName }}</td>
-              <td>{{ restaurant.phone }}</td>
-              <td>{{ restaurant.email }}</td>
-              <td>
-                <a [routerLink]="['/restaurant', restaurant.restaurantId, 'meals']" class="button" routerLinkActive="active">Order!</a>
-              </td>
-            </tr>
+          <tr>
+            <td class="restaurant-name">{{ restaurant.restaurantName }}</td>
+            <td class="phone-cell">{{ restaurant.phone }}</td>
+            <td class="email-cell">{{ restaurant.email }}</td>
+            <td class="text-center">
+              <a [routerLink]="['/restaurant', restaurant.restaurantId, 'meals']"
+                 class="btn-black"
+                 routerLinkActive="active">
+                Order!
+              </a>
+            </td>
+          </tr>
           }
-        </tbody>
-      </table>
-      <br>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </article>

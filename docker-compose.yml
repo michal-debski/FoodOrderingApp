@@ -1,4 +1,11 @@
 services:
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - food-ordering
   postgres:
     image: postgres:17
     container_name: postgres
@@ -33,23 +40,6 @@ services:
     networks:
       - food-ordering
 
-  api-gateway-service:
-    image: amazoncorretto:21-alpine-jdk
-    container_name: api-gateway-service
-    working_dir: /app
-    volumes:
-      - ./services/api-gateway/build/libs/api-gateway-0.0.1-SNAPSHOT.jar:/app/api-gateway.jar
-    command: java -jar api-gateway.jar
-    environment:
-      SPRING_CONFIG_IMPORT: optional:configserver:http://config-service:8888
-      SPRING_PROFILES_ACTIVE: docker
-    depends_on:
-      - config-service
-      - discovery-service
-    ports:
-      - "8222:8222"
-    networks:
-      - food-ordering
   config-service:
     image: amazoncorretto:21-alpine-jdk
     container_name: config-service
@@ -149,6 +139,25 @@ services:
     networks:
       - food-ordering
 
+  shopping-cart-service:
+    image: amazoncorretto:21-alpine-jdk
+    container_name: shopping-cart-service
+    working_dir: /app
+    volumes:
+      - ./services/shopping-cart/build/libs/shopping-cart-0.0.1-SNAPSHOT.jar:/app/shopping-cart-service.jar
+    command: java -jar shopping-cart-service.jar
+    environment:
+      SPRING_CONFIG_IMPORT: optional:configserver:http://config-service:8888
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      - config-service
+      - discovery-service
+      - redis
+    ports:
+      - "8093:8093"
+    networks:
+      - food-ordering
+
   meal-service:
     image: amazoncorretto:21-alpine-jdk
     container_name: meal-service
@@ -167,6 +176,23 @@ services:
     networks:
       - food-ordering
 
+  api-gateway-service:
+    image: amazoncorretto:21-alpine-jdk
+    container_name: api-gateway-service
+    working_dir: /app
+    volumes:
+      - ./services/api-gateway/build/libs/api-gateway-0.0.1-SNAPSHOT.jar:/app/api-gateway.jar
+    command: java -jar api-gateway.jar
+    environment:
+      SPRING_CONFIG_IMPORT: optional:configserver:http://config-service:8888
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      - config-service
+      - discovery-service
+    ports:
+      - "8222:8222"
+    networks:
+      - food-ordering
 networks:
   food-ordering:
     driver: bridge
