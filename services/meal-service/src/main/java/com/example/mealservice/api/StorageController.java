@@ -28,7 +28,11 @@ public class StorageController {
             @PathVariable("restaurantId") String restaurantId,
             @RequestBody IngredientRequest ingredientRequest
     ) {
-        Ingredient ingredient = storageMapper.mapIngredientRequestToDomain(ingredientRequest);
+        log.info("Full request path received");
+        log.info("Restaurant Id: " + restaurantId);
+        log.info("Ingredient request: " + ingredientRequest);
+        Ingredient ingredient = storageMapper.mapIngredientRequestToDomain(ingredientRequest, restaurantId);
+        log.info("Ingredient to store after mapping: " + ingredient);
         Ingredient newIngredientToStore = storageService.addNewIngredientToStore(ingredient, restaurantId);
         return ResponseEntity.ok(storageMapper.mapToDto(newIngredientToStore));
     }
@@ -39,7 +43,7 @@ public class StorageController {
             @RequestBody IngredientRequest ingredientRequest
     ) {
         log.info("Received request to delete ingredient: {} from storage for restaurant {}", ingredientRequest, restaurantId);
-        Ingredient ingredient = storageMapper.mapIngredientRequestToDomain(ingredientRequest);
+        Ingredient ingredient = storageMapper.mapIngredientRequestToDomain(ingredientRequest, restaurantId);
         storageService.deleteIngredient(ingredient, restaurantId);
         return ResponseEntity.ok().build();
     }

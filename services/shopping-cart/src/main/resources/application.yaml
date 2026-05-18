@@ -1,0 +1,7 @@
+spring:
+  config:
+    import: optional:configserver:http://config-service:8888
+  application:
+    name: SHOPPING-CART-SERVICE
+flyway:
+  table: flyway_schema_history_shopping_cart

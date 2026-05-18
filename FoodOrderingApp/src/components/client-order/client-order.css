@@ -1,93 +1,151 @@
-p {
-  color: black;
-  font-size: 21px;
-}
-
-a {
-  background-color: #000000;
-  border: none;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  border-radius: 32px;
-  margin: 10px;
-}
-.column-left h1 {
-  margin-bottom: 1rem;
-  font-size: 3rem;
-}
-
-.column-left p {
-  margin-bottom: 2rem;
-  /* line-height: 1.5; */
+/* Baza i typografia */
+:host {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: #2D3748;
 }
 
 .hero-container {
-  display: grid;
-  margin-left: 50px;
+  display: flex;
+  flex-direction: column;
+  margin: 40px 0 40px 50px;
 }
 
 .column-left {
+  display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  color: #000;
-  padding: 0rem 2rem;
+  padding: 0 2rem;
 }
 
 .column-left h1 {
-  margin-bottom: 1rem;
-  font-size: 3rem;
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #1A202C;
+  letter-spacing: -0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.column-left p.subtitle {
+  font-size: 1.1rem;
+  color: #718096;
+  margin-bottom: 2rem;
+}
+
+/* --- KONTENER I TABELA (Zgładzone rogi i brak więziennych kratek) --- */
+.dashboard-wrapper {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 10px 15px -3px rgba(0, 0, 0, 0.07);
+  border: 1px solid #E2E8F0;
+  overflow: hidden;
+  width: 95%; /* Tabela zajmuje optymalną przestrzeń */
 }
 
 table {
-  margin: 0px auto;
-  width: 80%;
-  text-align: center;
+  width: 100%;
   border-collapse: collapse;
-  border: 1px solid;
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-}
-
-thead th {
-  position: sticky;
-  top: 0;
-  background-color: black;
-  color: white;
-  z-index: 1;
-}
-
-th,
-td {
-  padding: 10px;
-  font-size: 16px;
-  font-weight: bold;
-  text-transform: uppercase;
-  border: 1px solid grey;
-}
-
-td ul {
-  list-style-type: disc;
-  padding-left: 20px;
   text-align: left;
 }
 
-tr:hover {
-  background-color: orange;
-}
-
-button:disabled {
-  background-color: grey;
-  color: #ccc;
-  cursor: not-allowed;
-}
-
-p.order-item-p {
-  font-size: 16px;
-  font-weight: bold;
+thead th {
+  background-color: #F8FAFC;
+  color: #64748B;
+  font-size: 0.8rem;
+  font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 18px 20px;
+  border-bottom: 2px solid #E2E8F0;
+}
+
+th, td {
+  padding: 16px 20px;
+  vertical-align: middle;
+}
+
+td {
+  font-size: 0.95rem;
+  color: #334155;
+  border-bottom: 1px solid #F1F5F9;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+tr:hover {
+  background-color: #F8FAFC; /* Subtelny hover zamiast pomarańczowego */
+}
+
+/* Pomocnicze klasy stylizacji komórek */
+.font-semibold { font-weight: 600; color: #1A202C; }
+.price-cell { font-weight: 600; color: #10B981; }
+.date-cell { color: #64748B; font-size: 0.9rem; }
+.text-center { text-align: center; }
+
+.status-badge {
+  background-color: #EDF2F7;
+  color: #4A5568;
+  padding: 4px 12px;
+  border-radius: 99s9px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* --- COMPONENT: LISTA DAŃ W TABELI --- */
+.order-items-list {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.order-items-list li {
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+
+.order-items-list li:last-child {
+  margin-bottom: 0;
+}
+
+.meal-name {
+  font-weight: 600;
+  color: #2D3748;
+  display: block; /* Nazwa dania od nowej linii dla czytelności */
+}
+
+.meal-details {
+  font-size: 0.85rem;
+  color: #718096;
+}
+
+/* --- NOWOCZESNY CZARNY PRZYCISK (Zostaje #000000) --- */
+.btn-black {
+  background-color: #000000;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: 10px; /* Zaokrąglenie w stylu modern-minimal */
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: inline-block;
+}
+
+.btn-black:hover:not(:disabled) {
+  background-color: #1A202C; /* Delikatne rozjaśnienie przy najechaniu, by dać feedback */
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-black:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.btn-black:disabled {
+  background-color: #E2E8F0;
+  color: #94A3B8;
+  cursor: not-allowed;
+  box-shadow: none;
 }

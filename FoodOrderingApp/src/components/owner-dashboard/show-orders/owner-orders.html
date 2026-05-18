@@ -1,8 +1,9 @@
 <article>
   <div class="hero-container">
     <div class="column-left">
-      <table>
-        <thead>
+      <div class="dashboard-wrapper">
+        <table>
+          <thead>
           <tr>
             <th>Order Number</th>
             <th>Total Price</th>
@@ -10,65 +11,75 @@
             <th>Customer email</th>
             <th>Order date</th>
             <th>Order Items</th>
-            <th>Is Cancellable by user?</th>
-            <th class="actions">Actions</th>
+            <th class="text-center">Cancellable?</th>
+            <th class="actions text-center">Actions</th>
           </tr>
-        </thead>
-        <tbody>
+          </thead>
+          <tbody>
           @for (order of orders; track order.orderNumber) {
           <tr>
-            <td>{{ order.orderNumber }}</td>
-            <td>{{ order.totalPrice }}</td>
-            <td>{{ order.status }}</td>
+            <td class="font-semibold">#{{ order.orderNumber }}</td>
+            <td class="price-cell">{{ order.totalPrice }}</td>
+            <td>
+              <span class="status-badge">{{ order.status }}</span>
+            </td>
             <td>{{ order.customerEmail }}</td>
-            <td>{{ order.orderDate | date : 'dd MMM yyyy, HH:mm' }}</td>
+            <td class="date-cell">{{ order.orderDate | date : 'dd MMM yyyy, HH:mm' }}</td>
 
             <td>
-              <ul>
+              <ul class="order-items-list">
                 @for (item of order.orderItems; track item.mealId) {
                 <li>
-                  <p class="order-item-p">{{ item.mealName }}</p>
-                  <p class="order-item-p">
-                    (quantity: {{ item.quantity }}, unit price: {{ item.unitPrice }} )
-                  </p>
+                  <span class="meal-name">{{ item.mealName }}</span>
+                  <span class="meal-details">(qty: {{ item.quantity }}, unit: {{ item.unitPrice }})</span>
                 </li>
                 }
               </ul>
             </td>
 
-            <td>{{ order.isCancellable ? 'Yes' : 'No' }}</td>
+            <td class="text-center">
+                  <span class="boolean-badge" [class.yes]="order.isCancellable">
+                    {{ order.isCancellable ? 'Yes' : 'No' }}
+                  </span>
+            </td>
 
-            <td class="actions">
-              <button
-                class="normal-button"
-                (click)="cancelOrder(order.orderNumber)"
-                [disabled]="!order.isCancellable"
-              >
-                Cancel
-              </button>
-              @if(order.status !== "Completed") {
+            <td>
+              <div class="action-container">
+                <button
+                  class="btn-danger"
+                  (click)="cancelOrder(order.orderNumber)"
+                  [disabled]="!order.isCancellable"
+                >
+                  Cancel
+                </button>
 
-              <mat-form-field>
-                <mat-select [(value)]="selectedStatus">
-                  @for (orderStatus of orderStatuses; track orderStatus) {
-                  <mat-option [value]="orderStatus">{{ orderStatus }}</mat-option>
-                  }
-                </mat-select>
-              </mat-form-field>
-              <button
-                class="small-button"
-                mat-raised-button
-                (click)="updateStatus(order, selectedStatus!)"
-              >
-                ✓
-              </button>
-              }
+                @if(order.status !== "Completed") {
+                <div class="status-update-box">
+                  <mat-form-field appearance="outline" class="modern-select">
+                    <mat-select [(value)]="selectedStatus">
+                      @for (orderStatus of orderStatuses; track orderStatus) {
+                      <mat-option [value]="orderStatus">{{ orderStatus }}</mat-option>
+                      }
+                    </mat-select>
+                  </mat-form-field>
+
+                  <button
+                    class="btn-success-circle"
+                    mat-raised-button
+                    (click)="updateStatus(order, selectedStatus!)"
+                    title="Confirm status update"
+                  >
+                    ✓
+                  </button>
+                </div>
+                }
+              </div>
             </td>
           </tr>
           }
-        </tbody>
-      </table>
-      <br />
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </article>

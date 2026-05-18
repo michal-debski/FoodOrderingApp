@@ -10,11 +10,10 @@ export class StorageService {
 
   constructor(private http: HttpClient) {}
 
-  addIngredient(ingredient: IngredientForMealDTO): Observable<IngredientForMealDTO> {
-    const restaurantId = localStorage.getItem('restaurantId');
+  addIngredient(ingredient: IngredientForMealDTO, restaurantId: string): Observable<IngredientForMealDTO> {
     const url = `http://localhost:8222/api/v1/meals/${restaurantId}/storage`;
 
-    return this.http.post<IngredientForMealDTO>(url, ingredient);
+    return this.http.post<IngredientForMealDTO>(url, ingredient, { params: { restaurantId } });
   }
 
   getIngredients(restaurantId: string) {

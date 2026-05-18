@@ -1,45 +1,39 @@
 <article>
   <div class="hero-container">
     <div class="column-left">
-      <p>You can order a meal from below list</p>
-      <table>
-        <thead>
+      <p class="subtitle">You can order a meal from below list</p>
+
+      <!-- Wrapper nadający nowoczesne zaokrąglenia i cień -->
+      <div class="dashboard-wrapper">
+        <table>
+          <thead>
           <tr>
             <th>Meal Name</th>
             <th>Category</th>
             <th>Description</th>
             <th>Price</th>
-
-            <th class="actions">Actions</th>
+            <th class="actions text-center">Actions</th>
           </tr>
-        </thead>
-        <tbody>
-          @for (meal of meals; track meal.category) {
+          </thead>
+          <tbody>
+          @for (meal of meals; track meal.name) {
           <tr>
-            <td>{{ meal.name }}</td>
-            <td>{{ meal.category }}</td>
-            <td>{{ meal.description }}</td>
-            <td>{{ meal.price }}</td>
+            <td class="meal-name">{{ meal.name }}</td>
             <td>
-              <div>
-                <div>
-                  <button (click)="decrease(meal)" class="quantity-button">-</button>
-                  {{ getQuantity(meal) }}
-                  <button (click)="increase(meal)" class="quantity-button">+</button>
-                </div>
-              </div>
+              <span class="category-badge">{{ meal.category }}</span>
+            </td>
+            <td class="description-cell">{{ meal.description }}</td>
+            <td class="price-cell">{{ meal.price }}</td>
+            <td class="text-center">
+              <button (click)="addToCart(meal)" class="btn-black">
+                Add to cart
+              </button>
             </td>
           </tr>
           }
-        </tbody>
-      </table>
-      <button (click)="confirmFinishOrder()" class="button">Finish order!</button>
-      <div class="block-screen" *ngIf="isPreparing" >
-        <div class="block-content">
-          <app-spinner></app-spinner>
-        </div>
+          </tbody>
+        </table>
       </div>
-      <br />
     </div>
   </div>
 </article>

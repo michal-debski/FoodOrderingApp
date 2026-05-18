@@ -1,81 +1,89 @@
 <form [formGroup]="addMealForm" (ngSubmit)="confirmAddMeal()" novalidate>
   <div class="form-group">
-    <label for="name">Meal Name:</label>
-    <input id="name" type="text" formControlName="name" />
-    <div class="error" *ngIf="addMealForm.get('name')?.invalid && addMealForm.get('name')?.touched">
+    <label for="name">Meal Name</label>
+    <input id="name" type="text" formControlName="name" placeholder="e.g. Margherita Pizza" />
+    <div class="error-message" *ngIf="addMealForm.get('name')?.invalid && addMealForm.get('name')?.touched">
       Name is required.
     </div>
   </div>
 
   <div class="form-group">
-    <label for="category">Category:</label>
-    <select id="category" formControlName="category">
-      <option value="" selected>Select category</option>
-      @for (category of categories; track category) {
-      <option [ngValue]="category">{{ category }}</option>
-      }
-    </select>
-    <div
-      class="error"
-      *ngIf="addMealForm.get('category')?.invalid && addMealForm.get('category')?.touched"
-    >
+    <label for="category">Category</label>
+    <div class="select-wrapper">
+      <select id="category" formControlName="category">
+        <option value="" selected disabled>Select category</option>
+        @for (category of categories; track category) {
+        <option [ngValue]="category">{{ category }}</option>
+        }
+      </select>
+    </div>
+    <div class="error-message" *ngIf="addMealForm.get('category')?.invalid && addMealForm.get('category')?.touched">
       Category is required.
     </div>
   </div>
 
   <div class="form-group">
-    <label for="description">Description:</label>
-    <textarea id="description" formControlName="description"></textarea>
+    <label for="description">Description</label>
+    <textarea id="description" formControlName="description" placeholder="Describe the ingredients, taste, size..."></textarea>
   </div>
 
   <div class="form-group">
-    <label for="price">Price:</label>
-    <input id="price" type="number" formControlName="price" step="0.01" />
-    <div
-      class="error"
-      *ngIf="addMealForm.get('price')?.invalid && addMealForm.get('price')?.touched"
-    >
+    <label for="price">Price ($)</label>
+    <input id="price" type="number" formControlName="price" step="0.01" placeholder="0.00" />
+    <div class="error-message" *ngIf="addMealForm.get('price')?.invalid && addMealForm.get('price')?.touched">
       Price must be greater than 0.
     </div>
   </div>
-  <div class="form-group ingredient-select-group">
-    <label for="ingredients">Ingredients:</label>
-    <select id="ingredients" formControlName="selectedIngredient">
-      <option value="" disabled>Select ingredient</option>
-      @for (ingredient of ingredients; track ingredient.name) {
-      <option [ngValue]="ingredient">{{ ingredient.name }} ({{ ingredient.name }})</option>
-      }
-    </select>
-  </div>
-  <button type="button" (click)="addIngredient()">Add Ingredient</button>
 
-  <div class="selected-ingredients">
-    <div formArrayName="ingredients">
-      <div>
-        <h4>Selected ingredients:</h4>
+  <!-- Sekcja dodawania składników -->
+  <div class="ingredients-section">
+    <label for="ingredients">Ingredients</label>
+    <div class="ingredient-select-group">
+      <div class="select-wrapper flex-1">
+        <select id="ingredients" formControlName="selectedIngredient">
+          <option value="" disabled selected>Choose an ingredient to add...</option>
+          @for (ingredient of ingredients; track ingredient.name) {
+          <option [ngValue]="ingredient">{{ ingredient.name }}</option>
+          }
+        </select>
       </div>
+      <button type="button" class="btn-outline" (click)="addIngredient()">
+        <span>+</span> Add to list
+      </button>
+    </div>
+  </div>
 
+  <!-- Lista wybranych składników -->
+  <div class="selected-ingredients" *ngIf="ingredientsArray.length > 0">
+    <h4>Selected ingredients</h4>
+
+    <div formArrayName="ingredients" class="ingredients-list">
       @for (ingredientGroup of ingredientsArray.controls; track $index) {
       <div [formGroupName]="$index" class="ingredient-item">
-        <span>
-          {{ ingredientGroup.get('name')?.value }}
-          {{ ingredientGroup.get('unit')?.value }}
-        </span>
+          <span class="ingredient-info">
+            <span class="bullet">•</span>
+            {{ ingredientGroup.get('name')?.value }}
+            <small class="unit-text">({{ ingredientGroup.get('unit')?.value }})</small>
+          </span>
 
         <input
-          class="quantity"
+          class="quantity-input"
           type="number"
           formControlName="quantity"
           min="1"
           step="1"
-          placeholder="Quantity"
+          placeholder="Qty"
         />
 
-        <button type="button" (click)="removeIngredient($index)">Remove</button>
+        <button type="button" class="btn-delete-small" (click)="removeIngredient($index)" title="Remove ingredient">
+          Remove
+        </button>
       </div>
       }
     </div>
   </div>
 
-  <button type="submit" [disabled]="addMealForm.invalid">Add Meal</button>
+  <button type="submit" [disabled]="addMealForm.invalid" class="btn-black submit-btn">
+    Add Meal to Menu
+  </button>
 </form>

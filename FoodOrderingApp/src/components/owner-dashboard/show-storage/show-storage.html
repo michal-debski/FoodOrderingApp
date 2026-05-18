@@ -1,33 +1,44 @@
 <article>
   <div class="hero-container">
     <div class="column-left">
-      <table>
-        <thead>
-        <tr>
-          <th>Ingredient name</th>
-          <th>Quantity</th>
-          <th>Unit name</th>
-          <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-          @for (ingredient of ingredients; track ingredient.unit) {
-            <tr>
-              <td>{{ ingredient.name }}</td>
-              <td>
+      <!-- Wrapper gwarantujący nowoczesne zaokrąglenia i spójność z panelem -->
+      <div class="dashboard-wrapper">
+        <table>
+          <thead>
+          <tr>
+            <th>Ingredient name</th>
+            <th>Quantity</th>
+            <th>Unit name</th>
+            <th class="text-center">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          @for (ingredient of ingredients; track ingredient.name) {
+          <tr>
+            <td class="ingredient-name">{{ ingredient.name }}</td>
+            <td>
+              <div class="input-wrapper">
                 <input type="number" [(ngModel)]="ingredient.quantity" min="1"/>
-              </td>
-              <td>{{ ingredient.unit }}</td>
-              <td>
-                <button type="button" (click)="changeQuantity(ingredient)">Change</button>
-                <button type="button" (click)="deleteIngredient(ingredient)">Delete</button>
-
-              </td>
-            </tr>
+              </div>
+            </td>
+            <td>
+              <span class="unit-badge">{{ ingredient.unit }}</span>
+            </td>
+            <td>
+              <div class="action-buttons">
+                <button type="button" (click)="changeQuantity(ingredient)" class="btn-black">
+                  Change
+                </button>
+                <button type="button" (click)="deleteIngredient(ingredient)" class="btn-danger">
+                  Delete
+                </button>
+              </div>
+            </td>
+          </tr>
           }
-        </tbody>
-      </table>
-      <br>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </article>

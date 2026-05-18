@@ -1,89 +1,127 @@
-p {
-  color: black;
-  font-size: 16px;
-}
-
-a {
-  background-color: #000000;
-  border: none;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  border-radius: 32px;
-  margin: 10px;
+/* Baza i typografia */
+:host {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: #2D3748;
 }
 
 .hero-container {
-  display: grid;
-  margin-left: 50px;
+  display: flex;
+  flex-direction: column;
+  margin: 40px 0 40px 50px;
 }
 
 .column-left {
+  display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  color: #000;
-  padding: 0rem 2rem;
+  padding: 0 2rem;
 }
 
 .column-left h1 {
-  margin-bottom: 1rem;
-  font-size: 3rem;
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #1A202C;
+  letter-spacing: -0.05em;
+  margin-bottom: 0.5rem;
 }
 
-.column-left p {
+.column-left p.subtitle {
+  font-size: 1.1rem;
+  color: #718096;
   margin-bottom: 2rem;
-  font-size:1.5rem;
-  line-height: 1.5;
 }
 
-.hero-image{
-  width: 50%;
-  height: 50%;
+/* --- KONTENER I NOWOCZESNA TABELA --- */
+.dashboard-wrapper {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 10px 15px -3px rgba(0, 0, 0, 0.07);
+  border: 1px solid #E2E8F0;
+  overflow: hidden;
+  width: 95%;
+  margin-top: 20px; /* Zmniejszono z archaicznych 100px dla lepszego balansu sekcji */
 }
 
 table {
-  margin-top: 100px;
   width: 100%;
-  text-align: center;
   border-collapse: collapse;
-  border: 1px solid;
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  text-align: left; /* Zmiana na wyrównanie do lewej podnosi estetykę danych tekstowych */
 }
 
 thead th {
-  position: sticky;
-  top: 0;
-  background-color: black;
-  color: white;
-  z-index: 1;
+  background-color: #F8FAFC;
+  color: #64748B;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 18px 24px;
+  border-bottom: 2px solid #E2E8F0;
 }
 
 th, td {
-  padding: 10px;
-  font-size: 16px;
-  font-weight: bold;
-  text-transform: uppercase;
-  border: 1px solid grey;
+  padding: 16px 24px;
+  vertical-align: middle;
 }
 
-td ul {
-  list-style-type: disc;
-  padding-left: 20px;
-  text-align: left;
+td {
+  font-size: 0.95rem;
+  color: #334155;
+  border-bottom: 1px solid #F1F5F9;
+}
+
+tr:last-child td {
+  border-bottom: none;
 }
 
 tr:hover {
-  background-color: orange;
+  background-color: #F8FAFC; /* Subtelne podświetlenie zamiast jaskrawego pomarańczu */
+}
+
+/* Stylizacja konkretnych danych w tabeli */
+.restaurant-name {
+  font-weight: 600;
+  color: #1A202C;
+  font-size: 1rem;
+}
+
+.phone-cell {
+  color: #4A5568;
+}
+
+.email-cell {
+  color: #4F46E5; /* Subtelny kolor linku dla adresu email */
+  text-transform: none; /* Wyłączenie uppercase, żeby email wyglądał normalnie */
+}
+
+.text-center {
+  text-align: center;
 }
 
 .actions {
-  width: 30%;
+  width: 20%;
 }
 
+/* --- LEKKI CZARNY PRZYCISK (LINK) --- */
+.btn-black {
+  background-color: #000000;
+  color: #ffffff;
+  border: none;
+  padding: 10px 24px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 10px; /* Eleganckie, spójne zaokrąglenie */
+  display: inline-block;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
+.btn-black:hover {
+  background-color: #1A202C; /* Delikatne rozświetlenie w reakcji na kursor */
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
 
+.btn-black:active {
+  transform: translateY(1px);
+}

@@ -50,7 +50,7 @@ spring:
               predicates:
                 - Path=/api/v1/meals/**
               filters:
-                - RewritePath=/api/v1/meals(/?.*), /meals$1
+                - RewritePath=/api/v1/meals/(?<segment>.*), /meals/${segment}
                 - JwtValidation
             - id: order-service
               uri: lb://ORDER-SERVICE
@@ -65,4 +65,11 @@ spring:
                 - Path=/api/v1/restaurants/**
               filters:
                 - RewritePath=/api/v1/restaurants(?<segment>/.*|), /restaurants${segment}
+                - JwtValidation
+            - id: shopping-cart-service
+              uri: lb://SHOPPING-CART-SERVICE
+              predicates:
+                - Path=/api/v1/cart/**
+              filters:
+                - RewritePath=/api/v1/cart(?<segment>/.*|), /cart${segment}
                 - JwtValidation

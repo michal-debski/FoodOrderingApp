@@ -17,7 +17,6 @@ public interface OrderDAO {
 
     List<Order> findOrderByClientEmail(String id);
 
-
     BigDecimal getTotalOrderPrice(String orderNumber);
 
     List<Order> findAll();
