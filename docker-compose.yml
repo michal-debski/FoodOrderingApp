@@ -75,10 +75,7 @@ services:
     ports:
       - "80:80"
     depends_on:
-      - auth-service
-      - meal-service
-      - restaurant-service
-      - order-service
+      - api-gateway-service
     networks:
       - food-ordering
 
@@ -116,6 +113,7 @@ services:
       - config-service
       - discovery-service
       - kafka
+      - meal-service
     ports:
       - "8091:8091"
     networks:
@@ -176,23 +174,28 @@ services:
     networks:
       - food-ordering
 
-  api-gateway-service:
-    image: amazoncorretto:21-alpine-jdk
-    container_name: api-gateway-service
-    working_dir: /app
-    volumes:
-      - ./services/api-gateway/build/libs/api-gateway-0.0.1-SNAPSHOT.jar:/app/api-gateway.jar
-    command: java -jar api-gateway.jar
-    environment:
-      SPRING_CONFIG_IMPORT: optional:configserver:http://config-service:8888
-      SPRING_PROFILES_ACTIVE: docker
-    depends_on:
-      - config-service
-      - discovery-service
-    ports:
-      - "8222:8222"
-    networks:
-      - food-ordering
+   api-gateway-service:
+     image: amazoncorretto:21-alpine-jdk
+     container_name: api-gateway-service
+     working_dir: /app
+     volumes:
+       - ./services/api-gateway/build/libs/api-gateway-0.0.1-SNAPSHOT.jar:/app/api-gateway.jar
+     command: java -jar api-gateway.jar
+     environment:
+       SPRING_CONFIG_IMPORT: optional:configserver:http://config-service:8888
+       SPRING_PROFILES_ACTIVE: docker
+     depends_on:
+       - config-service
+       - discovery-service
+       - auth-service
+       - meal-service
+       - restaurant-service
+       - order-service
+       - shopping-cart-service
+     ports:
+       - "8222:8222"
+     networks:
+       - food-ordering
 networks:
   food-ordering:
     driver: bridge
